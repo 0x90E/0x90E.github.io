@@ -3,16 +3,18 @@ title: SVM basic
 date: 2017-06-26 13:33:41
 tags: [Data mining, Machine learning, SVM]
 ---
+## SVM(Support Vector Machines)
 
+<<<<<<< HEAD
 ### SVM(Support Vector Machines)
 
-## 運作原理
+## 運作原理
 使用分隔超平面(separating hyperplane)，將線性可分的數據分隔開來；在超平面同側的資料，屬於同一個類別。
 
 ## 如何挑選分隔超平面
 找到離超平面最近的點，並且讓它們離分隔面越遠越好。支援向量(support vector)及為離超平面最近的那些點；而支援向量到超平面的距離稱為間隔(margin)。在挑選超平面時，追求一個擁有最大間隔的超平面，保證在處理未知資料時的分類或回歸效果最佳。
 
-## 演算法參數
+## 演算法參數
 - 鬆弛變量(slack variable)
     - 許多時候數據並非能切分的很乾淨，引入鬆弛變量後，允許有些數據點可以被切分至錯誤的一側。
 - RBF kernel(Radial basis function kernel)
