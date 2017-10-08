@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hadoop,Big data," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Compile Hadoop source code編譯步驟基本訊息 OS: CentOS 6.5 64bit Hadoop: 2.8.1 JDK: 8u144 Maven: 3.3.9 ProtocolBuffer: 2.5.0 Findbugs: 1.3.9  ####設置Hadoop目錄  Hadoop source code: Hadoop官網下載123456789101112">
+<meta name="keywords" content="Hadoop,Big data">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Compile Hadoop source code">
+<meta property="og:url" content="http://yoursite.com/2017/08/23/hadoop-compile/index.html">
+<meta property="og:site_name" content="2318">
+<meta property="og:description" content="Compile Hadoop source code編譯步驟基本訊息 OS: CentOS 6.5 64bit Hadoop: 2.8.1 JDK: 8u144 Maven: 3.3.9 ProtocolBuffer: 2.5.0 Findbugs: 1.3.9  ####設置Hadoop目錄  Hadoop source code: Hadoop官網下載123456789101112">
+<meta property="og:updated_time" content="2017-08-23T04:38:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Compile Hadoop source code">
+<meta name="twitter:description" content="Compile Hadoop source code編譯步驟基本訊息 OS: CentOS 6.5 64bit Hadoop: 2.8.1 JDK: 8u144 Maven: 3.3.9 ProtocolBuffer: 2.5.0 Findbugs: 1.3.9  ####設置Hadoop目錄  Hadoop source code: Hadoop官網下載123456789101112">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/23/hadoop-compile/"/>
+
+
+
+
+
+  <title>Compile Hadoop source code | 2318</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">2318</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/23/hadoop-compile/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="2318">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="2318">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Compile Hadoop source code</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-23T12:33:33+08:00">
+                2017-08-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Compile-Hadoop-source-code"><a href="#Compile-Hadoop-source-code" class="headerlink" title="Compile Hadoop source code"></a>Compile Hadoop source code</h2><h3 id="編譯步驟"><a href="#編譯步驟" class="headerlink" title="編譯步驟"></a>編譯步驟</h3><h4 id="基本訊息"><a href="#基本訊息" class="headerlink" title="基本訊息"></a>基本訊息</h4><ul>
+<li>OS: CentOS 6.5 64bit</li>
+<li>Hadoop: 2.8.1</li>
+<li>JDK: 8u144</li>
+<li>Maven: 3.3.9</li>
+<li>ProtocolBuffer: 2.5.0</li>
+<li>Findbugs: 1.3.9</li>
+</ul>
+<p>####設置Hadoop目錄</p>
+<ul>
+<li>Hadoop source code:<ul>
+<li><a href="http://hadoop.apache.org/releases.html" title="Hadoop releases" target="_blank" rel="external">Hadoop官網下載</a><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 ~]<span class="comment"># cd /opt/sourcecode/</span></div><div class="line">[root@hadoop-01 sourcecode]<span class="comment"># ls</span></div><div class="line">hadoop-2.8.1-src.tar.gz  <span class="comment">## 已下載的hadoop 2.8.1 source code壓縮包</span></div><div class="line">[root@hadoop-01 sourcecode]<span class="comment"># tar -xzvf hadoop-2.8.1-src.tar.gz</span></div><div class="line">[root@hadoop-01 sourcecode]<span class="comment"># ls</span></div><div class="line">hadoop-2.8.1-src</div><div class="line">hadoop-2.8.1-src.tar.gz</div><div class="line">[root@hadoop-01 sourcecode]<span class="comment"># cd hadoop-2.8.1-src</span></div><div class="line">[root@hadoop-01 hadoop-2.8.1-src]<span class="comment"># ll</span></div><div class="line">total 228</div><div class="line">-rw-rw-r--.  1 root root 15623 May 24 07:14 BUILDING.txt</div><div class="line">drwxr-xr-x.  4 root root  4096 Aug 21 00:38 dev-support</div><div class="line">drwxr-xr-x.  4 root root  4096 Aug 21 02:01 hadoop-assemblies</div><div class="line">drwxr-xr-x.  4 root root  4096 Aug 21 02:01 hadoop-build-tools</div><div class="line">drwxrwxr-x.  3 root root  4096 Aug 21 02:13 hadoop-client</div><div class="line">drwxr-xr-x. 11 root root  4096 Aug 21 02:04 hadoop-common-project</div><div class="line">drwxr-xr-x.  3 root root  4096 Aug 21 02:13 hadoop-dist</div><div class="line">drwxr-xr-x.  9 root root  4096 Aug 21 02:07 hadoop-hdfs-project</div><div class="line">drwxr-xr-x. 10 root root  4096 Aug 21 02:11 hadoop-mapreduce-project</div><div class="line">drwxr-xr-x.  4 root root  4096 Aug 21 02:01 hadoop-maven-plugins</div><div class="line">drwxr-xr-x.  3 root root  4096 Aug 21 02:13 hadoop-minicluster</div><div class="line">drwxr-xr-x.  4 root root  4096 Aug 21 02:01 hadoop-project</div><div class="line">drwxr-xr-x.  3 root root  4096 Aug 21 02:01 hadoop-project-dist</div><div class="line">drwxr-xr-x. 19 root root  4096 Aug 21 02:13 hadoop-tools</div><div class="line">drwxr-xr-x.  4 root root  4096 Aug 21 02:09 hadoop-yarn-project</div><div class="line">-rw-rw-r--.  1 root root 99253 May 24 07:14 LICENSE.txt</div><div class="line">-rw-------.  1 root root   289 Aug 21 00:45 nohup.out</div><div class="line">-rw-rw-r--.  1 root root 15915 May 24 07:14 NOTICE.txt</div><div class="line">drwxrwxr-x.  2 root root  4096 Jun  2 14:24 patchprocess</div><div class="line">-rw-rw-r--.  1 root root 20477 May 29 06:36 pom.xml</div><div class="line">-rw-r--r--.  1 root root  1366 May 20 13:30 README.txt</div><div class="line">-rwxrwxr-x.  1 root root  1841 May 24 07:14 start-build-env.sh</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>BUILDING.txt文件中列出編譯的基本需求，以及編譯時需要注意的地方，可以在編譯的過程中對照著看。</p>
+<h4 id="Java的安裝與配置"><a href="#Java的安裝與配置" class="headerlink" title="Java的安裝與配置"></a>Java的安裝與配置</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 ~]<span class="comment"># ls cd /opt/software/</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># ls</span></div><div class="line">jdk-8u144-linux-x64.tar  <span class="comment">## 已下載的JDK壓縮包</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># mkdir -p /usr/java</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># mv jdk-8u144-linux-x64.tar /usr/java</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># cd /usr/java</span></div><div class="line">[root@hadoop-01 java]<span class="comment"># tar -vxf jdk-8u144-linux-x64.tar</span></div><div class="line">[root@hadoop-01 java]<span class="comment"># ll</span></div><div class="line">drwxr-xr-x. 8 uucp  143      4096 Jul 22 13:11 jdk1.8.0_144</div><div class="line">-rw-r--r--. 1 root root 377835520 Aug 20 22:13 jdk-8u144-linux-x64.tar</div><div class="line">[root@hadoop-01 java]<span class="comment"># chown -R root:root jdk1.8.0_144</span></div><div class="line">[root@hadoop-01 java]<span class="comment"># ll</span></div><div class="line">drwxr-xr-x. 8 root root      4096 Jul 22 13:11 jdk1.8.0_144</div><div class="line">-rw-r--r--. 1 root root 377835520 Aug 20 22:13 jdk-8u144-linux-x64.tar</div><div class="line">[root@hadoop-01 java]<span class="comment"># vim /etc/profile</span></div><div class="line"><span class="comment">## 新增下列兩行在文件中的任一位置，設置Java環境變量</span></div><div class="line"><span class="built_in">export</span> JAVA_HOME=/usr/java/jdk1.8.0_144</div><div class="line"><span class="built_in">export</span> PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$PATH</span></div><div class="line">[root@hadoop-01 java]<span class="comment"># source /etc/profile</span></div><div class="line">[root@hadoop-01 java]<span class="comment"># which java  ## 確認Java環境變量設置成功</span></div><div class="line">/usr/java/jdk1.8.0_144/bin/java</div><div class="line">[root@hadoop-01 java]<span class="comment"># java -version</span></div><div class="line">java version <span class="string">"1.8.0_144"</span></div><div class="line">Java(TM) SE Runtime Environment (build 1.8.0_144-b01)</div><div class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, mixed mode)</div></pre></td></tr></table></figure>
+<h4 id="Maven的安裝與配置"><a href="#Maven的安裝與配置" class="headerlink" title="Maven的安裝與配置"></a>Maven的安裝與配置</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 ~]<span class="comment"># cd /opt/software/</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># ls</span></div><div class="line">apache-maven-3.3.9-bin.tar.gz  <span class="comment">## 已下載的Maven壓縮包</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># tar -zxvf apache-maven-3.3.9-bin.tar.gz</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># ls</span></div><div class="line">apache-maven-3.3.9 </div><div class="line">apache-maven-3.3.9-bin.tar.gz</div><div class="line">[root@hadoop-01 software]<span class="comment"># vim /etc/profile</span></div><div class="line"><span class="comment">## 新增下列兩行在文件中的任一位置，設置Maven環境變量</span></div><div class="line"><span class="built_in">export</span> MAVEN_HOME=/opt/software/apache-maven-3.3.9</div><div class="line"><span class="built_in">export</span> PATH=<span class="variable">$MAVEN_HOME</span>/bin:<span class="variable">$PATH</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># source /etc/profile</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># mvn -version  ## 確認Maven環境變量設置成功</span></div><div class="line">Apache Maven 3.3.9 (bb52d8502b132ec0a5a3f4c09453c07478323dc5; 2015-11-11T00:41:47+08:00)</div><div class="line">Maven home: /opt/software/apache-maven-3.3.9</div><div class="line">Java version: 1.8.0_144, vendor: Oracle Corporation</div><div class="line">Java home: /usr/java/jdk1.8.0_144/jre</div><div class="line">Default locale: en_US, platform encoding: UTF-8</div><div class="line">OS name: <span class="string">"linux"</span>, version: <span class="string">"2.6.32-431.el6.x86_64"</span>, arch: <span class="string">"amd64"</span>, family: <span class="string">"unix"</span></div></pre></td></tr></table></figure>
+<h4 id="Autoconf的安裝"><a href="#Autoconf的安裝" class="headerlink" title="Autoconf的安裝"></a>Autoconf的安裝</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 ~]<span class="comment"># cd /opt/software/</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># wget http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># ls</span></div><div class="line">autoconf-2.69.tar.gz</div><div class="line">[root@hadoop-01 software]<span class="comment"># tar -zxvf autoconf-2.69.tar.gz</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># ls</span></div><div class="line">autoconf-2.69</div><div class="line">autoconf-2.69.tar.gz</div><div class="line">[root@hadoop-01 software]<span class="comment"># cd autoconf-2.69 </span></div><div class="line">[root@hadoop-01 autoconf-2.69]<span class="comment"># ./configure</span></div><div class="line">[root@hadoop-01 autoconf-2.69]<span class="comment"># make &amp; make install</span></div><div class="line">[root@hadoop-01 autoconf-2.69]<span class="comment"># autoconf --version  ## 確認Autoconf安裝成功</span></div><div class="line">autoconf (GNU Autoconf) 2.69</div></pre></td></tr></table></figure>
+<h4 id="Automake的安裝"><a href="#Automake的安裝" class="headerlink" title="Automake的安裝"></a>Automake的安裝</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 ~]<span class="comment"># cd /opt/software/</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># wget http://ftp.gnu.org/gnu/automake/automake-1.14.tar.gz</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># ls</span></div><div class="line">automake-1.14.tar.gz</div><div class="line">[root@hadoop-01 software]<span class="comment"># tar -xvzf automake-1.14.tar.gz</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># ls</span></div><div class="line">automake-1.14</div><div class="line">automake-1.14.tar.gz</div><div class="line">[root@hadoop-01 software]<span class="comment"># cd automake-1.14</span></div><div class="line">[root@hadoop-01 automake-1.14]<span class="comment"># ./configure</span></div><div class="line">[root@hadoop-01 automake-1.14]<span class="comment"># make &amp; make install</span></div><div class="line">[root@hadoop-01 automake-1.14]<span class="comment"># automake --version  ## 確認Automake安裝成功</span></div><div class="line">automake (GNU automake) 1.14</div></pre></td></tr></table></figure>
+<h4 id="Protobuf安装"><a href="#Protobuf安装" class="headerlink" title="Protobuf安装"></a>Protobuf安装</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 ~]<span class="comment"># cd /opt/software/</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># ls</span></div><div class="line">protobuf-2.5.0.tar.gz  <span class="comment">## 已下載的Protobuf壓縮包</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># tar -zxvf protobuf-2.5.0.tar.gz</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># ls </span></div><div class="line">protobuf-2.5.0 </div><div class="line">protobuf-2.5.0.tar.gz</div><div class="line">[root@hadoop-01 software]<span class="comment"># cd protobuf-2.5.0</span></div><div class="line">[root@hadoop-01 protobuf-2.5.0]<span class="comment"># ls</span></div><div class="line">[root@hadoop-01 protobuf-2.5.0]<span class="comment"># yum install -y gcc gcc-c++ make cmake</span></div><div class="line">[root@hadoop-01 protobuf-2.5.0]<span class="comment"># ./configure --prefix=/usr/local/protobuf</span></div><div class="line">[root@hadoop-01 protobuf-2.5.0]<span class="comment"># make &amp;&amp; make install</span></div><div class="line">[root@hadoop-01 protobuf-2.5.0]<span class="comment"># vim /etc/profile</span></div><div class="line"><span class="comment">## 新增下列兩行在文件中的任一位置，設置Protobuf環境變量</span></div><div class="line"><span class="built_in">export</span> PROTOC_HOME=/usr/<span class="built_in">local</span>/protobuf</div><div class="line"><span class="built_in">export</span> PATH=<span class="variable">$PROTOC_HOME</span>/bin:<span class="variable">$PATH</span></div><div class="line">[root@hadoop-01 protobuf-2.5.0]<span class="comment"># source /etc/profile</span></div><div class="line">[root@hadoop-01 protobuf-2.5.0]<span class="comment"># protoc --version   ## 確認Protobuf環境變量設置成功</span></div><div class="line">libprotoc 2.5.0</div></pre></td></tr></table></figure>
+<h4 id="Findbugs安装"><a href="#Findbugs安装" class="headerlink" title="Findbugs安装"></a>Findbugs安装</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 ~]<span class="comment"># cd /opt/software</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># ls</span></div><div class="line">findbugs-1.3.9.zip  <span class="comment">## 已下載的Findbugs壓縮包</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># unzip findbugs-1.3.9.zip</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># ls</span></div><div class="line">findbugs-1.3.9</div><div class="line">findbugs-1.3.9.zip</div><div class="line">[root@hadoop-01 software]<span class="comment"># vi /etc/profile</span></div><div class="line"><span class="comment">## 新增下列兩行在文件中的任一位置，設置Findbugs環境變量</span></div><div class="line"><span class="built_in">export</span> FINDBUGS_HOME=/opt/software/findbugs-1.3.9</div><div class="line"><span class="built_in">export</span> PATH=<span class="variable">$FINDBUGS_HOME</span>/bin:<span class="variable">$PATH</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># source /etc/profile</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># findbugs -version   ## 確認Findbugs環境變量設置成功</span></div><div class="line">1.3.9</div></pre></td></tr></table></figure>
+<h4 id="安装其他依賴"><a href="#安装其他依賴" class="headerlink" title="安装其他依賴"></a>安装其他依賴</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 ~]<span class="comment"># yum install -y openssl openssl-devel svn ncurses-devel zlib-devel libtool</span></div><div class="line">[root@hadoop-01 ~]<span class="comment"># yum install -y snappy snappy-devel bzip2 bzip2-devel lzo lzo-devel lzop</span></div></pre></td></tr></table></figure>
+<h4 id="進行編譯"><a href="#進行編譯" class="headerlink" title="進行編譯"></a>進行編譯</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 ~]<span class="comment"># cd /opt/sourcecode/hadoop-2.8.1-src</span></div><div class="line">[root@hadoop-01 hadoop-2.8.1-src]<span class="comment"># mvn clean package -Pdist,native -DskipTests -Dtar</span></div><div class="line"><span class="comment">## 編譯過程中，需保證網路暢通，因為maven會自動下載依賴的jar檔</span></div><div class="line"><span class="comment">## 若在下載的過程中有某個jar卡住，可以使用Ctrl+C退出後，重新輸入編譯命令</span></div><div class="line"><span class="comment">## 編譯完成的Hadoop jar放置在 /opt/sourcecode/hadoop-2.8.1-src/hadoop-dist/target/hadoop-2.8.1.tar.gz</span></div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+          
+            <a href="/tags/Big-data/" rel="tag"># Big data</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/23/hadoop-install-pseudo-distributed/" rel="next" title="Hadoop Pseudo-Distributed Setup">
+                <i class="fa fa-chevron-left"></i> Hadoop Pseudo-Distributed Setup
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/27/hdfs-basics/" rel="prev" title="HDFS Basics">
+                HDFS Basics <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">2318</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Compile-Hadoop-source-code"><span class="nav-number">1.</span> <span class="nav-text">Compile Hadoop source code</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#編譯步驟"><span class="nav-number">1.1.</span> <span class="nav-text">編譯步驟</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本訊息"><span class="nav-number">1.1.1.</span> <span class="nav-text">基本訊息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java的安裝與配置"><span class="nav-number">1.1.2.</span> <span class="nav-text">Java的安裝與配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Maven的安裝與配置"><span class="nav-number">1.1.3.</span> <span class="nav-text">Maven的安裝與配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Autoconf的安裝"><span class="nav-number">1.1.4.</span> <span class="nav-text">Autoconf的安裝</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Automake的安裝"><span class="nav-number">1.1.5.</span> <span class="nav-text">Automake的安裝</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Protobuf安装"><span class="nav-number">1.1.6.</span> <span class="nav-text">Protobuf安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Findbugs安装"><span class="nav-number">1.1.7.</span> <span class="nav-text">Findbugs安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装其他依賴"><span class="nav-number">1.1.8.</span> <span class="nav-text">安装其他依賴</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#進行編譯"><span class="nav-number">1.1.9.</span> <span class="nav-text">進行編譯</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">2318</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

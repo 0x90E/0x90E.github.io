@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Big data,Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Why Spark 編譯步驟基本訊息 OS: CentOS 6.5 64bit/macOS Sierra JDK: 8u144 Maven: 3.3.9(Spark source code自帶)   Apache Spark下載位置   如上圖，在Spark頁面選擇Source code進行下載，並進行解壓縮。 1234567[root@hadoop-01 sourcecode]# lsspa">
+<meta name="keywords" content="Big data,Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Compile Spark source code">
+<meta property="og:url" content="http://yoursite.com/2017/09/09/spark-compile/index.html">
+<meta property="og:site_name" content="2318">
+<meta property="og:description" content="Why Spark 編譯步驟基本訊息 OS: CentOS 6.5 64bit/macOS Sierra JDK: 8u144 Maven: 3.3.9(Spark source code自帶)   Apache Spark下載位置   如上圖，在Spark頁面選擇Source code進行下載，並進行解壓縮。 1234567[root@hadoop-01 sourcecode]# lsspa">
+<meta property="og:image" content="http://yoursite.com/2017/09/09/spark-compile/why_spark.svg">
+<meta property="og:image" content="http://yoursite.com/2017/09/09/spark-compile/spark_compile_1.png">
+<meta property="og:updated_time" content="2017-09-11T04:35:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Compile Spark source code">
+<meta name="twitter:description" content="Why Spark 編譯步驟基本訊息 OS: CentOS 6.5 64bit/macOS Sierra JDK: 8u144 Maven: 3.3.9(Spark source code自帶)   Apache Spark下載位置   如上圖，在Spark頁面選擇Source code進行下載，並進行解壓縮。 1234567[root@hadoop-01 sourcecode]# lsspa">
+<meta name="twitter:image" content="http://yoursite.com/2017/09/09/spark-compile/why_spark.svg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/09/spark-compile/"/>
+
+
+
+
+
+  <title>Compile Spark source code | 2318</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">2318</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/09/spark-compile/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="2318">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="2318">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Compile Spark source code</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-09T12:22:02+08:00">
+                2017-09-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Why-Spark"><a href="#Why-Spark" class="headerlink" title="Why Spark"></a>Why Spark</h3><img src="/2017/09/09/spark-compile/why_spark.svg" width="800">
+<h3 id="編譯步驟"><a href="#編譯步驟" class="headerlink" title="編譯步驟"></a>編譯步驟</h3><h3 id="基本訊息"><a href="#基本訊息" class="headerlink" title="基本訊息"></a>基本訊息</h3><ul>
+<li>OS: CentOS 6.5 64bit/macOS Sierra</li>
+<li>JDK: 8u144</li>
+<li>Maven: 3.3.9(Spark source code自帶)</li>
+</ul>
+<ul>
+<li><a href="http://spark.apache.org/downloads.html" title="Spark download" target="_blank" rel="external">Apache Spark下載位置</a></li>
+</ul>
+<img src="/2017/09/09/spark-compile/spark_compile_1.png" width="800">
+<p>如上圖，在Spark頁面選擇Source code進行下載，並進行解壓縮。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 sourcecode]# ls</div><div class="line">spark-2.2.0.tgz  ## 已下載的Spark 2.2.0 source code壓縮包</div><div class="line">[root@hadoop-01 sourcecode]# tar -zxvf spark-2.2.0.tgz</div><div class="line">[root@hadoop-01 sourcecode]# ls</div><div class="line">spark-2.2.0  </div><div class="line">spark-2.2.0.tgz</div><div class="line">[root@hadoop-01 sourcecode]# cd spark-2.2.0</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="http://spark.apache.org/docs/latest/building-spark.html" title="Building Spark" target="_blank" rel="external">Building Spark官方文檔</a></li>
+<li>Spark官方文檔詳細描述如何編譯Spark，下面列出Spark 2.2.0編譯所需步驟與指令。</li>
+</ul>
+<h4 id="Building-Spark-using-Maven-requires"><a href="#Building-Spark-using-Maven-requires" class="headerlink" title="Building Spark using Maven requires:"></a>Building Spark using Maven requires:</h4><ul>
+<li>Maven 3.3.9 or newer</li>
+<li>Java 8+, Java 7 was removed as of Spark 2.2.0.</li>
+<li>Set JAVA_HOME<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 spark-2.2.0]<span class="comment"># cd build/  ## Spark source code目錄內自帶的Maven</span></div><div class="line">[root@hadoop-01 build]<span class="comment"># mvn -version     ## 確認Maven與Java版本，分別為Maven 3.3.9與Java 1.8.0_144</span></div><div class="line">Apache Maven 3.3.9 (bb52d8502b132ec0a5a3f4c09453c07478323dc5; 2015-11-11T00:41:47+08:00)</div><div class="line">Maven home: /opt/software/apache-maven-3.3.9</div><div class="line">Java version: 1.8.0_144, vendor: Oracle Corporation</div><div class="line">Java home: /usr/java/jdk1.8.0_144/jre</div><div class="line">Default locale: en_US, platform encoding: UTF-8</div><div class="line">OS name: <span class="string">"linux"</span>, version: <span class="string">"2.6.32-431.el6.x86_64"</span>, arch: <span class="string">"amd64"</span>, family: <span class="string">"unix"</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Setting-up-Maven’s-Memory-Usage"><a href="#Setting-up-Maven’s-Memory-Usage" class="headerlink" title="Setting up Maven’s Memory Usage"></a>Setting up Maven’s Memory Usage</h4><ul>
+<li>使用MAVEN_OPTS參數設置Maven可使用的記憶體上限。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 spark-2.2.0]<span class="comment"># export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="build-mvn"><a href="#build-mvn" class="headerlink" title="build/mvn"></a>build/mvn</h4><ul>
+<li>使用Spark source code內在build目錄下自帶Maven進行編譯</li>
+<li>此命令會自動下載編譯所需的資源(Maven, Scala, and Zinc)在build目錄下並安裝</li>
+<li>下列指令使用預設值編譯Spark<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 spark-2.2.0]<span class="comment"># ./build/mvn -DskipTests clean package</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Building-a-Runnable-Distribution"><a href="#Building-a-Runnable-Distribution" class="headerlink" title="Building a Runnable Distribution"></a>Building a Runnable Distribution</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 spark-2.2.0]<span class="comment"># vim pom.xml ## 首先觀察pom.xml中，需要關注的內容</span></div><div class="line">&lt;properties&gt;</div><div class="line">    &lt;hadoop.version&gt;2.6.5&lt;/hadoop.version&gt;</div><div class="line">    &lt;protobuf.version&gt;2.5.0&lt;/protobuf.version&gt;</div><div class="line">    &lt;yarn.version&gt;<span class="variable">$&#123;hadoop.version&#125;</span>&lt;/yarn.version&gt;</div><div class="line">&lt;/properties&gt;</div><div class="line"></div><div class="line"> &lt;!-- A series of build profiles <span class="built_in">where</span> customizations <span class="keyword">for</span> particular Hadoop releases can be made --&gt;</div><div class="line">&lt;profiles&gt;</div><div class="line">    &lt;profile&gt;</div><div class="line">        &lt;id&gt;hadoop-2.6&lt;/id&gt;</div><div class="line">        &lt;!-- Default hadoop profile. Uses global properties. --&gt;</div><div class="line">    &lt;/profile&gt;</div><div class="line"></div><div class="line">    &lt;profile&gt;</div><div class="line">        &lt;id&gt;hadoop-2.7&lt;/id&gt;</div><div class="line">        &lt;properties&gt;</div><div class="line">        &lt;hadoop.version&gt;2.7.3&lt;/hadoop.version&gt;</div><div class="line">        &lt;/properties&gt;</div><div class="line">    &lt;/profile&gt;</div><div class="line"></div><div class="line">    &lt;profile&gt;</div><div class="line">      &lt;id&gt;yarn&lt;/id&gt;</div><div class="line">      &lt;modules&gt;</div><div class="line">        &lt;module&gt;resource-managers/yarn&lt;/module&gt;</div><div class="line">        &lt;module&gt;common/network-yarn&lt;/module&gt;</div><div class="line">      &lt;/modules&gt;</div><div class="line">    &lt;/profile&gt;  </div><div class="line"></div><div class="line">    &lt;profile&gt;</div><div class="line">      &lt;id&gt;hive-thriftserver&lt;/id&gt;</div><div class="line">      &lt;modules&gt;</div><div class="line">        &lt;module&gt;sql/hive-thriftserver&lt;/module&gt;</div><div class="line">      &lt;/modules&gt;</div><div class="line">    &lt;/profile&gt;      </div><div class="line">&lt;/profiles&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>由pom.xml得知訊息<ul>
+<li>properties section:<ul>
+<li>編譯預設支援hadoop2.6.5</li>
+<li>編譯預設支援yarn的版本與hadoop相同</li>
+</ul>
+</li>
+<li>profiles section:<ul>
+<li>可支援的hadoop為2.6與2.7，預設為2.6</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>目標平台使用Hadoop版本為2.8.1，使用下述命令進行編譯<ul>
+<li>./dev/make-distribution.sh –name spark-2.2.0 –tgz  -Pyarn -Phadoop-2.8 -Phive -Phive-thriftserver -Dhadoop.version=2.8.1</li>
+</ul>
+</li>
+<li>參數說明:<ul>
+<li>–name: 輸出名稱，make-distribution.sh內指出此參數將會替代spark-$VERSION-bin-$NAME中的$NAME</li>
+<li>–tgz: 輸出tgz包</li>
+<li>-Pyarn: 支援yarn, 指定profile中對應的id</li>
+<li>-Phadoop-2.7: 由<a href="http://spark.apache.org/docs/latest/building-spark.html#specifying-the-hadoop-version-and-enabling-yarn" title="Specifying hadoop version" target="_blank" rel="external">Spark官方文檔</a>得知，若要支援Hadoop 2.7+的版本，此參數指定為-Phadoop-2.7</li>
+<li>-Phive: 支援hive</li>
+<li>-Phive-thriftserver: 支援hive-thriftserver，指定profile中對應的id</li>
+<li>-Dhadoop.version=2.8.1: 指定property中Hadoop版本為2.8.1，替換掉pom.xml內的2.6.5</li>
+</ul>
+</li>
+<li>make-distribution.sh內最終會執行/build/mvn，並自動設置MAVEN_OPTS，以及在編譯命令中加上 -DskipTests clean package</li>
+<li>在編譯命令中加上-X，可以得到詳細的輸出訊息，可用於錯誤原因確認<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 spark-2.2.0]<span class="comment"># ./dev/make-distribution.sh --name spark-2.2.0 --tgz  -Pyarn -Phadoop-2.8 -Phive -Phive-thriftserver -Dhadoop.version=2.8.1</span></div><div class="line">main:</div><div class="line">[INFO] Executed tasks</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] Reactor Summary:</div><div class="line">[INFO] </div><div class="line">[INFO] Spark Project Parent POM ........................... SUCCESS [  7.014 s]</div><div class="line">[INFO] Spark Project Tags ................................. SUCCESS [  7.707 s]</div><div class="line">[INFO] Spark Project Sketch ............................... SUCCESS [  6.783 s]</div><div class="line">[INFO] Spark Project Networking ........................... SUCCESS [ 20.351 s]</div><div class="line">[INFO] Spark Project Shuffle Streaming Service ............ SUCCESS [ 15.513 s]</div><div class="line">[INFO] Spark Project Unsafe ............................... SUCCESS [ 15.655 s]</div><div class="line">[INFO] Spark Project Launcher ............................. SUCCESS [ 19.657 s]</div><div class="line">[INFO] Spark Project Core ................................. SUCCESS [03:15 min]</div><div class="line">[INFO] Spark Project ML Local Library ..................... SUCCESS [ 15.572 s]</div><div class="line">[INFO] Spark Project GraphX ............................... SUCCESS [ 27.722 s]</div><div class="line">[INFO] Spark Project Streaming ............................ SUCCESS [01:01 min]</div><div class="line">[INFO] Spark Project Catalyst ............................. SUCCESS [01:50 min]</div><div class="line">[INFO] Spark Project SQL .................................. SUCCESS [02:45 min]</div><div class="line">[INFO] Spark Project ML Library ........................... SUCCESS [01:51 min]</div><div class="line">[INFO] Spark Project Tools ................................ SUCCESS [  2.650 s]</div><div class="line">[INFO] Spark Project Hive ................................. SUCCESS [ 59.211 s]</div><div class="line">[INFO] Spark Project REPL ................................. SUCCESS [  8.718 s]</div><div class="line">[INFO] Spark Project YARN Shuffle Service ................. SUCCESS [ 18.745 s]</div><div class="line">[INFO] Spark Project YARN ................................. SUCCESS [ 18.137 s]</div><div class="line">[INFO] Spark Project Hive Thrift Server ................... SUCCESS [ 38.423 s]</div><div class="line">[INFO] Spark Project Assembly ............................. SUCCESS [  4.710 s]</div><div class="line">[INFO] Spark Project External Flume Sink .................. SUCCESS [ 16.745 s]</div><div class="line">[INFO] Spark Project External Flume ....................... SUCCESS [ 17.172 s]</div><div class="line">[INFO] Spark Project External Flume Assembly .............. SUCCESS [  4.797 s]</div><div class="line">[INFO] Spark Integration <span class="keyword">for</span> Kafka 0.8 .................... SUCCESS [ 15.995 s]</div><div class="line">[INFO] Kafka 0.10 Source <span class="keyword">for</span> Structured Streaming ......... SUCCESS [ 13.452 s]</div><div class="line">[INFO] Spark Project Examples ............................. SUCCESS [ 30.937 s]</div><div class="line">[INFO] Spark Project External Kafka Assembly .............. SUCCESS [  6.090 s]</div><div class="line">[INFO] Spark Integration <span class="keyword">for</span> Kafka 0.10 ................... SUCCESS [ 14.209 s]</div><div class="line">[INFO] Spark Integration <span class="keyword">for</span> Kafka 0.10 Assembly .......... SUCCESS [  5.213 s]</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] BUILD SUCCESS</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] Total time: 17:37 min</div><div class="line">[INFO] Finished at: 2017-09-02T00:22:22+08:00</div><div class="line">[INFO] Final Memory: 83M/352M</div><div class="line"></div><div class="line"></div><div class="line">+ TARDIR_NAME=spark-2.2.0-bin-custom-spark</div><div class="line">+ TARDIR=/opt/sourcecode/spark-2.2.0/spark-2.2.0-bin-custom-spark</div><div class="line"></div><div class="line"><span class="comment">## 由TARDIR_NAME與TARDIR變量可得知編譯輸出tgz包的名稱與位置</span></div><div class="line">[root@hadoop-01 spark-2.2.0]<span class="comment"># ll | grep spark-2.2.0-bin-custom-spark</span></div><div class="line">-rw-r--r--.  1 root      root      194582530 Sep  2 00:22 spark-2.2.0-bin-custom-spark.tgz</div></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Big-data/" rel="tag"># Big data</a>
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/30/yarn-basics/" rel="next" title="YARN Basics">
+                <i class="fa fa-chevron-left"></i> YARN Basics
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/10/mysql-install-from-source/" rel="prev" title="MySQL install from source">
+                MySQL install from source <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">2318</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Why-Spark"><span class="nav-number">1.</span> <span class="nav-text">Why Spark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#編譯步驟"><span class="nav-number">2.</span> <span class="nav-text">編譯步驟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本訊息"><span class="nav-number">3.</span> <span class="nav-text">基本訊息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Building-Spark-using-Maven-requires"><span class="nav-number">3.1.</span> <span class="nav-text">Building Spark using Maven requires:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Setting-up-Maven’s-Memory-Usage"><span class="nav-number">3.2.</span> <span class="nav-text">Setting up Maven’s Memory Usage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#build-mvn"><span class="nav-number">3.3.</span> <span class="nav-text">build/mvn</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Building-a-Runnable-Distribution"><span class="nav-number">3.4.</span> <span class="nav-text">Building a Runnable Distribution</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">2318</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hadoop,Big data,Hive," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Hive Built-in FunctionsBuilt-in Functions Apache Hive Built-in Functions  透過Hive command列出Built-in Functions 顯示出當前session所支持的Built-in Functions123456789101112131415161718192021222324252627282930313233">
+<meta name="keywords" content="Hadoop,Big data,Hive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive Built-in Functions">
+<meta property="og:url" content="http://yoursite.com/2017/09/25/builtin-functions/index.html">
+<meta property="og:site_name" content="2318">
+<meta property="og:description" content="Hive Built-in FunctionsBuilt-in Functions Apache Hive Built-in Functions  透過Hive command列出Built-in Functions 顯示出當前session所支持的Built-in Functions123456789101112131415161718192021222324252627282930313233">
+<meta property="og:updated_time" content="2017-09-26T04:11:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hive Built-in Functions">
+<meta name="twitter:description" content="Hive Built-in FunctionsBuilt-in Functions Apache Hive Built-in Functions  透過Hive command列出Built-in Functions 顯示出當前session所支持的Built-in Functions123456789101112131415161718192021222324252627282930313233">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/25/builtin-functions/"/>
+
+
+
+
+
+  <title>Hive Built-in Functions | 2318</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">2318</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/25/builtin-functions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="2318">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="2318">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hive Built-in Functions</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-25T00:03:30+08:00">
+                2017-09-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Hive-Built-in-Functions"><a href="#Hive-Built-in-Functions" class="headerlink" title="Hive Built-in Functions"></a>Hive Built-in Functions</h2><h3 id="Built-in-Functions"><a href="#Built-in-Functions" class="headerlink" title="Built-in Functions"></a>Built-in Functions</h3><ul>
+<li><a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF#LanguageManualUDF-Built-inFunctions" title="Built-in Functions" target="_blank" rel="external">Apache Hive Built-in Functions</a></li>
+</ul>
+<h4 id="透過Hive-command列出Built-in-Functions"><a href="#透過Hive-command列出Built-in-Functions" class="headerlink" title="透過Hive command列出Built-in Functions"></a>透過Hive command列出Built-in Functions</h4><ul>
+<li>顯示出當前session所支持的Built-in Functions<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">hive&gt; show functions;</div><div class="line">OK</div><div class="line">!</div><div class="line">!=</div><div class="line">%</div><div class="line">&amp;</div><div class="line">*</div><div class="line">+</div><div class="line">-</div><div class="line">/</div><div class="line">&lt;</div><div class="line">&lt;=</div><div class="line">&lt;=&gt;</div><div class="line">&lt;&gt;</div><div class="line">=</div><div class="line">==</div><div class="line">&gt;</div><div class="line">&gt;=</div><div class="line">^</div><div class="line">abs</div><div class="line">acos</div><div class="line">add_months</div><div class="line">and</div><div class="line">array</div><div class="line">array_contains</div><div class="line">ascii</div><div class="line">asin</div><div class="line">assert_true</div><div class="line">atan</div><div class="line">avg</div><div class="line"><span class="comment">-- ...</span></div><div class="line"></div><div class="line">Time taken: 0.471 seconds, Fetched: 210 row(s)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="查看特定Built-in-function說明。"><a href="#查看特定Built-in-function說明。" class="headerlink" title="查看特定Built-in function說明。"></a>查看特定Built-in function說明。</h4><ul>
+<li>function名稱可以是show functions所顯示出來的任一個。<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">hive&gt; desc function to_unix_timestamp;</div><div class="line">OK</div><div class="line">to_unix_timestamp(date[, pattern]) - Returns the UNIX timestamp</div><div class="line">Time taken: 0.084 seconds, Fetched: 1 row(s)</div><div class="line"></div><div class="line">hive&gt; desc function !;</div><div class="line">OK</div><div class="line">! a - Logical not</div><div class="line">Time taken: 0.05 seconds, Fetched: 1 row(s)</div><div class="line"></div><div class="line">hive&gt; desc function substr;</div><div class="line">OK</div><div class="line">substr(str, pos[, len]) - returns the substring of str that starts at pos and is of length len orsubstr(bin, pos[, len]) - returns the slice of byte array that starts at pos and is of length len</div><div class="line">Time taken: 0.026 seconds, Fetched: 1 row(s)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="顯示更詳細的Built-in-function說明"><a href="#顯示更詳細的Built-in-function說明" class="headerlink" title="顯示更詳細的Built-in function說明"></a>顯示更詳細的Built-in function說明</h4><ul>
+<li>包含註釋與使用範例。</li>
+<li>Synonyms關鍵字顯示，相同作用的function。<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">hive&gt; desc function extended substr;</div><div class="line">OK</div><div class="line">substr(str, pos[, len]) - returns the substring of str that starts at pos and is of length len orsubstr(bin, pos[, len]) - returns the slice of byte array that starts at pos and is of length len</div><div class="line">Synonyms: substring</div><div class="line">pos is a 1-based index. If pos&lt;0 the starting position is determined by counting backwards from the end of str.</div><div class="line">Example:</div><div class="line">   &gt; SELECT substr('Facebook', 5) FROM src LIMIT 1;</div><div class="line">  'book'</div><div class="line">  &gt; SELECT substr('Facebook', -5) FROM src LIMIT 1;</div><div class="line">  'ebook'</div><div class="line">  &gt; SELECT substr('Facebook', 5, 1) FROM src LIMIT 1;</div><div class="line">  'b'</div><div class="line">Time taken: 0.028 seconds, Fetched: 10 row(s)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="使用Built-in-function"><a href="#使用Built-in-function" class="headerlink" title="使用Built-in function"></a>使用Built-in function</h4><ul>
+<li>使用des function extented命令，可以得知此function如何使用，下述使用substr作為示例。<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">-- 列出紀錄</span></div><div class="line">hive&gt; select ename from emp limit 1;</div><div class="line">OK</div><div class="line">SMITH</div><div class="line">Time taken: 0.239 seconds, Fetched: 1 row(s)</div><div class="line"></div><div class="line"><span class="comment">-- 使用substr處理紀錄</span></div><div class="line">hive&gt; select substr(ename, 3) from emp limit 1;</div><div class="line">OK</div><div class="line">ITH</div><div class="line">Time taken: 0.119 seconds, Fetched: 1 row(s)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Date-Built-in-Functions"><a href="#Date-Built-in-Functions" class="headerlink" title="Date Built-in Functions"></a>Date Built-in Functions</h3><h4 id="取得當前時間"><a href="#取得當前時間" class="headerlink" title="取得當前時間"></a>取得當前時間</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">hive&gt; select to_date(from_unixtime(unix_timestamp())) from emp limit 1;</div><div class="line">OK</div><div class="line">2017-09-25</div><div class="line">Time taken: 0.083 seconds, Fetched: 1 row(s)</div><div class="line"></div><div class="line">hive&gt; select from_unixtime(unix_timestamp()) from emp limit 1;</div><div class="line">OK</div><div class="line">2017-09-25 00:11:09</div><div class="line">Time taken: 0.103 seconds, Fetched: 1 row(s)</div></pre></td></tr></table></figure>
+<h4 id="取的兩個時間的天數差異"><a href="#取的兩個時間的天數差異" class="headerlink" title="取的兩個時間的天數差異"></a>取的兩個時間的天數差異</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">hive&gt; desc function extended datediff;</div><div class="line">OK</div><div class="line">datediff(date1, date2) - Returns the number of days between date1 and date2</div><div class="line">date1 and date2 are strings in the format 'yyyy-MM-dd HH:mm:ss' or 'yyyy-MM-dd'. The time parts are ignored.If date1 is earlier than date2, the result is negative.</div><div class="line">Example:</div><div class="line">   &gt; select datediff('2009-07-30', '2009-07-31') FROM src LIMIT 1;</div><div class="line">  1</div><div class="line">Time taken: 0.011 seconds, Fetched: 5 row(s)</div><div class="line"></div><div class="line"><span class="comment">-- 使用datediff函數，輸入格式為yyyy-MM-dd</span></div><div class="line">hive&gt; select datediff('2010-07-31', '2009-07-31') from emp limit 1;</div><div class="line">OK</div><div class="line">365</div><div class="line">Time taken: 0.045 seconds, Fetched: 1 row(s)</div><div class="line"></div><div class="line"><span class="comment">-- 使用datediff函數，輸入格式為yyyy-MM-dd HH:mm:ss</span></div><div class="line">hive&gt; select datediff('2010-07-31 10:20:00', '2009-07-31 11:21:00') FROM emp LIMIT 1;</div><div class="line">OK</div><div class="line">365</div><div class="line">Time taken: 0.047 seconds, Fetched: 1 row(s)</div></pre></td></tr></table></figure>
+<h3 id="Type-Conversion-Functions"><a href="#Type-Conversion-Functions" class="headerlink" title="Type Conversion Functions"></a>Type Conversion Functions</h3><ul>
+<li><a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF#LanguageManualUDF-TypeConversionFunctions" title="Type Conversion Functions" target="_blank" rel="external">Apache Hive Type Conversion Functions</a></li>
+</ul>
+<h4 id="使用Type-Conversion-Functions"><a href="#使用Type-Conversion-Functions" class="headerlink" title="使用Type Conversion Functions"></a>使用Type Conversion Functions</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">hive&gt; desc emp;</div><div class="line">OK</div><div class="line">empno               	int</div><div class="line">ename               	string</div><div class="line">job                 	string</div><div class="line">mgr                 	int</div><div class="line">hiredate            	string</div><div class="line">sal                 	double</div><div class="line">comm                	double</div><div class="line">deptno              	int</div><div class="line">Time taken: 0.164 seconds, Fetched: 8 row(s)</div><div class="line"></div><div class="line"><span class="comment">-- 將double類型的sal紀錄，轉換成int類型</span></div><div class="line">hive&gt; select sal, cast(sal as int) from emp;</div><div class="line">OK</div><div class="line">800.0	800</div><div class="line">1600.0	1600</div><div class="line">1250.0	1250</div><div class="line">2975.0	2975</div><div class="line">1250.0	1250</div><div class="line">2850.0	2850</div><div class="line">2450.0	2450</div><div class="line">3000.0	3000</div><div class="line">5000.0	5000</div><div class="line">1500.0	1500</div><div class="line">1100.0	1100</div><div class="line">950.0	950</div><div class="line">3000.0	3000</div><div class="line">1300.0	1300</div><div class="line">10300.0	10300</div><div class="line">Time taken: 0.082 seconds, Fetched: 15 row(s)</div></pre></td></tr></table></figure>
+<h4 id="Type-Conversion-Failure"><a href="#Type-Conversion-Failure" class="headerlink" title="Type Conversion Failure"></a>Type Conversion Failure</h4><ul>
+<li>當轉換失敗時，Type Conversion Function將會回傳NUll<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">hive&gt; select ename, cast(ename as int) from emp;</div><div class="line">OK</div><div class="line">SMITH	NULL</div><div class="line">ALLEN	NULL</div><div class="line">WARD	NULL</div><div class="line">JONES	NULL</div><div class="line">MARTIN	NULL</div><div class="line">BLAKE	NULL</div><div class="line">CLARK	NULL</div><div class="line">SCOTT	NULL</div><div class="line">KING	NULL</div><div class="line">TURNER	NULL</div><div class="line">ADAMS	NULL</div><div class="line">JAMES	NULL</div><div class="line">FORD	NULL</div><div class="line">MILLER	NULL</div><div class="line">HIVE	NULL</div><div class="line">Time taken: 0.088 seconds, Fetched: 15 row(s)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Binary-Type-Conversion"><a href="#Binary-Type-Conversion" class="headerlink" title="Binary Type Conversion"></a>Binary Type Conversion</h4><ul>
+<li>若Binary要轉成Int類型，須先轉換成String類型，才能換成Int類型。</li>
+</ul>
+<h3 id="常用built-in-functions補充"><a href="#常用built-in-functions補充" class="headerlink" title="常用built-in functions補充"></a>常用built-in functions補充</h3><h4 id="isnull-and-isnotnull"><a href="#isnull-and-isnotnull" class="headerlink" title="isnull and isnotnull"></a>isnull and isnotnull</h4><ul>
+<li>isnull: 若紀錄為null，則回傳true。</li>
+<li>isnotnull: 與isnull相反。若紀錄不為null，則回傳true。<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">hive&gt; select comm, isnull(comm), isnotnull(comm) from emp;</div><div class="line">OK</div><div class="line">NULL	true	false</div><div class="line">300.0	false	true</div><div class="line">500.0	false	true</div><div class="line">NULL	true	false</div><div class="line">1400.0	false	true</div><div class="line">NULL	true	false</div><div class="line">NULL	true	false</div><div class="line">NULL	true	false</div><div class="line">NULL	true	false</div><div class="line">0.0	false	true</div><div class="line">NULL	true	false</div><div class="line">NULL	true	false</div><div class="line">NULL	true	false</div><div class="line">NULL	true	false</div><div class="line">NULL	true	false</div><div class="line">Time taken: 0.079 seconds, Fetched: 15 row(s)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="assert-true"><a href="#assert-true" class="headerlink" title="assert_true"></a>assert_true</h4><ul>
+<li>判斷指定欄位內的紀錄中，若有任何一個紀錄不符合，則拋出異常。<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">hive&gt; select assert_true(sal &gt; 700) from emp;</div><div class="line">OK</div><div class="line">NULL</div><div class="line">NULL</div><div class="line">NULL</div><div class="line">NULL</div><div class="line">NULL</div><div class="line">NULL</div><div class="line">NULL</div><div class="line">NULL</div><div class="line">NULL</div><div class="line">NULL</div><div class="line">NULL</div><div class="line">NULL</div><div class="line">NULL</div><div class="line">NULL</div><div class="line">NULL</div><div class="line">Time taken: 0.096 seconds, Fetched: 15 row(s)</div><div class="line"></div><div class="line">hive&gt; select assert_true(sal &gt; 800) from emp;</div><div class="line">OK</div><div class="line">Failed with exception java.io.IOException:org.apache.hadoop.hive.ql.metadata.HiveException: ASSERT_TRUE(): assertion failed.</div><div class="line">Time taken: 0.07 seconds</div></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+          
+            <a href="/tags/Big-data/" rel="tag"># Big data</a>
+          
+            <a href="/tags/Hive/" rel="tag"># Hive</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/24/hive-join/" rel="next" title="Hive Join">
+                <i class="fa fa-chevron-left"></i> Hive Join
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">2318</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hive-Built-in-Functions"><span class="nav-number">1.</span> <span class="nav-text">Hive Built-in Functions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Built-in-Functions"><span class="nav-number">1.1.</span> <span class="nav-text">Built-in Functions</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#透過Hive-command列出Built-in-Functions"><span class="nav-number">1.1.1.</span> <span class="nav-text">透過Hive command列出Built-in Functions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看特定Built-in-function說明。"><span class="nav-number">1.1.2.</span> <span class="nav-text">查看特定Built-in function說明。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#顯示更詳細的Built-in-function說明"><span class="nav-number">1.1.3.</span> <span class="nav-text">顯示更詳細的Built-in function說明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用Built-in-function"><span class="nav-number">1.1.4.</span> <span class="nav-text">使用Built-in function</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Date-Built-in-Functions"><span class="nav-number">1.2.</span> <span class="nav-text">Date Built-in Functions</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#取得當前時間"><span class="nav-number">1.2.1.</span> <span class="nav-text">取得當前時間</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#取的兩個時間的天數差異"><span class="nav-number">1.2.2.</span> <span class="nav-text">取的兩個時間的天數差異</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Type-Conversion-Functions"><span class="nav-number">1.3.</span> <span class="nav-text">Type Conversion Functions</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用Type-Conversion-Functions"><span class="nav-number">1.3.1.</span> <span class="nav-text">使用Type Conversion Functions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Type-Conversion-Failure"><span class="nav-number">1.3.2.</span> <span class="nav-text">Type Conversion Failure</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Binary-Type-Conversion"><span class="nav-number">1.3.3.</span> <span class="nav-text">Binary Type Conversion</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用built-in-functions補充"><span class="nav-number">1.4.</span> <span class="nav-text">常用built-in functions補充</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#isnull-and-isnotnull"><span class="nav-number">1.4.1.</span> <span class="nav-text">isnull and isnotnull</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#assert-true"><span class="nav-number">1.4.2.</span> <span class="nav-text">assert_true</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">2318</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

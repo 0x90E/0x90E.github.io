@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Data mining,Machine learning,RF," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Random Forsest定義RF為Bagging的擴展變形。RF以決策樹為基學習器，並在決策樹訓練時，引入隨機屬性選擇。 產生基學習器建立每一顆決策樹皆包含行採樣、列採樣與完全分裂三個步驟:  行採樣: 目的是挑選進行訓練的數據。採用有放回的方式，及為採樣得到的樣本集中，可能會有重複的樣本。假設，輸入N個樣本，那麼採樣的樣本也為N個。在訓練時，每一顆樹輸入樣本都不是全部的樣本，使得相對不容易o">
+<meta name="keywords" content="Data mining,Machine learning,RF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RF Basic">
+<meta property="og:url" content="http://yoursite.com/2017/06/28/rf-basic/index.html">
+<meta property="og:site_name" content="2318">
+<meta property="og:description" content="Random Forsest定義RF為Bagging的擴展變形。RF以決策樹為基學習器，並在決策樹訓練時，引入隨機屬性選擇。 產生基學習器建立每一顆決策樹皆包含行採樣、列採樣與完全分裂三個步驟:  行採樣: 目的是挑選進行訓練的數據。採用有放回的方式，及為採樣得到的樣本集中，可能會有重複的樣本。假設，輸入N個樣本，那麼採樣的樣本也為N個。在訓練時，每一顆樹輸入樣本都不是全部的樣本，使得相對不容易o">
+<meta property="og:updated_time" content="2017-06-28T01:41:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RF Basic">
+<meta name="twitter:description" content="Random Forsest定義RF為Bagging的擴展變形。RF以決策樹為基學習器，並在決策樹訓練時，引入隨機屬性選擇。 產生基學習器建立每一顆決策樹皆包含行採樣、列採樣與完全分裂三個步驟:  行採樣: 目的是挑選進行訓練的數據。採用有放回的方式，及為採樣得到的樣本集中，可能會有重複的樣本。假設，輸入N個樣本，那麼採樣的樣本也為N個。在訓練時，每一顆樹輸入樣本都不是全部的樣本，使得相對不容易o">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/28/rf-basic/"/>
+
+
+
+
+
+  <title>RF Basic | 2318</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">2318</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/28/rf-basic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="2318">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="2318">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">RF Basic</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-28T00:20:02+08:00">
+                2017-06-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Random-Forsest"><a href="#Random-Forsest" class="headerlink" title="Random Forsest"></a>Random Forsest</h2><h2 id="定義"><a href="#定義" class="headerlink" title="定義"></a>定義</h2><p>RF為Bagging的擴展變形。RF以決策樹為基學習器，並在決策樹訓練時，引入隨機屬性選擇。</p>
+<h2 id="產生基學習器"><a href="#產生基學習器" class="headerlink" title="產生基學習器"></a>產生基學習器</h2><p>建立每一顆決策樹皆包含行採樣、列採樣與完全分裂三個步驟:</p>
+<ol>
+<li><p>行採樣: 目的是挑選進行訓練的數據。採用有放回的方式，及為採樣得到的樣本集中，可能會有重複的樣本。假設，輸入N個樣本，那麼採樣的樣本也為N個。在訓練時，每一顆樹輸入樣本都不是全部的樣本，使得相對不容易over-fitting。</p>
+</li>
+<li><p>列採樣: 目的是挑選進行訓練的特徵，從M個特徵中，挑m個(m &lt;&lt; M)。</p>
+</li>
+<li><p>完全分裂: 使用完全分裂的方式對採樣後的數據建立決策樹，這樣決策樹的某一個葉子節點要麼是無法繼續分裂，不然就是裡面的樣本全屬一同一個分類。</p>
+</li>
+</ol>
+<p>與其他決策樹算法不同的是，這裡不進行剪枝，因為前兩個隨機採樣的過程保證了隨機性，就算不進行剪枝，也不會出現over-fitting</p>
+<h2 id="Bagging"><a href="#Bagging" class="headerlink" title="Bagging"></a>Bagging</h2><p>為一種並行式集成學習方法，基於自助採樣法(bootstrap sampling)，在有N個樣本的數據集中，隨機挑選一個樣本，然後將樣本放回，下次隨機挑選時，仍有機會挑中相同的樣本。根據公式推算，約有63.2%的樣本會被用來進行訓練。<br>透過上述步驟，可採樣出T個包含N個樣本的子數據集，對每個子數據集進行訓練，則會得到T個基學習器，再將這些基學習器進行結合。<br>進行結合時，Bagging通常對分類問題採用簡單投票法，對回歸問題採用簡單平均法。</p>
+<h2 id="優點"><a href="#優點" class="headerlink" title="優點"></a>優點</h2><ul>
+<li>在很多數據集上，相對其他算法有著很大的優勢</li>
+<li>能夠處理很高維度(feature很多)的數據，並且不用做特徵選擇</li>
+<li>在訓練完後，它能給出哪些feature比較重要</li>
+<li>在創建隨機森林時，對 generlization error使用的是無偏估計</li>
+<li>訓練速度快</li>
+<li>容易做成並行化方法</li>
+<li>實現比較簡單</li>
+</ul>
+<h2 id="缺點"><a href="#缺點" class="headerlink" title="缺點"></a>缺點</h2><ul>
+<li>模型規模較大</li>
+</ul>
+<h2 id="Python-示例"><a href="#Python-示例" class="headerlink" title="Python 示例"></a>Python 示例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</div><div class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, precision_score, recall_score</div><div class="line"></div><div class="line"><span class="comment"># Type of data is DataFrame</span></div><div class="line">X = data.iloc[:, data.columns != <span class="string">"label"</span>].values</div><div class="line">y = data.iloc[:, data.columns == <span class="string">"label"</span>].values</div><div class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.3</span>, random_state=<span class="number">0</span>)</div><div class="line">classifier = RandomForestClassifier(random_state=<span class="number">0</span>)</div><div class="line">classifier.fit(X_train, y_train.ravel())</div><div class="line"></div><div class="line">y_pred = classifier.predict(X_test)</div><div class="line"><span class="keyword">print</span> <span class="string">"accuracy: %f"</span> %accuracy_score(y_test, y_pred)</div><div class="line"><span class="keyword">print</span> <span class="string">"precision: %f"</span> %precision_score(y_test, y_pred, average=<span class="string">"macro"</span>)</div><div class="line"><span class="keyword">print</span> <span class="string">"recall: %f"</span> %recall_score(y_test, y_pred, average=<span class="string">"macro"</span>)</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Data-mining/" rel="tag"># Data mining</a>
+          
+            <a href="/tags/Machine-learning/" rel="tag"># Machine learning</a>
+          
+            <a href="/tags/RF/" rel="tag"># RF</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/26/svm_basic/" rel="next" title="SVM basic">
+                <i class="fa fa-chevron-left"></i> SVM basic
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/03/nlp-gram/" rel="prev" title="NLP N-gram">
+                NLP N-gram <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">2318</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Random-Forsest"><span class="nav-number">1.</span> <span class="nav-text">Random Forsest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定義"><span class="nav-number">2.</span> <span class="nav-text">定義</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#產生基學習器"><span class="nav-number">3.</span> <span class="nav-text">產生基學習器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bagging"><span class="nav-number">4.</span> <span class="nav-text">Bagging</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#優點"><span class="nav-number">5.</span> <span class="nav-text">優點</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缺點"><span class="nav-number">6.</span> <span class="nav-text">缺點</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-示例"><span class="nav-number">7.</span> <span class="nav-text">Python 示例</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">2318</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

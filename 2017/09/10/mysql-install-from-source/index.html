@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Big data," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Install MySQL from sourcecode安裝步驟基本訊息 OS: CentOS 6.5 64bit MySQL: 5.6.23  設置MySQL目錄123456789[root@hadoop-01 ~]# cd /usr/local[root@hadoop-01 local]# ls | grep mysqlmysql-5.6.23-linux-glibc2.5-x86_64.">
+<meta name="keywords" content="Big data">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL install from source">
+<meta property="og:url" content="http://yoursite.com/2017/09/10/mysql-install-from-source/index.html">
+<meta property="og:site_name" content="2318">
+<meta property="og:description" content="Install MySQL from sourcecode安裝步驟基本訊息 OS: CentOS 6.5 64bit MySQL: 5.6.23  設置MySQL目錄123456789[root@hadoop-01 ~]# cd /usr/local[root@hadoop-01 local]# ls | grep mysqlmysql-5.6.23-linux-glibc2.5-x86_64.">
+<meta property="og:updated_time" content="2017-09-11T04:40:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL install from source">
+<meta name="twitter:description" content="Install MySQL from sourcecode安裝步驟基本訊息 OS: CentOS 6.5 64bit MySQL: 5.6.23  設置MySQL目錄123456789[root@hadoop-01 ~]# cd /usr/local[root@hadoop-01 local]# ls | grep mysqlmysql-5.6.23-linux-glibc2.5-x86_64.">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/10/mysql-install-from-source/"/>
+
+
+
+
+
+  <title>MySQL install from source | 2318</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">2318</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/10/mysql-install-from-source/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="2318">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="2318">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL install from source</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-10T12:32:35+08:00">
+                2017-09-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Install-MySQL-from-sourcecode"><a href="#Install-MySQL-from-sourcecode" class="headerlink" title="Install MySQL from sourcecode"></a>Install MySQL from sourcecode</h2><h3 id="安裝步驟"><a href="#安裝步驟" class="headerlink" title="安裝步驟"></a>安裝步驟</h3><h4 id="基本訊息"><a href="#基本訊息" class="headerlink" title="基本訊息"></a>基本訊息</h4><ul>
+<li>OS: CentOS 6.5 64bit</li>
+<li>MySQL: 5.6.23</li>
+</ul>
+<h4 id="設置MySQL目錄"><a href="#設置MySQL目錄" class="headerlink" title="設置MySQL目錄"></a>設置MySQL目錄</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 ~]<span class="comment"># cd /usr/local</span></div><div class="line">[root@hadoop-01 <span class="built_in">local</span>]<span class="comment"># ls | grep mysql</span></div><div class="line">mysql-5.6.23-linux-glibc2.5-x86_64.tar.gz</div><div class="line">[root@hadoop-01 <span class="built_in">local</span>]<span class="comment"># mv mysql-5.6.23-linux-glibc2.5-x86_64 mysql</span></div><div class="line">[root@hadoop-01 <span class="built_in">local</span>]<span class="comment"># vi /etc/profile</span></div><div class="line"><span class="comment">## 新增下列兩行在文件中的任一位置，設置MySQL環境變量</span></div><div class="line"><span class="built_in">export</span> MYSQL_HOME=/usr/<span class="built_in">local</span>/mysql</div><div class="line"><span class="built_in">export</span> PATH=<span class="string">"<span class="variable">$MYSQL_HOME</span>/bin:<span class="variable">$PATH</span>"</span></div><div class="line">[root@hadoop-01 <span class="built_in">local</span>]<span class="comment"># source /etc/profile</span></div></pre></td></tr></table></figure>
+<h4 id="新增Linux的用戶與群組"><a href="#新增Linux的用戶與群組" class="headerlink" title="新增Linux的用戶與群組"></a>新增Linux的用戶與群組</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 <span class="built_in">local</span>]<span class="comment"># groupadd -g 101 dba</span></div><div class="line">[root@hadoop-01 <span class="built_in">local</span>]<span class="comment"># useradd -u 514 -g dba -G root -d /usr/local/mysql mysqladmin</span></div><div class="line">[root@hadoop-01 <span class="built_in">local</span>]<span class="comment"># id mysqladmin</span></div><div class="line">uid=514(mysqladmin) gid=101(dba) groups=101(dba),0(root)</div></pre></td></tr></table></figure>
+<h4 id="建立-etc-my-cnf"><a href="#建立-etc-my-cnf" class="headerlink" title="建立/etc/my.cnf"></a>建立/etc/my.cnf</h4><p>MySQL啟動時，會跟據下列順序，讀取第一個存在的配置文件</p>
+<ol>
+<li>/etc/my.cnf</li>
+<li>/etc/mysql/my.cnf</li>
+<li>SYSCONFDIR/my.cnf</li>
+<li>$MYSQL_HOME/my.cnf</li>
+<li>–defaults-extra-file</li>
+<li>~/my.cnf </li>
+</ol>
+<p>進行/etc/my.cnf配置<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 <span class="built_in">local</span>]<span class="comment"># vi /etc/my.cnf</span></div><div class="line">[client]</div><div class="line">port            = 3306</div><div class="line">socket          = /usr/<span class="built_in">local</span>/mysql/data/mysql.sock</div><div class="line"> </div><div class="line">[mysqld]</div><div class="line">port            = 3306</div><div class="line">socket          = /usr/<span class="built_in">local</span>/mysql/data/mysql.sock</div><div class="line"></div><div class="line">skip-external-locking</div><div class="line">key_buffer_size = 256M</div><div class="line">sort_buffer_size = 2M</div><div class="line">read_buffer_size = 2M</div><div class="line">read_rnd_buffer_size = 4M</div><div class="line">query_cache_size= 32M</div><div class="line">max_allowed_packet = 16M</div><div class="line">myisam_sort_buffer_size=128M</div><div class="line">tmp_table_size=32M</div><div class="line"></div><div class="line">table_open_cache = 512</div><div class="line">thread_cache_size = 8</div><div class="line">wait_timeout = 86400</div><div class="line">interactive_timeout = 86400</div><div class="line">max_connections = 600</div><div class="line"></div><div class="line"><span class="comment"># Try number of CPU's*2 for thread_concurrency</span></div><div class="line">thread_concurrency = 32</div><div class="line"></div><div class="line"><span class="comment">#isolation level and default engine </span></div><div class="line">default-storage-engine = INNODB</div><div class="line">transaction-isolation = READ-COMMITTED</div><div class="line"></div><div class="line">server-id  = 1</div><div class="line">basedir     = /usr/<span class="built_in">local</span>/mysql</div><div class="line">datadir     = /usr/<span class="built_in">local</span>/mysql/data</div><div class="line">pid-file     = /usr/<span class="built_in">local</span>/mysql/data/hostname.pid</div><div class="line"></div><div class="line"><span class="comment">#open performance schema</span></div><div class="line"><span class="built_in">log</span>-warnings</div><div class="line">sysdate-is-now</div><div class="line"></div><div class="line">binlog_format = MIXED</div><div class="line">log_bin_trust_function_creators=1</div><div class="line"><span class="built_in">log</span>-error  = /usr/<span class="built_in">local</span>/mysql/data/hostname.err</div><div class="line"><span class="built_in">log</span>-bin=/usr/<span class="built_in">local</span>/mysql/arch/mysql-bin</div><div class="line"><span class="comment">#other logs</span></div><div class="line"><span class="comment">#general_log =1</span></div><div class="line"><span class="comment">#general_log_file  = /usr/local/mysql/data/general_log.err</span></div><div class="line"><span class="comment">#slow_query_log=1</span></div><div class="line"><span class="comment">#slow_query_log_file=/usr/local/mysql/data/slow_log.err</span></div><div class="line"></div><div class="line"><span class="comment">#for replication slave</span></div><div class="line"><span class="comment">#log-slave-updates </span></div><div class="line"><span class="comment">#sync_binlog = 1</span></div><div class="line"></div><div class="line"><span class="comment">#for innodb options </span></div><div class="line">innodb_data_home_dir = /usr/<span class="built_in">local</span>/mysql/data/</div><div class="line">innodb_data_file_path = ibdata1:500M:autoextend</div><div class="line">innodb_log_group_home_dir = /usr/<span class="built_in">local</span>/mysql/arch</div><div class="line">innodb_log_files_in_group = 2</div><div class="line">innodb_log_file_size = 200M</div><div class="line"></div><div class="line"><span class="comment">#根據記憶體資源配置</span></div><div class="line">innodb_buffer_pool_size = 2048M</div><div class="line">innodb_additional_mem_pool_size = 50M</div><div class="line">innodb_log_buffer_size = 16M</div><div class="line"></div><div class="line">innodb_lock_wait_timeout = 100</div><div class="line"><span class="comment">#innodb_thread_concurrency = 0</span></div><div class="line">innodb_flush_log_at_trx_commit = 1</div><div class="line">innodb_locks_unsafe_for_binlog=1</div><div class="line"></div><div class="line"><span class="comment">#innodb io features: add for mysql5.5.8</span></div><div class="line">performance_schema</div><div class="line">innodb_read_io_threads=4</div><div class="line">innodb-write-io-threads=4</div><div class="line">innodb-io-capacity=200</div><div class="line"><span class="comment">#purge threads change default(0) to 1 for purge</span></div><div class="line">innodb_purge_threads=1</div><div class="line">innodb_use_native_aio=on</div><div class="line"></div><div class="line"><span class="comment">#case-sensitive file names and separate tablespace</span></div><div class="line">innodb_file_per_table = 1</div><div class="line">lower_case_table_names=1</div><div class="line"></div><div class="line">[mysqldump]</div><div class="line">quick</div><div class="line">max_allowed_packet = 16M</div><div class="line"></div><div class="line">[mysql]</div><div class="line">no-auto-rehash</div><div class="line"></div><div class="line">[mysqlhotcopy]</div><div class="line">interactive-timeout</div><div class="line"></div><div class="line">[myisamchk]</div><div class="line">key_buffer_size = 256M</div><div class="line">sort_buffer_size = 256M</div><div class="line">read_buffer = 2M</div><div class="line">write_buffer = 2M</div></pre></td></tr></table></figure></p>
+<h4 id="安裝MySQL"><a href="#安裝MySQL" class="headerlink" title="安裝MySQL"></a>安裝MySQL</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">## 修改相關文件的擁有者與權限</div><div class="line">[root@hadoop-01 local]# chown mysqladmin:dba /etc/my.cnf </div><div class="line">[root@hadoop-01 local]# chmod 640 /etc/my.cnf</div><div class="line">[root@hadoop-01 local]# chown -R mysqladmin:dba /usr/local/mysql</div><div class="line">[root@hadoop-01 local]# chmod -R 755 /usr/local/mysql </div><div class="line">[root@hadoop-01 local]# su - mysqladmin</div><div class="line"></div><div class="line">[mysqladmin@hadoop-01 ~]$ mkdir arch  ## 在/etc/my.cnf所設定的Log存放目錄</div><div class="line">## 進行安裝</div><div class="line">[mysqladmin@hadoop-01 ~]$ scripts/mysql_install_db  --user=mysqladmin --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data</div><div class="line">Installing MySQL system tables..../bin/mysqld: error while loading shared libraries: libaio.so.1: cannot open shared object file: No such file or directory</div><div class="line"></div><div class="line">## 此錯誤是因為缺少libaio.so包</div><div class="line">[mysqladmin@hadoop-01 ~]$ sudo yum -y install libaio  ## 安裝libaio.so</div><div class="line">## 再次進行安裝</div><div class="line">[mysqladmin@hadoop-01 ~]$ scripts/mysql_install_db  --user=mysqladmin --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data</div><div class="line">Installing MySQL system tables...2017-09-06 00:11:24 0 [Warning] &apos;THREAD_CONCURRENCY&apos; is deprecated and will be removed in a future release.</div><div class="line">2017-09-06 00:11:24 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).</div><div class="line">OK</div><div class="line"></div><div class="line">Filling help tables...2017-09-06 00:11:26 0 [Warning] &apos;THREAD_CONCURRENCY&apos; is deprecated and will be removed in a future release.</div><div class="line">2017-09-06 00:11:26 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).</div><div class="line">OK</div></pre></td></tr></table></figure>
+<h4 id="配置開機啟動MySQL"><a href="#配置開機啟動MySQL" class="headerlink" title="配置開機啟動MySQL"></a>配置開機啟動MySQL</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[mysqladmin@hadoop-01 ~]$ su - <span class="comment">## 切換至root</span></div><div class="line">[root@hadoop-01 ~]<span class="comment"># cd /usr/local/mysql</span></div><div class="line">[root@hadoop-01 mysql]<span class="comment"># cp support-files/mysql.server /etc/rc.d/init.d/mysql</span></div><div class="line">[root@hadoop-01 mysql]<span class="comment"># chmod +x /etc/rc.d/init.d/mysql</span></div><div class="line">[root@hadoop-01 mysql]<span class="comment"># chkconfig --del mysql</span></div><div class="line">[root@hadoop-01 mysql]<span class="comment"># chkconfig --add mysql</span></div><div class="line">[root@hadoop-01 mysql]<span class="comment"># chkconfig --level 345 mysql on</span></div></pre></td></tr></table></figure>
+<h4 id="啟動MySQL"><a href="#啟動MySQL" class="headerlink" title="啟動MySQL"></a>啟動MySQL</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 mysql]<span class="comment"># su - mysqladmin</span></div><div class="line">[mysqladmin@hadoop-01 ~]$ bin/mysqld_safe &amp;</div><div class="line">[1] 5382</div><div class="line">[mysqladmin@hadoop-01 ~]$ 170906 00:30:44 mysqld_safe Logging to <span class="string">'/usr/local/mysql/data/hostname.err'</span>.</div><div class="line">170906 00:30:44 mysqld_safe Starting mysqld daemon with databases from /usr/<span class="built_in">local</span>/mysql/data</div><div class="line">[mysqladmin@hadoop-01 ~]$ ps -ef|grep mysqld  <span class="comment">## 確認MySQL的行程狀態</span></div><div class="line">514        5382   5358  0 00:30 pts/1    00:00:00 /bin/sh bin/mysqld_safe</div><div class="line">514        6025   5382  1 00:30 pts/1    00:00:00 /usr/<span class="built_in">local</span>/mysql/bin/mysqld --basedir=/usr/<span class="built_in">local</span>/mysql --datadir=/usr/<span class="built_in">local</span>/mysql/data --plugin-dir=/usr/<span class="built_in">local</span>/mysql/lib/plugin --<span class="built_in">log</span>-error=/usr/<span class="built_in">local</span>/mysql/data/hostname.err --pid-file=/usr/<span class="built_in">local</span>/mysql/data/hostname.pid --socket=/usr/<span class="built_in">local</span>/mysql/data/mysql.sock --port=3306</div><div class="line">514        6052   5358  0 00:31 pts/1    00:00:00 grep mysqld</div><div class="line">[mysqladmin@hadoop-01 ~]$ netstat -nlp | grep mysql  <span class="comment">## 確認MySQL的網路狀態</span></div><div class="line">(Not all processes could be identified, non-owned process info</div><div class="line"> will not be shown, you would have to be root to see it all.)</div><div class="line">tcp        0      0 :::3306                     :::*                        LISTEN      6025/mysqld    </div><div class="line">[mysqladmin@hadoop-01 ~]$ service mysql status  <span class="comment">## 確認MySQL的服務運行狀態</span></div><div class="line">MySQL running (6025)                                       [  OK  ]</div></pre></td></tr></table></figure>
+<p>若MySQL啟動失敗，可以至$MYSQL_HOME/data/hostname.err下查看日誌。</p>
+<h4 id="登入MySQL，進行帳號配置"><a href="#登入MySQL，進行帳號配置" class="headerlink" title="登入MySQL，進行帳號配置"></a>登入MySQL，進行帳號配置</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line">[mysqladmin@hadoop-01 ~]$ mysql <span class="comment">## 使用空帳號，空密碼登入MySQL</span></div><div class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</div><div class="line">Your MySQL connection id is 1</div><div class="line">Server version: 5.6.23-log MySQL Community Server (GPL)</div><div class="line"></div><div class="line">Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.</div><div class="line"></div><div class="line">Oracle is a registered trademark of Oracle Corporation and/or its</div><div class="line">affiliates. Other names may be trademarks of their respective</div><div class="line">owners.</div><div class="line"></div><div class="line">Type <span class="string">'help;'</span> or <span class="string">'\h'</span> <span class="keyword">for</span> <span class="built_in">help</span>. Type <span class="string">'\c'</span> to clear the current input statement.</div><div class="line"></div><div class="line">mysql&gt;</div><div class="line">mysql&gt; show databases;</div><div class="line">+--------------------+</div><div class="line">| Database           |</div><div class="line">+--------------------+</div><div class="line">| information_schema |</div><div class="line">| mysql              |</div><div class="line">| performance_schema |</div><div class="line">| <span class="built_in">test</span>               |</div><div class="line">+--------------------+</div><div class="line">4 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</div><div class="line"></div><div class="line">mysql&gt; use mysql;   <span class="comment">## MySQL的帳號訊息皆存在此database</span></div><div class="line">Database changed</div><div class="line">mysql&gt; update user <span class="built_in">set</span> password=password(<span class="string">'password'</span>) <span class="built_in">where</span> user=<span class="string">'root'</span>;  <span class="comment">## 設置root帳號的密碼</span></div><div class="line">Query OK, 4 rows affected (0.00 sec)</div><div class="line">Rows matched: 4  Changed: 4  Warnings: 0</div><div class="line"></div><div class="line">mysql&gt; select host, user, password from user;  <span class="comment">## MySQL的帳號訊息皆存在此table</span></div><div class="line">+-----------+------+-------------------------------------------+</div><div class="line">| host      | user | password                                  |</div><div class="line">+-----------+------+-------------------------------------------+</div><div class="line">| localhost | root | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| hadoop-01 | root | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| 127.0.0.1 | root | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| ::1       | root | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| localhost |      |                                           |</div><div class="line">| hadoop-01 |      |          |</div><div class="line">+-----------+------+-------------------------------------------+</div><div class="line">4 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; delete from user <span class="built_in">where</span> user=<span class="string">''</span>;  <span class="comment">## 刪除空帳號</span></div><div class="line">mysql&gt; select host, user, password from user;</div><div class="line">+-----------+------+-------------------------------------------+</div><div class="line">| host      | user | password                                  |</div><div class="line">+-----------+------+-------------------------------------------+</div><div class="line">| localhost | root | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| hadoop-01 | root | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| 127.0.0.1 | root | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| ::1       | root | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">+-----------+------+-------------------------------------------+</div><div class="line">4 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; flush privileges;</div><div class="line">mysql&gt; <span class="built_in">exit</span></div><div class="line">Bye</div></pre></td></tr></table></figure>
+<h4 id="使用MySQL-root帳號登入"><a href="#使用MySQL-root帳號登入" class="headerlink" title="使用MySQL root帳號登入"></a>使用MySQL root帳號登入</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line">[mysqladmin@hadoop-01 ~]$ mysql -uroot -h127.0.0.1 -p3306 -ppassword  <span class="comment">## -p後面直接接密碼，不需空格</span></div><div class="line">Warning: Using a password on the <span class="built_in">command</span> line interface can be insecure.</div><div class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</div><div class="line">Your MySQL connection id is 15</div><div class="line">Server version: 5.6.23-log MySQL Community Server (GPL)</div><div class="line"></div><div class="line">Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.</div><div class="line"></div><div class="line">Oracle is a registered trademark of Oracle Corporation and/or its</div><div class="line">affiliates. Other names may be trademarks of their respective</div><div class="line">owners.</div><div class="line"></div><div class="line">Type <span class="string">'help;'</span> or <span class="string">'\h'</span> <span class="keyword">for</span> <span class="built_in">help</span>. Type <span class="string">'\c'</span> to clear the current input statement.</div><div class="line"></div><div class="line">mysql&gt; show databases; <span class="comment">## 顯示當前用戶有權限訪問的database</span></div><div class="line">+--------------------+</div><div class="line">| Database           |</div><div class="line">+--------------------+</div><div class="line">| information_schema |</div><div class="line">| mysql              |</div><div class="line">| performance_schema |</div><div class="line">| <span class="built_in">test</span>               |</div><div class="line">+--------------------+</div><div class="line">4 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; desc user; <span class="comment">## 顯示table資訊</span></div><div class="line">mysql&gt; show create table user; <span class="comment">## 顯示create database語句</span></div><div class="line"></div><div class="line">mysql&gt; create database dbname DEFAULT CHARACTER SET utf8;  <span class="comment">## 創建database</span></div><div class="line">Query OK, 1 row affected (0.01 sec)</div><div class="line"></div><div class="line">mysql&gt; grant all on dbname.* TO <span class="string">'usera'</span>@<span class="string">'%'</span> IDENTIFIED BY <span class="string">'password'</span>; <span class="comment">## 創建user，設置密碼，允許從所有IP登入，並賦予讀存取db下的所有table權限。可對相同使用者重複設置。</span></div><div class="line">Query OK, 0 rows affected (0.04 sec)</div><div class="line"></div><div class="line">mysql&gt; grant all on dbname.* TO <span class="string">'usera'</span>@<span class="string">'192.168.16.130'</span> IDENTIFIED BY <span class="string">'password'</span>;  <span class="comment">## 創建user，設置密碼，允許從指定IP登入，並賦予讀存取db下的所有table權限。</span></div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; select host, user, password from user;</div><div class="line">+----------------+-------+-------------------------------------------+</div><div class="line">| host           | user  | password                                  |</div><div class="line">+----------------+-------+-------------------------------------------+</div><div class="line">| localhost      | root  | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| hadoop-01      | root  | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| 127.0.0.1      | root  | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| ::1            | root  | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| %              | usera | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| 192.168.16.130 | usera | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">+----------------+-------+-------------------------------------------+</div><div class="line">mysql&gt; flush privileges;</div><div class="line"></div><div class="line">mysql&gt; drop user usera@<span class="string">'%'</span>;  <span class="comment">## 刪除指定用戶與權限</span></div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; select host, user, password from user;</div><div class="line">+----------------+-------+-------------------------------------------+</div><div class="line">| host           | user  | password                                  |</div><div class="line">+----------------+-------+-------------------------------------------+</div><div class="line">| localhost      | root  | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| hadoop-01      | root  | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| 127.0.0.1      | root  | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| ::1            | root  | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| 192.168.16.130 | usera | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">+----------------+-------+-------------------------------------------+</div><div class="line">5 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</div><div class="line"></div><div class="line"></div><div class="line">mysql&gt; delete from user <span class="built_in">where</span> user=<span class="string">'usera'</span>;  <span class="comment">## 刪除用戶，但權限會留著</span></div><div class="line">mysql&gt; select host, user, password from user; </div><div class="line">+-----------+------+-------------------------------------------+</div><div class="line">| host      | user | password                                  |</div><div class="line">+-----------+------+-------------------------------------------+</div><div class="line">| localhost | root | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| hadoop-01 | root | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| 127.0.0.1 | root | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">| ::1       | root | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</div><div class="line">+-----------+------+-------------------------------------------+</div><div class="line"></div><div class="line">mysql&gt; flush privileges;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Big-data/" rel="tag"># Big data</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/09/spark-compile/" rel="next" title="Compile Spark source code">
+                <i class="fa fa-chevron-left"></i> Compile Spark source code
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/13/hive-basic/" rel="prev" title="Hive Basics">
+                Hive Basics <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">2318</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-MySQL-from-sourcecode"><span class="nav-number">1.</span> <span class="nav-text">Install MySQL from sourcecode</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安裝步驟"><span class="nav-number">1.1.</span> <span class="nav-text">安裝步驟</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本訊息"><span class="nav-number">1.1.1.</span> <span class="nav-text">基本訊息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#設置MySQL目錄"><span class="nav-number">1.1.2.</span> <span class="nav-text">設置MySQL目錄</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#新增Linux的用戶與群組"><span class="nav-number">1.1.3.</span> <span class="nav-text">新增Linux的用戶與群組</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建立-etc-my-cnf"><span class="nav-number">1.1.4.</span> <span class="nav-text">建立/etc/my.cnf</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安裝MySQL"><span class="nav-number">1.1.5.</span> <span class="nav-text">安裝MySQL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置開機啟動MySQL"><span class="nav-number">1.1.6.</span> <span class="nav-text">配置開機啟動MySQL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#啟動MySQL"><span class="nav-number">1.1.7.</span> <span class="nav-text">啟動MySQL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#登入MySQL，進行帳號配置"><span class="nav-number">1.1.8.</span> <span class="nav-text">登入MySQL，進行帳號配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用MySQL-root帳號登入"><span class="nav-number">1.1.9.</span> <span class="nav-text">使用MySQL root帳號登入</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">2318</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
