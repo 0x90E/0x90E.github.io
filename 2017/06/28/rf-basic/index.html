@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="">
+<html class="theme-next pisces use-motion" lang="en">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -84,8 +84,9 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="RF Basic">
 <meta property="og:url" content="http://yoursite.com/2017/06/28/rf-basic/index.html">
-<meta property="og:site_name" content="2318">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
 <meta property="og:description" content="Random Forsest定義RF為Bagging的擴展變形。RF以決策樹為基學習器，並在決策樹訓練時，引入隨機屬性選擇。 產生基學習器建立每一顆決策樹皆包含行採樣、列採樣與完全分裂三個步驟:  行採樣: 目的是挑選進行訓練的數據。採用有放回的方式，及為採樣得到的樣本集中，可能會有重複的樣本。假設，輸入N個樣本，那麼採樣的樣本也為N個。在訓練時，每一顆樹輸入樣本都不是全部的樣本，使得相對不容易o">
+<meta property="og:locale" content="en">
 <meta property="og:updated_time" content="2017-06-28T01:41:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RF Basic">
@@ -97,7 +98,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Pisces',
     version: '5.1.3',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -125,7 +126,7 @@
 
 
 
-  <title>RF Basic | 2318</title>
+  <title>RF Basic | 0x90e's Blog</title>
   
 
 
@@ -137,7 +138,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="">
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
 
   
   
@@ -155,7 +156,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">2318</span>
+        <span class="site-title">0x90e's Blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -185,7 +186,17 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
           </a>
         </li>
       
@@ -195,7 +206,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -235,13 +246,13 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/28/rf-basic/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="2318">
+      <meta itemprop="name" content="0x90e">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="2318">
+      <meta itemprop="name" content="0x90e's Blog">
     </span>
 
     
@@ -259,7 +270,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-28T00:20:02+08:00">
                 2017-06-28
@@ -424,10 +435,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -436,7 +447,11 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">2318</p>
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
@@ -448,7 +463,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">15</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -459,10 +474,10 @@
               
               
               <div class="site-state-item site-state-tags">
-                
+                <a href="/tags/index.html">
                   <span class="site-state-item-count">12</span>
-                  <span class="site-state-item-name">Tags</span>
-                
+                  <span class="site-state-item-name">tags</span>
+                </a>
               </div>
             
 
@@ -515,17 +530,17 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">2318</span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
 
   
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
@@ -533,7 +548,7 @@
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
 
 
 
@@ -620,6 +635,13 @@
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
