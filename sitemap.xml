@@ -2,107 +2,114 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://0x90e.github.io/hadoop-compile/</loc>
-    
-    <lastmod>2017-10-09T17:36:53.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://0x90e.github.io/spark-compile/</loc>
-    
-    <lastmod>2017-10-09T17:34:58.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://0x90e.github.io/yarn-basics/</loc>
-    
-    <lastmod>2017-10-09T17:33:18.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://0x90e.github.io/verify_a_signature_with_certificate/</loc>
     
-    <lastmod>2017-10-09T17:33:13.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://0x90e.github.io/svm_basic/</loc>
-    
-    <lastmod>2017-10-09T17:33:04.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://0x90e.github.io/rf-basic/</loc>
-    
-    <lastmod>2017-10-09T17:32:44.000Z</lastmod>
+    <lastmod>2017-10-09T17:55:05.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://0x90e.github.io/nlp-gram/</loc>
     
-    <lastmod>2017-10-09T17:32:34.000Z</lastmod>
+    <lastmod>2017-10-09T17:52:17.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0x90e.github.io/svm_basic/</loc>
+    
+    <lastmod>2017-10-09T17:52:12.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0x90e.github.io/rf-basic/</loc>
+    
+    <lastmod>2017-10-09T17:52:05.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0x90e.github.io/yarn-basics/</loc>
+    
+    <lastmod>2017-10-09T17:51:41.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0x90e.github.io/spark-compile/</loc>
+    
+    <lastmod>2017-10-09T17:51:29.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://0x90e.github.io/mysql-install-from-source/</loc>
     
-    <lastmod>2017-10-09T17:32:24.000Z</lastmod>
+    <lastmod>2017-10-09T17:51:17.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://0x90e.github.io/hive-join/</loc>
     
-    <lastmod>2017-10-09T17:32:19.000Z</lastmod>
+    <lastmod>2017-10-09T17:50:58.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://0x90e.github.io/hive-dml/</loc>
     
-    <lastmod>2017-10-09T17:31:56.000Z</lastmod>
+    <lastmod>2017-10-09T17:50:50.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://0x90e.github.io/hive-basic/</loc>
     
-    <lastmod>2017-10-09T17:31:48.000Z</lastmod>
+    <lastmod>2017-10-09T17:50:42.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://0x90e.github.io/hdfs-read-write-procedure/</loc>
     
-    <lastmod>2017-10-09T17:31:43.000Z</lastmod>
+    <lastmod>2017-10-09T17:50:35.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://0x90e.github.io/hdfs-basics/</loc>
     
-    <lastmod>2017-10-09T17:31:33.000Z</lastmod>
+    <lastmod>2017-10-09T17:50:28.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://0x90e.github.io/hadoop-install-pseudo-distributed/</loc>
     
-    <lastmod>2017-10-09T17:31:26.000Z</lastmod>
+    <lastmod>2017-10-09T17:50:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0x90e.github.io/hadoop-compile/</loc>
+    
+    <lastmod>2017-10-09T17:50:09.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://0x90e.github.io/builtin-functions/</loc>
     
-    <lastmod>2017-10-09T17:30:11.000Z</lastmod>
+    <lastmod>2017-10-09T17:49:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0x90e.github.io/categories/index.html</loc>
+    
+    <lastmod>2017-10-09T17:47:05.000Z</lastmod>
     
   </url>
   
