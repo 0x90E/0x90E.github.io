@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="N-gram Language Model定義為一種統計語言模型(Statistical Language Model)，統計語言模型定義: 而N-gram又稱為N元模型，N-gram是指一段語句中包含N個Token，譬如abcde，則2-gram依次為:ab, bc, cd, de 馬可夫假設(Markov chain)根據鏈式法則將統計語言模型展開後可得: 這裡利用馬可夫假設進行，縮減參數空間">
+<meta name="description" content="N-gram Language Model定義為一種統計語言模型(Statistical Language Model)，統計語言模型定義: 而N-gram又稱為N元模型，N-gram是指一段語句中包含N個Token，譬如abcde，則2-gram依次為:ab, bc, cd, de">
 <meta name="keywords" content="NLP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="NLP N-gram">
 <meta property="og:url" content="https://0x90e.github.io/nlp-gram/index.html">
 <meta property="og:site_name" content="0x90e&#39;s Blog">
-<meta property="og:description" content="N-gram Language Model定義為一種統計語言模型(Statistical Language Model)，統計語言模型定義: 而N-gram又稱為N元模型，N-gram是指一段語句中包含N個Token，譬如abcde，則2-gram依次為:ab, bc, cd, de 馬可夫假設(Markov chain)根據鏈式法則將統計語言模型展開後可得: 這裡利用馬可夫假設進行，縮減參數空間">
+<meta property="og:description" content="N-gram Language Model定義為一種統計語言模型(Statistical Language Model)，統計語言模型定義: 而N-gram又稱為N元模型，N-gram是指一段語句中包含N個Token，譬如abcde，則2-gram依次為:ab, bc, cd, de">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://0x90e.github.io/2017/07/03/nlp-gram/img_1.svg">
 <meta property="og:image" content="https://0x90e.github.io/2017/07/03/nlp-gram/img_2.svg">
@@ -97,10 +97,10 @@
 <meta property="og:image" content="https://0x90e.github.io/2017/07/03/nlp-gram/img_8.svg">
 <meta property="og:image" content="https://0x90e.github.io/2017/07/03/nlp-gram/img_9.svg">
 <meta property="og:image" content="https://0x90e.github.io/2017/07/03/nlp-gram/img_10.svg">
-<meta property="og:updated_time" content="2017-07-03T07:17:14.000Z">
+<meta property="og:updated_time" content="2017-10-09T17:32:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NLP N-gram">
-<meta name="twitter:description" content="N-gram Language Model定義為一種統計語言模型(Statistical Language Model)，統計語言模型定義: 而N-gram又稱為N元模型，N-gram是指一段語句中包含N個Token，譬如abcde，則2-gram依次為:ab, bc, cd, de 馬可夫假設(Markov chain)根據鏈式法則將統計語言模型展開後可得: 這裡利用馬可夫假設進行，縮減參數空間">
+<meta name="twitter:description" content="N-gram Language Model定義為一種統計語言模型(Statistical Language Model)，統計語言模型定義: 而N-gram又稱為N元模型，N-gram是指一段語句中包含N個Token，譬如abcde，則2-gram依次為:ab, bc, cd, de">
 <meta name="twitter:image" content="https://0x90e.github.io/2017/07/03/nlp-gram/img_1.svg">
 
 
@@ -336,7 +336,7 @@
 
       
         <h2 id="N-gram-Language-Model"><a href="#N-gram-Language-Model" class="headerlink" title="N-gram Language Model"></a>N-gram Language Model</h2><h3 id="定義"><a href="#定義" class="headerlink" title="定義"></a>定義</h3><p>為一種統計語言模型(Statistical Language Model)，統計語言模型定義:<br><img src="/2017/07/03/nlp-gram/img_1.svg" width="500"></p>
-<p>而N-gram又稱為N元模型，N-gram是指一段語句中包含N個Token，譬如abcde，則2-gram依次為:<br>ab, bc, cd, de<br><br></p>
+<p>而N-gram又稱為N元模型，N-gram是指一段語句中包含N個Token，譬如abcde，則2-gram依次為:<br>ab, bc, cd, de<br><a id="more"></a><br><br></p>
 <h3 id="馬可夫假設-Markov-chain"><a href="#馬可夫假設-Markov-chain" class="headerlink" title="馬可夫假設(Markov chain)"></a>馬可夫假設(Markov chain)</h3><p>根據鏈式法則將統計語言模型展開後可得:<br><img src="/2017/07/03/nlp-gram/img_2.svg" width="500"></p>
 <p>這裡利用馬可夫假設進行，縮減參數空間。馬可夫假設的概念為，任一個詞出現的機率，只與前幾個詞有關西。<br>N-gram模型的N指出要取前幾個詞(包含自己)來計算。N越大，則模型越準確，但也越複雜，且計算量也大。<br>最常使用的為Bigram，N取≥4的情况的情況較少。<br>常用的N-gram模型的縮減後為:<br>1-gram(Unigram):<br><img src="/2017/07/03/nlp-gram/img_3.svg" width="300"><br>2-gram(Bigram):<br><img src="/2017/07/03/nlp-gram/img_4.svg" width="400"><br>3-gram(Trigram):<br><img src="/2017/07/03/nlp-gram/img_5.svg" width="500"></p>
 <p>學習過程中，利用最大似然法將上述算式的參數求出，並追求將訓練樣本概率的最大值。<br><br></p>

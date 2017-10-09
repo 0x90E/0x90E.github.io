@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="Why Spark 編譯步驟基本訊息 OS: CentOS 6.5 64bit/macOS Sierra JDK: 8u144 Maven: 3.3.9(Spark source code自帶)   Apache Spark下載位置   如上圖，在Spark頁面選擇Source code進行下載，並進行解壓縮。 1234567[root@hadoop-01 sourcecode]# lsspa">
+<meta name="description" content="Why Spark 編譯步驟基本訊息 OS: CentOS 6.5 64bit/macOS Sierra JDK: 8u144 Maven: 3.3.9(Spark source code自帶) Apache Spark下載位置">
 <meta name="keywords" content="Big data,Spark">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Compile Spark source code">
 <meta property="og:url" content="https://0x90e.github.io/spark-compile/index.html">
 <meta property="og:site_name" content="0x90e&#39;s Blog">
-<meta property="og:description" content="Why Spark 編譯步驟基本訊息 OS: CentOS 6.5 64bit/macOS Sierra JDK: 8u144 Maven: 3.3.9(Spark source code自帶)   Apache Spark下載位置   如上圖，在Spark頁面選擇Source code進行下載，並進行解壓縮。 1234567[root@hadoop-01 sourcecode]# lsspa">
+<meta property="og:description" content="Why Spark 編譯步驟基本訊息 OS: CentOS 6.5 64bit/macOS Sierra JDK: 8u144 Maven: 3.3.9(Spark source code自帶) Apache Spark下載位置">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://0x90e.github.io/2017/09/09/spark-compile/why_spark.svg">
 <meta property="og:image" content="https://0x90e.github.io/2017/09/09/spark-compile/spark_compile_1.png">
-<meta property="og:updated_time" content="2017-09-11T04:35:50.000Z">
+<meta property="og:updated_time" content="2017-10-09T17:34:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Compile Spark source code">
-<meta name="twitter:description" content="Why Spark 編譯步驟基本訊息 OS: CentOS 6.5 64bit/macOS Sierra JDK: 8u144 Maven: 3.3.9(Spark source code自帶)   Apache Spark下載位置   如上圖，在Spark頁面選擇Source code進行下載，並進行解壓縮。 1234567[root@hadoop-01 sourcecode]# lsspa">
+<meta name="twitter:description" content="Why Spark 編譯步驟基本訊息 OS: CentOS 6.5 64bit/macOS Sierra JDK: 8u144 Maven: 3.3.9(Spark source code自帶) Apache Spark下載位置">
 <meta name="twitter:image" content="https://0x90e.github.io/2017/09/09/spark-compile/why_spark.svg">
 
 
@@ -332,12 +332,10 @@
 <li>OS: CentOS 6.5 64bit/macOS Sierra</li>
 <li>JDK: 8u144</li>
 <li>Maven: 3.3.9(Spark source code自帶)</li>
-</ul>
-<ul>
-<li><a href="http://spark.apache.org/downloads.html" title="Spark download" target="_blank" rel="external">Apache Spark下載位置</a></li>
-</ul>
+<li><a href="http://spark.apache.org/downloads.html" title="Spark download" target="_blank" rel="external">Apache Spark下載位置</a><a id="more"></a>
 <img src="/2017/09/09/spark-compile/spark_compile_1.png" width="800">
-<p>如上圖，在Spark頁面選擇Source code進行下載，並進行解壓縮。</p>
+如上圖，在Spark頁面選擇Source code進行下載，並進行解壓縮。</li>
+</ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 sourcecode]# ls</div><div class="line">spark-2.2.0.tgz  ## 已下載的Spark 2.2.0 source code壓縮包</div><div class="line">[root@hadoop-01 sourcecode]# tar -zxvf spark-2.2.0.tgz</div><div class="line">[root@hadoop-01 sourcecode]# ls</div><div class="line">spark-2.2.0  </div><div class="line">spark-2.2.0.tgz</div><div class="line">[root@hadoop-01 sourcecode]# cd spark-2.2.0</div></pre></td></tr></table></figure>
 <ul>
 <li><a href="http://spark.apache.org/docs/latest/building-spark.html" title="Building Spark" target="_blank" rel="external">Building Spark官方文檔</a></li>

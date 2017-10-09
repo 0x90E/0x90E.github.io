@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="0x90e&#39;s Blog">
 <meta property="og:description" content="SVM(Support Vector Machines)運作原理使用分隔超平面(separating hyperplane)，將線性可分的數據分隔開來；在超平面同側的資料，屬於同一個類別。 如何挑選分隔超平面找到離超平面最近的點，並且讓它們離分隔面越遠越好。支援向量(support vector)及為離超平面最近的那些點；而支援向量到超平面的距離稱為間隔(margin)。在挑選超平面時，追求一個擁">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2017-06-27T02:58:05.000Z">
+<meta property="og:updated_time" content="2017-10-09T17:33:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SVM basic">
 <meta name="twitter:description" content="SVM(Support Vector Machines)運作原理使用分隔超平面(separating hyperplane)，將線性可分的數據分隔開來；在超平面同側的資料，屬於同一個類別。 如何挑選分隔超平面找到離超平面最近的點，並且讓它們離分隔面越遠越好。支援向量(support vector)及為離超平面最近的那些點；而支援向量到超平面的距離稱為間隔(margin)。在挑選超平面時，追求一個擁">
@@ -325,7 +325,7 @@
 
       
         <h2 id="SVM-Support-Vector-Machines"><a href="#SVM-Support-Vector-Machines" class="headerlink" title="SVM(Support Vector Machines)"></a>SVM(Support Vector Machines)</h2><h3 id="運作原理"><a href="#運作原理" class="headerlink" title="運作原理"></a>運作原理</h3><p>使用分隔超平面(separating hyperplane)，將線性可分的數據分隔開來；在超平面同側的資料，屬於同一個類別。</p>
-<h3 id="如何挑選分隔超平面"><a href="#如何挑選分隔超平面" class="headerlink" title="如何挑選分隔超平面"></a>如何挑選分隔超平面</h3><p>找到離超平面最近的點，並且讓它們離分隔面越遠越好。支援向量(support vector)及為離超平面最近的那些點；而支援向量到超平面的距離稱為間隔(margin)。在挑選超平面時，追求一個擁有最大間隔的超平面，保證在處理未知資料時的分類或回歸效果最佳。</p>
+<h3 id="如何挑選分隔超平面"><a href="#如何挑選分隔超平面" class="headerlink" title="如何挑選分隔超平面"></a>如何挑選分隔超平面</h3><p>找到離超平面最近的點，並且讓它們離分隔面越遠越好。支援向量(support vector)及為離超平面最近的那些點；而支援向量到超平面的距離稱為間隔(margin)。在挑選超平面時，追求一個擁有最大間隔的超平面，保證在處理未知資料時的分類或回歸效果最佳。<br><a id="more"></a></p>
 <h3 id="演算法參數"><a href="#演算法參數" class="headerlink" title="演算法參數"></a>演算法參數</h3><ul>
 <li>鬆弛變量(slack variable)<ul>
 <li>許多時候數據並非能切分的很乾淨，引入鬆弛變量後，允許有些數據點可以被切分至錯誤的一側。</li>

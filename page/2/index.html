@@ -318,9 +318,16 @@
 
       
         
-          
-          
-          ...
+          <h2 id="Hadoop-Pseudo-Distributed-Setup"><a href="#Hadoop-Pseudo-Distributed-Setup" class="headerlink" title="Hadoop Pseudo-Distributed Setup"></a>Hadoop Pseudo-Distributed Setup</h2><h3 id="偽分布式模式-Pseudo-Distributed-Mode"><a href="#偽分布式模式-Pseudo-Distributed-Mode" class="headerlink" title="偽分布式模式(Pseudo-Distributed Mode)"></a>偽分布式模式(Pseudo-Distributed Mode)</h3><ul>
+<li>在單個集群上運行Hadoop</li>
+<li>所有的Hadoop daemon皆運行在不同的Java process</li>
+<li>在單機模式上增加了程式調適功能，並允許檢查以下狀態:<ul>
+<li>記憶體使用情況</li>
+<li>HDFS的輸出/輸入</li>
+<li>與其他daemon的交互情況，如namenode，datanode，secondarynamenode，jobtracer，tasktrace</li>
+</ul>
+</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/hadoop-install-pseudo-distributed/#more" rel="contents">
@@ -444,9 +451,8 @@
 
       
         
-          
-          
-          ...
+          <h2 id="N-gram-Language-Model"><a href="#N-gram-Language-Model" class="headerlink" title="N-gram Language Model"></a>N-gram Language Model</h2><h3 id="定義"><a href="#定義" class="headerlink" title="定義"></a>定義</h3><p>為一種統計語言模型(Statistical Language Model)，統計語言模型定義:<br><img src="/2017/07/03/nlp-gram/img_1.svg" width="500"></p>
+<p>而N-gram又稱為N元模型，N-gram是指一段語句中包含N個Token，譬如abcde，則2-gram依次為:<br>ab, bc, cd, de<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/nlp-gram/#more" rel="contents">
@@ -570,9 +576,17 @@
 
       
         
-          
-          
-          ...
+          <h2 id="Random-Forsest"><a href="#Random-Forsest" class="headerlink" title="Random Forsest"></a>Random Forsest</h2><h2 id="定義"><a href="#定義" class="headerlink" title="定義"></a>定義</h2><p>RF為Bagging的擴展變形。RF以決策樹為基學習器，並在決策樹訓練時，引入隨機屬性選擇。</p>
+<h2 id="產生基學習器"><a href="#產生基學習器" class="headerlink" title="產生基學習器"></a>產生基學習器</h2><p>建立每一顆決策樹皆包含行採樣、列採樣與完全分裂三個步驟:</p>
+<ol>
+<li><p>行採樣: 目的是挑選進行訓練的數據。採用有放回的方式，及為採樣得到的樣本集中，可能會有重複的樣本。假設，輸入N個樣本，那麼採樣的樣本也為N個。在訓練時，每一顆樹輸入樣本都不是全部的樣本，使得相對不容易over-fitting。</p>
+</li>
+<li><p>列採樣: 目的是挑選進行訓練的特徵，從M個特徵中，挑m個(m &lt;&lt; M)。</p>
+</li>
+<li><p>完全分裂: 使用完全分裂的方式對採樣後的數據建立決策樹，這樣決策樹的某一個葉子節點要麼是無法繼續分裂，不然就是裡面的樣本全屬一同一個分類。</p>
+</li>
+</ol>
+<p>與其他決策樹算法不同的是，這裡不進行剪枝，因為前兩個隨機採樣的過程保證了隨機性，就算不進行剪枝，也不會出現over-fitting<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/rf-basic/#more" rel="contents">
@@ -696,9 +710,8 @@
 
       
         
-          
-          
-          ...
+          <h2 id="SVM-Support-Vector-Machines"><a href="#SVM-Support-Vector-Machines" class="headerlink" title="SVM(Support Vector Machines)"></a>SVM(Support Vector Machines)</h2><h3 id="運作原理"><a href="#運作原理" class="headerlink" title="運作原理"></a>運作原理</h3><p>使用分隔超平面(separating hyperplane)，將線性可分的數據分隔開來；在超平面同側的資料，屬於同一個類別。</p>
+<h3 id="如何挑選分隔超平面"><a href="#如何挑選分隔超平面" class="headerlink" title="如何挑選分隔超平面"></a>如何挑選分隔超平面</h3><p>找到離超平面最近的點，並且讓它們離分隔面越遠越好。支援向量(support vector)及為離超平面最近的那些點；而支援向量到超平面的距離稱為間隔(margin)。在挑選超平面時，追求一個擁有最大間隔的超平面，保證在處理未知資料時的分類或回歸效果最佳。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/svm_basic/#more" rel="contents">
@@ -822,9 +835,14 @@
 
       
         
-          
-          
-          ...
+          <h3 id="所需檔案建立"><a href="#所需檔案建立" class="headerlink" title="所需檔案建立"></a>所需檔案建立</h3><h4 id="建立CA基礎設施"><a href="#建立CA基礎設施" class="headerlink" title="建立CA基礎設施"></a>建立CA基礎設施</h4><ol>
+<li>建立CA基礎設施，步驟可參考<a href="https://jamielinux.com/docs/openssl-certificate-authority/introduction.html" target="_blank" rel="external">openssl-certificate-authority</a></li>
+<li>透過以上步驟可獲得Certificate與Private key<ul>
+<li>Certificate位置: /root/ca/intermediate/certs/www.example.com.cert.pem</li>
+<li>Private key位置: /root/ca/intermediate/private/www.example.com.key.pem</li>
+</ul>
+</li>
+</ol>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/verify_a_signature_with_certificate/#more" rel="contents">
