@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hadoop,Big data,Hive," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Hive JoinHive中的Join的用法創建join示例所使用的表。1234567891011121314151617181920212223242526272829303132333435363738394041424344-- 創建table a hive&amp;gt; create table a(    id int,    name string    )row format delim">
+<meta name="keywords" content="Hadoop,Big data,Hive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive Join">
+<meta property="og:url" content="https://0x90e.github.io/hive-join/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Hive JoinHive中的Join的用法創建join示例所使用的表。1234567891011121314151617181920212223242526272829303132333435363738394041424344-- 創建table a hive&amp;gt; create table a(    id int,    name string    )row format delim">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0x90e.github.io/2017/09/24/hive-join/hive_normal_join.svg">
+<meta property="og:image" content="https://0x90e.github.io/2017/09/24/hive-join/hive_mapjoin.svg">
+<meta property="og:updated_time" content="2017-09-25T04:48:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hive Join">
+<meta name="twitter:description" content="Hive JoinHive中的Join的用法創建join示例所使用的表。1234567891011121314151617181920212223242526272829303132333435363738394041424344-- 創建table a hive&amp;gt; create table a(    id int,    name string    )row format delim">
+<meta name="twitter:image" content="https://0x90e.github.io/2017/09/24/hive-join/hive_normal_join.svg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/hive-join/"/>
+
+
+
+
+
+  <title>Hive Join | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Chase Excellence，Sucess will follow.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/hive-join/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hive Join</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-24T14:17:48+08:00">
+                2017-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Hive-Join"><a href="#Hive-Join" class="headerlink" title="Hive Join"></a>Hive Join</h2><h3 id="Hive中的Join的用法"><a href="#Hive中的Join的用法" class="headerlink" title="Hive中的Join的用法"></a>Hive中的Join的用法</h3><h4 id="創建join示例所使用的表。"><a href="#創建join示例所使用的表。" class="headerlink" title="創建join示例所使用的表。"></a>創建join示例所使用的表。</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="comment">-- 創建table a </span></div><div class="line">hive&gt; create table a(</div><div class="line">    id int,</div><div class="line">    name string</div><div class="line">    )row format delimited fields terminated by '\t';</div><div class="line">OK</div><div class="line"></div><div class="line"><span class="comment">-- 從本地文件載入資料</span></div><div class="line">hive&gt; load data local inpath '/home/hadoop/data/a_join.txt' into table a;</div><div class="line">Loading data to table default.a</div><div class="line">Table default.a stats: [numFiles=1, totalSize=26]</div><div class="line">OK</div><div class="line">Time taken: 0.293 seconds</div><div class="line"></div><div class="line"></div><div class="line">hive&gt; select * from a;</div><div class="line">OK</div><div class="line">1	zhangsa</div><div class="line">2	lisi</div><div class="line">3	wangwu</div><div class="line">Time taken: 0.055 seconds, Fetched: 3 row(s)</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">-- 創建table b</span></div><div class="line">hive&gt; create table b(</div><div class="line">    id int,</div><div class="line">    age int</div><div class="line">    ) row format delimited fields terminated by '\t';</div><div class="line">OK</div><div class="line"></div><div class="line"><span class="comment">-- 從本地文件載入資料</span></div><div class="line">hive&gt; load data local inpath '/home/hadoop/data/b_join.txt' into table b;</div><div class="line">Loading data to table default.b</div><div class="line">Table default.b stats: [numFiles=1, totalSize=15]</div><div class="line">OK</div><div class="line">Time taken: 0.241 seconds</div><div class="line"></div><div class="line"></div><div class="line">hive&gt; select * from b;</div><div class="line">OK</div><div class="line">1	28</div><div class="line">2	19</div><div class="line">4	21</div><div class="line">Time taken: 0.089 seconds, Fetched: 3 row(s)</div></pre></td></tr></table></figure>
+<h4 id="Inner-Join"><a href="#Inner-Join" class="headerlink" title="Inner Join"></a>Inner Join</h4><ul>
+<li>只返回能關聯的紀錄。<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">hive&gt; select a.id, a.name, b.age from a join b on a.id=b.id;</div><div class="line">Query ID = hadoop_20170914014141_a03e8794-0c51-414f-87d7-50236e8e1b36</div><div class="line">Total jobs = 1</div><div class="line">17/09/16 17:37:52 WARN util.NativeCodeLoader: Unable to <span class="keyword">load</span> <span class="keyword">native</span>-hadoop <span class="keyword">library</span> <span class="keyword">for</span> your platform... <span class="keyword">using</span> builtin-<span class="keyword">java</span> classes <span class="keyword">where</span> applicable</div><div class="line">Execution <span class="keyword">log</span> <span class="keyword">at</span>: /opt/software/hive/<span class="keyword">log</span>/hadoop_20170914014141_a03e8794<span class="number">-0</span>c51<span class="number">-414</span>f<span class="number">-87</span>d7<span class="number">-50236e8</span>e1b36.log</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-16</span> <span class="number">05</span>:<span class="number">37</span>:<span class="number">53</span>	<span class="keyword">Starting</span> <span class="keyword">to</span> launch <span class="keyword">local</span> task <span class="keyword">to</span> process <span class="keyword">map</span> <span class="keyword">join</span>;	maximum memory = 518979584</div><div class="line">2017-09-16 05:37:55	Dump the side-table for tag: 1 with group count: 3 into file: file:/tmp/hadoop/2d0fe1f1-954f-4cb7-bc14-1f05d5de3555/hive_2017-09-16_17-37-49_384_3178169469256003866-1/-local-10003/HashTable-Stage-3/MapJoin-mapfile11<span class="comment">--.hashtable</span></div><div class="line">2017-09-16 05:37:55	Uploaded 1 File to: file:/tmp/hadoop/2d0fe1f1-954f-4cb7-bc14-1f05d5de3555/hive_2017-09-16_17-37-49_384_3178169469256003866-1/-local-10003/HashTable-Stage-3/MapJoin-mapfile11<span class="comment">--.hashtable (320 bytes)</span></div><div class="line">2017-09-16 05:37:55	<span class="keyword">End</span> <span class="keyword">of</span> <span class="keyword">local</span> task; Time Taken: 2.002 sec.</div><div class="line">Execution completed successfully</div><div class="line">MapredLocal task succeeded</div><div class="line">Launching Job 1 out of 1</div><div class="line">Number of reduce tasks is <span class="keyword">set</span> <span class="keyword">to</span> <span class="number">0</span> since theres <span class="keyword">no</span> reduce <span class="keyword">operator</span></div><div class="line">Job running <span class="keyword">in</span>-process (<span class="keyword">local</span> Hadoop)</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-16</span> <span class="number">17</span>:<span class="number">37</span>:<span class="number">56</span>,<span class="number">968</span> Stage<span class="number">-3</span> <span class="keyword">map</span> = <span class="number">100</span>%,  reduce = <span class="number">0</span>%</div><div class="line">Ended Job = job_local1965457212_0036</div><div class="line">MapReduce Jobs Launched: </div><div class="line">Stage-Stage<span class="number">-3</span>:  HDFS <span class="keyword">Read</span>: <span class="number">55888</span> HDFS Write: <span class="number">10506</span> <span class="keyword">SUCCESS</span></div><div class="line">Total MapReduce CPU <span class="keyword">Time</span> Spent: <span class="number">0</span> msec</div><div class="line">OK</div><div class="line"><span class="number">1</span>	zhangsa	<span class="number">28</span></div><div class="line"><span class="number">2</span>	lisi	<span class="number">19</span></div><div class="line"><span class="keyword">Time</span> taken: <span class="number">7.589</span> seconds, Fetched: <span class="number">2</span> <span class="keyword">row</span>(s)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Left-Join"><a href="#Left-Join" class="headerlink" title="Left Join"></a>Left Join</h4><ul>
+<li>使用左表作為主表，返回紀錄數與左表相同。</li>
+<li>關聯不上的使用NULL表示。<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">hive&gt; select a.id, a.name, b.age from a left join b on a.id=b.id;</div><div class="line">Query ID = hadoop_20170914014141_a03e8794-0c51-414f-87d7-50236e8e1b36</div><div class="line">Total jobs = 1</div><div class="line">17/09/16 17:39:46 WARN util.NativeCodeLoader: Unable to <span class="keyword">load</span> <span class="keyword">native</span>-hadoop <span class="keyword">library</span> <span class="keyword">for</span> your platform... <span class="keyword">using</span> builtin-<span class="keyword">java</span> classes <span class="keyword">where</span> applicable</div><div class="line">Execution <span class="keyword">log</span> <span class="keyword">at</span>: /opt/software/hive/<span class="keyword">log</span>/hadoop_20170914014141_a03e8794<span class="number">-0</span>c51<span class="number">-414</span>f<span class="number">-87</span>d7<span class="number">-50236e8</span>e1b36.log</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-16</span> <span class="number">05</span>:<span class="number">39</span>:<span class="number">47</span>	<span class="keyword">Starting</span> <span class="keyword">to</span> launch <span class="keyword">local</span> task <span class="keyword">to</span> process <span class="keyword">map</span> <span class="keyword">join</span>;	maximum memory = 518979584</div><div class="line">2017-09-16 05:39:48	Dump the side-table for tag: 1 with group count: 3 into file: file:/tmp/hadoop/2d0fe1f1-954f-4cb7-bc14-1f05d5de3555/hive_2017-09-16_17-39-43_925_9210396379212280287-1/-local-10003/HashTable-Stage-3/MapJoin-mapfile21<span class="comment">--.hashtable</span></div><div class="line">2017-09-16 05:39:48	Uploaded 1 File to: file:/tmp/hadoop/2d0fe1f1-954f-4cb7-bc14-1f05d5de3555/hive_2017-09-16_17-39-43_925_9210396379212280287-1/-local-10003/HashTable-Stage-3/MapJoin-mapfile21<span class="comment">--.hashtable (320 bytes)</span></div><div class="line">2017-09-16 05:39:48	<span class="keyword">End</span> <span class="keyword">of</span> <span class="keyword">local</span> task; Time Taken: 0.912 sec.</div><div class="line">Execution completed successfully</div><div class="line">MapredLocal task succeeded</div><div class="line">Launching Job 1 out of 1</div><div class="line">Number of reduce tasks is <span class="keyword">set</span> <span class="keyword">to</span> <span class="number">0</span> since theres <span class="keyword">no</span> reduce <span class="keyword">operator</span></div><div class="line">Job running <span class="keyword">in</span>-process (<span class="keyword">local</span> Hadoop)</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-16</span> <span class="number">17</span>:<span class="number">39</span>:<span class="number">50</span>,<span class="number">005</span> Stage<span class="number">-3</span> <span class="keyword">map</span> = <span class="number">100</span>%,  reduce = <span class="number">0</span>%</div><div class="line">Ended Job = job_local296218704_0037</div><div class="line">MapReduce Jobs Launched: </div><div class="line">Stage-Stage<span class="number">-3</span>:  HDFS <span class="keyword">Read</span>: <span class="number">55914</span> HDFS Write: <span class="number">10506</span> <span class="keyword">SUCCESS</span></div><div class="line">Total MapReduce CPU <span class="keyword">Time</span> Spent: <span class="number">0</span> msec</div><div class="line">OK</div><div class="line"><span class="number">1</span>	zhangsa	<span class="number">28</span></div><div class="line"><span class="number">2</span>	lisi	<span class="number">19</span></div><div class="line"><span class="number">3</span>	wangwu	<span class="literal">NULL</span></div><div class="line"><span class="keyword">Time</span> taken: <span class="number">6.09</span> seconds, Fetched: <span class="number">3</span> <span class="keyword">row</span>(s)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Right-Join"><a href="#Right-Join" class="headerlink" title="Right Join"></a>Right Join</h4><ul>
+<li>使用右表作為主表，返回紀錄數與右表相同。</li>
+<li>關聯不上的使用NULL表示。<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">hive&gt; select a.id, a.name, b.age from a right join b on a.id=b.id;</div><div class="line">Query ID = hadoop_20170914014141_a03e8794-0c51-414f-87d7-50236e8e1b36</div><div class="line">Total jobs = 1</div><div class="line">17/09/16 17:40:40 WARN util.NativeCodeLoader: Unable to <span class="keyword">load</span> <span class="keyword">native</span>-hadoop <span class="keyword">library</span> <span class="keyword">for</span> your platform... <span class="keyword">using</span> builtin-<span class="keyword">java</span> classes <span class="keyword">where</span> applicable</div><div class="line">Execution <span class="keyword">log</span> <span class="keyword">at</span>: /opt/software/hive/<span class="keyword">log</span>/hadoop_20170914014141_a03e8794<span class="number">-0</span>c51<span class="number">-414</span>f<span class="number">-87</span>d7<span class="number">-50236e8</span>e1b36.log</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-16</span> <span class="number">05</span>:<span class="number">40</span>:<span class="number">41</span>	<span class="keyword">Starting</span> <span class="keyword">to</span> launch <span class="keyword">local</span> task <span class="keyword">to</span> process <span class="keyword">map</span> <span class="keyword">join</span>;	maximum memory = 518979584</div><div class="line">2017-09-16 05:40:42	Dump the side-table for tag: 0 with group count: 3 into file: file:/tmp/hadoop/2d0fe1f1-954f-4cb7-bc14-1f05d5de3555/hive_2017-09-16_17-40-37_662_8266497628801648044-1/-local-10003/HashTable-Stage-3/MapJoin-mapfile30<span class="comment">--.hashtable</span></div><div class="line">2017-09-16 05:40:42	Uploaded 1 File to: file:/tmp/hadoop/2d0fe1f1-954f-4cb7-bc14-1f05d5de3555/hive_2017-09-16_17-40-37_662_8266497628801648044-1/-local-10003/HashTable-Stage-3/MapJoin-mapfile30<span class="comment">--.hashtable (337 bytes)</span></div><div class="line">2017-09-16 05:40:42	<span class="keyword">End</span> <span class="keyword">of</span> <span class="keyword">local</span> task; Time Taken: 1.125 sec.</div><div class="line">Execution completed successfully</div><div class="line">MapredLocal task succeeded</div><div class="line">Launching Job 1 out of 1</div><div class="line">Number of reduce tasks is <span class="keyword">set</span> <span class="keyword">to</span> <span class="number">0</span> since theres <span class="keyword">no</span> reduce <span class="keyword">operator</span></div><div class="line">Job running <span class="keyword">in</span>-process (<span class="keyword">local</span> Hadoop)</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-16</span> <span class="number">17</span>:<span class="number">40</span>:<span class="number">43</span>,<span class="number">702</span> Stage<span class="number">-3</span> <span class="keyword">map</span> = <span class="number">100</span>%,  reduce = <span class="number">0</span>%</div><div class="line">Ended Job = job_local2139900301_0038</div><div class="line">MapReduce Jobs Launched: </div><div class="line">Stage-Stage<span class="number">-3</span>:  HDFS <span class="keyword">Read</span>: <span class="number">55929</span> HDFS Write: <span class="number">10506</span> <span class="keyword">SUCCESS</span></div><div class="line">Total MapReduce CPU <span class="keyword">Time</span> Spent: <span class="number">0</span> msec</div><div class="line">OK</div><div class="line"><span class="number">1</span>	zhangsa	<span class="number">28</span></div><div class="line"><span class="number">2</span>	lisi	<span class="number">19</span></div><div class="line"><span class="literal">NULL</span>	<span class="literal">NULL</span>	<span class="number">21</span></div><div class="line"><span class="keyword">Time</span> taken: <span class="number">6.042</span> seconds, Fetched: <span class="number">3</span> <span class="keyword">row</span>(s)</div><div class="line"><span class="comment">-- 最後一列的id為null而不是為4，是因為select語句中，是取用table a的id，而不是table b的id。</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Full-Join"><a href="#Full-Join" class="headerlink" title="Full Join"></a>Full Join</h4><ul>
+<li>以兩個表的紀錄為基準，返回兩個表的紀錄去重之和。</li>
+<li>關聯不上的使用NULL表示。</li>
+<li>在此情況下，Hive不使用Map Join來優化。<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">hive&gt; select a.id, a.name, b.age from a full join b on a.id=b.id;</div><div class="line">Query ID = hadoop_20170914014141_a03e8794-0c51-414f-87d7-50236e8e1b36</div><div class="line">Total jobs = 1</div><div class="line">Launching Job 1 out of 1</div><div class="line">Number of reduce tasks not specified. Estimated from input data size: 1</div><div class="line">In order to <span class="keyword">change</span> the average <span class="keyword">load</span> <span class="keyword">for</span> a reducer (<span class="keyword">in</span> <span class="keyword">bytes</span>):</div><div class="line">  <span class="keyword">set</span> hive.exec.reducers.bytes.per.reducer=&lt;<span class="built_in">number</span>&gt;</div><div class="line"><span class="keyword">In</span> <span class="keyword">order</span> <span class="keyword">to</span> <span class="keyword">limit</span> the maximum <span class="built_in">number</span> <span class="keyword">of</span> reducers:</div><div class="line">  <span class="keyword">set</span> hive.exec.reducers.max=&lt;<span class="built_in">number</span>&gt;</div><div class="line"><span class="keyword">In</span> <span class="keyword">order</span> <span class="keyword">to</span> <span class="keyword">set</span> a <span class="keyword">constant</span> <span class="built_in">number</span> <span class="keyword">of</span> reducers:</div><div class="line">  <span class="keyword">set</span> mapreduce.job.reduces=&lt;<span class="built_in">number</span>&gt;</div><div class="line">Job running <span class="keyword">in</span>-process (<span class="keyword">local</span> Hadoop)</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-16</span> <span class="number">17</span>:<span class="number">42</span>:<span class="number">15</span>,<span class="number">465</span> Stage<span class="number">-1</span> <span class="keyword">map</span> = <span class="number">0</span>%,  reduce = <span class="number">0</span>%</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-16</span> <span class="number">17</span>:<span class="number">42</span>:<span class="number">16</span>,<span class="number">467</span> Stage<span class="number">-1</span> <span class="keyword">map</span> = <span class="number">100</span>%,  reduce = <span class="number">100</span>%</div><div class="line">Ended Job = job_local1292867757_0039</div><div class="line">MapReduce Jobs Launched: </div><div class="line">Stage-Stage<span class="number">-1</span>:  HDFS <span class="keyword">Read</span>: <span class="number">167895</span> HDFS Write: <span class="number">31518</span> <span class="keyword">SUCCESS</span></div><div class="line">Total MapReduce CPU <span class="keyword">Time</span> Spent: <span class="number">0</span> msec</div><div class="line">OK</div><div class="line"><span class="number">1</span>	zhangsa	<span class="number">28</span></div><div class="line"><span class="number">2</span>	lisi	<span class="number">19</span></div><div class="line"><span class="number">3</span>	wangwu	<span class="literal">NULL</span></div><div class="line"><span class="literal">NULL</span>	<span class="literal">NULL</span>	<span class="number">21</span></div><div class="line"><span class="keyword">Time</span> taken: <span class="number">2.285</span> seconds, Fetched: <span class="number">4</span> <span class="keyword">row</span>(s)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Cross-Join"><a href="#Cross-Join" class="headerlink" title="Cross Join"></a>Cross Join</h4><ul>
+<li>返回兩個表的笛卡兒積(Cartesian product)結果</li>
+<li>不需指定關聯鍵，及不需使用on關鍵字。<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">hive&gt; select a.id, a.name, b.age from a cross join b;</div><div class="line">Warning: Map Join MAPJOIN[7][bigTable=a] in task 'Stage-3:MAPRED' is a cross product</div><div class="line">Query ID = hadoop_20170914014141_a03e8794-0c51-414f-87d7-50236e8e1b36</div><div class="line">Total jobs = 1</div><div class="line">17/09/16 17:44:22 WARN util.NativeCodeLoader: Unable to <span class="keyword">load</span> <span class="keyword">native</span>-hadoop <span class="keyword">library</span> <span class="keyword">for</span> your platform... <span class="keyword">using</span> builtin-<span class="keyword">java</span> classes <span class="keyword">where</span> applicable</div><div class="line">Execution <span class="keyword">log</span> <span class="keyword">at</span>: /opt/software/hive/<span class="keyword">log</span>/hadoop_20170914014141_a03e8794<span class="number">-0</span>c51<span class="number">-414</span>f<span class="number">-87</span>d7<span class="number">-50236e8</span>e1b36.log</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-16</span> <span class="number">05</span>:<span class="number">44</span>:<span class="number">23</span>	<span class="keyword">Starting</span> <span class="keyword">to</span> launch <span class="keyword">local</span> task <span class="keyword">to</span> process <span class="keyword">map</span> <span class="keyword">join</span>;	maximum memory = 518979584</div><div class="line">2017-09-16 05:44:23	Dump the side-table for tag: 1 with group count: 1 into file: file:/tmp/hadoop/2d0fe1f1-954f-4cb7-bc14-1f05d5de3555/hive_2017-09-16_17-44-19_720_6308228100696237254-1/-local-10003/HashTable-Stage-3/MapJoin-mapfile51<span class="comment">--.hashtable</span></div><div class="line">2017-09-16 05:44:24	Uploaded 1 File to: file:/tmp/hadoop/2d0fe1f1-954f-4cb7-bc14-1f05d5de3555/hive_2017-09-16_17-44-19_720_6308228100696237254-1/-local-10003/HashTable-Stage-3/MapJoin-mapfile51<span class="comment">--.hashtable (290 bytes)</span></div><div class="line">2017-09-16 05:44:24	<span class="keyword">End</span> <span class="keyword">of</span> <span class="keyword">local</span> task; Time Taken: 0.961 sec.</div><div class="line">Execution completed successfully</div><div class="line">MapredLocal task succeeded</div><div class="line">Launching Job 1 out of 1</div><div class="line">Number of reduce tasks is <span class="keyword">set</span> <span class="keyword">to</span> <span class="number">0</span> since theres <span class="keyword">no</span> reduce <span class="keyword">operator</span></div><div class="line">Job running <span class="keyword">in</span>-process (<span class="keyword">local</span> Hadoop)</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-16</span> <span class="number">17</span>:<span class="number">44</span>:<span class="number">25</span>,<span class="number">491</span> Stage<span class="number">-3</span> <span class="keyword">map</span> = <span class="number">100</span>%,  reduce = <span class="number">0</span>%</div><div class="line">Ended Job = job_local1992175647_0041</div><div class="line">MapReduce Jobs Launched: </div><div class="line">Stage-Stage<span class="number">-3</span>:  HDFS <span class="keyword">Read</span>: <span class="number">56022</span> HDFS Write: <span class="number">10506</span> <span class="keyword">SUCCESS</span></div><div class="line">Total MapReduce CPU <span class="keyword">Time</span> Spent: <span class="number">0</span> msec</div><div class="line">OK</div><div class="line"><span class="number">1</span>	zhangsa	<span class="number">28</span></div><div class="line"><span class="number">1</span>	zhangsa	<span class="number">19</span></div><div class="line"><span class="number">1</span>	zhangsa	<span class="number">21</span></div><div class="line"><span class="number">2</span>	lisi	<span class="number">28</span></div><div class="line"><span class="number">2</span>	lisi	<span class="number">19</span></div><div class="line"><span class="number">2</span>	lisi	<span class="number">21</span></div><div class="line"><span class="number">3</span>	wangwu	<span class="number">28</span></div><div class="line"><span class="number">3</span>	wangwu	<span class="number">19</span></div><div class="line"><span class="number">3</span>	wangwu	<span class="number">21</span></div><div class="line"><span class="keyword">Time</span> taken: <span class="number">5.781</span> seconds, Fetched: <span class="number">9</span> <span class="keyword">row</span>(s)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Hive-join"><a href="#Hive-join" class="headerlink" title="Hive join"></a>Hive join</h3><ul>
+<li>Hive中的join，分成下列兩種:<ul>
+<li>Common join: 又稱Shuffle join、Reduce join </li>
+<li>Map join: 又稱Broadcast join</li>
+</ul>
+</li>
+<li>hive-site.xml相關屬性:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hive.auto.convert.join</td>
+<td>是否轉換為Map Join</td>
+<td>false in 0.7.0 to 0.10.0; true in 0.11.0 and later</td>
+</tr>
+<tr>
+<td>hive.mapjoin.smalltable.filesize</td>
+<td>判斷為小表的上限依據</td>
+<td>25MB</td>
+</tr>
+<tr>
+<td>hive.auto.convert.join.noconditionaltask</td>
+<td>是否將多個Map join合併為一個</td>
+<td>true</td>
+</tr>
+<tr>
+<td>hive.auto.convert.join.noconditionaltask.size</td>
+<td>多個Map join轉換為1個時，所有小表文件大小總和的最大值</td>
+<td>10MB</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Common-Join"><a href="#Common-Join" class="headerlink" title="Common Join"></a>Common Join</h4><img src="/2017/09/24/hive-join/hive_normal_join.svg" width="600">
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line"><span class="comment">-- 此屬性預設為true，若要啟動Common Join需先設定為false</span></div><div class="line">hive&gt; set hive.auto.convert.join=false;</div><div class="line">hive&gt; set hive.auto.convert.join;</div><div class="line">hive.auto.convert.join=false</div><div class="line"></div><div class="line"><span class="comment">-- 顯示查詢語句的執行計畫</span></div><div class="line">hive&gt; explain select a.id, a.name, b.age from a join b on a.id=b.id;</div><div class="line">OK</div><div class="line">STAGE DEPENDENCIES:</div><div class="line">  Stage-1 is a root stage</div><div class="line">  Stage-0 depends on stages: Stage-1</div><div class="line"></div><div class="line">STAGE PLANS:</div><div class="line">  Stage: Stage-1</div><div class="line">    Map Reduce</div><div class="line">      Map Operator Tree:</div><div class="line">          TableScan</div><div class="line">            alias: a</div><div class="line">            Statistics: Num rows: 1 Data size: 26 Basic stats: COMPLETE Column stats: NONE</div><div class="line">            Filter Operator</div><div class="line">              predicate: id is not null (type: boolean)</div><div class="line">              Statistics: Num rows: 1 Data size: 26 Basic stats: COMPLETE Column stats: NONE</div><div class="line">              Reduce Output Operator</div><div class="line">                key expressions: id (type: int)</div><div class="line">                sort order: +</div><div class="line">                Map-reduce partition columns: id (type: int)</div><div class="line">                Statistics: Num rows: 1 Data size: 26 Basic stats: COMPLETE Column stats: NONE</div><div class="line">                value expressions: name (type: string)</div><div class="line">          TableScan</div><div class="line">            alias: b</div><div class="line">            Statistics: Num rows: 1 Data size: 15 Basic stats: COMPLETE Column stats: NONE</div><div class="line">            Filter Operator</div><div class="line">              predicate: id is not null (type: boolean)</div><div class="line">              Statistics: Num rows: 1 Data size: 15 Basic stats: COMPLETE Column stats: NONE</div><div class="line">              Reduce Output Operator</div><div class="line">                key expressions: id (type: int)</div><div class="line">                sort order: +</div><div class="line">                Map-reduce partition columns: id (type: int)</div><div class="line">                Statistics: Num rows: 1 Data size: 15 Basic stats: COMPLETE Column stats: NONE</div><div class="line">                value expressions: age (type: int)</div><div class="line">      Reduce Operator Tree:</div><div class="line">        Join Operator</div><div class="line">          condition map:</div><div class="line">               Inner Join 0 to 1</div><div class="line">          keys:</div><div class="line">            0 id (type: int)</div><div class="line">            1 id (type: int)</div><div class="line">          outputColumnNames: _col0, _col1, _col6</div><div class="line">          Statistics: Num rows: 1 Data size: 28 Basic stats: COMPLETE Column stats: NONE</div><div class="line">          <span class="keyword">Select</span> <span class="keyword">Operator</span></div><div class="line">            expressions: _col0 (<span class="keyword">type</span>: <span class="built_in">int</span>), _col1 (<span class="keyword">type</span>: <span class="keyword">string</span>), _col6 (<span class="keyword">type</span>: <span class="built_in">int</span>)</div><div class="line">            outputColumnNames: _col0, _col1, _col2</div><div class="line">            <span class="keyword">Statistics</span>: <span class="keyword">Num</span> <span class="keyword">rows</span>: <span class="number">1</span> <span class="keyword">Data</span> <span class="keyword">size</span>: <span class="number">28</span> Basic stats: <span class="keyword">COMPLETE</span> <span class="keyword">Column</span> stats: <span class="keyword">NONE</span></div><div class="line">            <span class="keyword">File</span> <span class="keyword">Output</span> <span class="keyword">Operator</span></div><div class="line">              compressed: <span class="literal">false</span></div><div class="line">              <span class="keyword">Statistics</span>: <span class="keyword">Num</span> <span class="keyword">rows</span>: <span class="number">1</span> <span class="keyword">Data</span> <span class="keyword">size</span>: <span class="number">28</span> Basic stats: <span class="keyword">COMPLETE</span> <span class="keyword">Column</span> stats: <span class="keyword">NONE</span></div><div class="line">              <span class="keyword">table</span>:</div><div class="line">                  <span class="keyword">input</span> <span class="keyword">format</span>: org.apache.hadoop.mapred.TextInputFormat</div><div class="line">                  <span class="keyword">output</span> <span class="keyword">format</span>: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat</div><div class="line">                  serde: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe</div><div class="line"></div><div class="line">  Stage: Stage<span class="number">-0</span></div><div class="line">    <span class="keyword">Fetch</span> <span class="keyword">Operator</span></div><div class="line">      <span class="keyword">limit</span>: <span class="number">-1</span></div><div class="line">      Processor Tree:</div><div class="line">        ListSink</div><div class="line"></div><div class="line"><span class="keyword">Time</span> taken: <span class="number">0.138</span> seconds, Fetched: <span class="number">59</span> <span class="keyword">row</span>(s)</div></pre></td></tr></table></figure>
+<h5 id="執行計畫說明"><a href="#執行計畫說明" class="headerlink" title="執行計畫說明"></a>執行計畫說明</h5><p>上面為Common Join的執行計畫，下面將分段解釋所代表意思。</p>
+<ul>
+<li>共生成2個Stage，且需要先執行完Stage-1，才能執行Stage-0。</li>
+<li>Stage-1區段中的Mapreduce關鍵字說明此為一個MapReduece Job，分別描述在Map Operator Tree與Reduce Operator Tree區段。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Map Operator Tree:</div><div class="line">    TableScan</div><div class="line">      alias: a</div><div class="line">      Statistics: Num rows: 1 Data size: 26 Basic stats: COMPLETE Column stats: NONE</div><div class="line">      Filter Operator</div><div class="line">        predicate: id is not null (type: boolean)</div><div class="line">        Statistics: Num rows: 1 Data size: 26 Basic stats: COMPLETE Column stats: NONE</div></pre></td></tr></table></figure>
+<ul>
+<li>Map Operator Tree<ul>
+<li>TableScan: 進行讀表操作。</li>
+<li>alias: 目標表的名稱。</li>
+<li>Statistics: 讀入數據的相關資訊。</li>
+<li>Filter Operator: 雖然SQL語句中不包含Where，但是join語句中隱藏一個過濾條件(on關鍵字)。<ul>
+<li>predicate: join條件。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Reduce Output Operator</div><div class="line">  key expressions: id (type: int)</div><div class="line">  sort order: +</div><div class="line">  Map-reduce partition columns: id (type: int)</div><div class="line">  Statistics: Num rows: 1 Data size: 26 Basic stats: COMPLETE Column stats: NONE</div><div class="line">  value expressions: name (type: string)</div></pre></td></tr></table></figure>
+<ul>
+<li>Reduce Output Operator<ul>
+<li>及為Mapper的輸出。</li>
+<li>key expressions: 對應join語句中on的對象。</li>
+<li>value expressions:value是一系列的字段，對應select語句。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">Reduce Operator Tree:</div><div class="line">  Join Operator</div><div class="line">    condition map:</div><div class="line">         Inner Join 0 to 1</div><div class="line">    keys:</div><div class="line">      0 id (type: int)</div><div class="line">      1 id (type: int)</div><div class="line">    outputColumnNames: _col0, _col1, _col6</div><div class="line">    Statistics: Num rows: 1 Data size: 28 Basic stats: COMPLETE Column stats: NONE</div><div class="line">    <span class="keyword">Select</span> <span class="keyword">Operator</span></div><div class="line">      expressions: _col0 (<span class="keyword">type</span>: <span class="built_in">int</span>), _col1 (<span class="keyword">type</span>: <span class="keyword">string</span>), _col6 (<span class="keyword">type</span>: <span class="built_in">int</span>)</div><div class="line">      outputColumnNames: _col0, _col1, _col2</div><div class="line">      <span class="keyword">Statistics</span>: <span class="keyword">Num</span> <span class="keyword">rows</span>: <span class="number">1</span> <span class="keyword">Data</span> <span class="keyword">size</span>: <span class="number">28</span> Basic stats: <span class="keyword">COMPLETE</span> <span class="keyword">Column</span> stats: <span class="keyword">NONE</span></div><div class="line">      <span class="keyword">File</span> <span class="keyword">Output</span> <span class="keyword">Operator</span></div><div class="line">        compressed: <span class="literal">false</span></div><div class="line">        <span class="keyword">Statistics</span>: <span class="keyword">Num</span> <span class="keyword">rows</span>: <span class="number">1</span> <span class="keyword">Data</span> <span class="keyword">size</span>: <span class="number">28</span> Basic stats: <span class="keyword">COMPLETE</span> <span class="keyword">Column</span> stats: <span class="keyword">NONE</span></div><div class="line">        <span class="keyword">table</span>:</div><div class="line">            <span class="keyword">input</span> <span class="keyword">format</span>: org.apache.hadoop.mapred.TextInputFormat</div><div class="line">            <span class="keyword">output</span> <span class="keyword">format</span>: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat</div><div class="line">            serde: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe</div></pre></td></tr></table></figure>
+<ul>
+<li>Reduce Operator<ul>
+<li>Inner Join 0 to 1: 此為一個inner join操作。</li>
+<li>keys: join操作時，各表所使用的的key。</li>
+<li>Select Operator: reduce結果輸出的相關訊息。<ul>
+<li>compressed: 是否使用壓縮。</li>
+<li>Statistics: 輸出數據的相關統計訊息。</li>
+<li>input/output format: 輸出入檔案的格式。</li>
+<li>serde: 序列化物件。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h5><p>上面為Common Join的流程圖以及執行計畫說明，在MapReduce的執行common join過程中，需要Shuffle進行重新洗牌的操作，也就是將key進行Hash處理後相同的值，放置在一塊，作為Reduce的輸入。這個過程中如果傳輸的量很大會造成一定的網路資源開銷，且可能造成OOM的問題，導致計算任務失敗。<br>若Shuffle是計算瓶頸所在，而Shuffle是為Reduce的前置作業，如何去除掉Shuffle，又能達到Reduce的結果。故Map Join就是用來解決此問題。</p>
+<h4 id="Map-Join"><a href="#Map-Join" class="headerlink" title="Map Join"></a>Map Join</h4><img src="/2017/09/24/hive-join/hive_mapjoin.svg" width="400">
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line"><span class="comment">-- 將此屬性設為true，啟用Map Join</span></div><div class="line">hive&gt; set hive.auto.convert.join=true;</div><div class="line">hive&gt; set hive.auto.convert.join;</div><div class="line">hive.auto.convert.join=true</div><div class="line"></div><div class="line">hive&gt; explain select a.id, a.name, b.age from a join b on a.id=b.id;</div><div class="line">OK</div><div class="line">STAGE DEPENDENCIES:</div><div class="line">  Stage-4 is a root stage</div><div class="line">  Stage-3 depends on stages: Stage-4</div><div class="line">  Stage-0 depends on stages: Stage-3</div><div class="line"></div><div class="line">STAGE PLANS:</div><div class="line">  Stage: Stage-4</div><div class="line">    Map Reduce Local Work</div><div class="line">      Alias -&gt; Map Local Tables:</div><div class="line">        b </div><div class="line">          Fetch Operator</div><div class="line">            limit: -1</div><div class="line">      Alias -&gt; Map Local Operator Tree:</div><div class="line">        b </div><div class="line">          TableScan</div><div class="line">            alias: b</div><div class="line">            Statistics: Num rows: 1 Data size: 15 Basic stats: COMPLETE Column stats: NONE</div><div class="line">            Filter Operator</div><div class="line">              predicate: id is not null (type: boolean)</div><div class="line">              Statistics: Num rows: 1 Data size: 15 Basic stats: COMPLETE Column stats: NONE</div><div class="line">              HashTable Sink Operator</div><div class="line">                keys:</div><div class="line">                  0 id (type: int)</div><div class="line">                  1 id (type: int)</div><div class="line"></div><div class="line">  Stage: Stage-3</div><div class="line">    Map Reduce</div><div class="line">      Map Operator Tree:</div><div class="line">          TableScan</div><div class="line">            alias: a</div><div class="line">            Statistics: Num rows: 1 Data size: 26 Basic stats: COMPLETE Column stats: NONE</div><div class="line">            Filter Operator</div><div class="line">              predicate: id is not null (type: boolean)</div><div class="line">              Statistics: Num rows: 1 Data size: 26 Basic stats: COMPLETE Column stats: NONE</div><div class="line">              Map Join Operator</div><div class="line">                condition map:</div><div class="line">                     Inner Join 0 to 1</div><div class="line">                keys:</div><div class="line">                  0 id (type: int)</div><div class="line">                  1 id (type: int)</div><div class="line">                outputColumnNames: _col0, _col1, _col6</div><div class="line">                Statistics: Num rows: 1 Data size: 28 Basic stats: COMPLETE Column stats: NONE</div><div class="line">                <span class="keyword">Select</span> <span class="keyword">Operator</span></div><div class="line">                  expressions: _col0 (<span class="keyword">type</span>: <span class="built_in">int</span>), _col1 (<span class="keyword">type</span>: <span class="keyword">string</span>), _col6 (<span class="keyword">type</span>: <span class="built_in">int</span>)</div><div class="line">                  outputColumnNames: _col0, _col1, _col2</div><div class="line">                  <span class="keyword">Statistics</span>: <span class="keyword">Num</span> <span class="keyword">rows</span>: <span class="number">1</span> <span class="keyword">Data</span> <span class="keyword">size</span>: <span class="number">28</span> Basic stats: <span class="keyword">COMPLETE</span> <span class="keyword">Column</span> stats: <span class="keyword">NONE</span></div><div class="line">                  <span class="keyword">File</span> <span class="keyword">Output</span> <span class="keyword">Operator</span></div><div class="line">                    compressed: <span class="literal">false</span></div><div class="line">                    <span class="keyword">Statistics</span>: <span class="keyword">Num</span> <span class="keyword">rows</span>: <span class="number">1</span> <span class="keyword">Data</span> <span class="keyword">size</span>: <span class="number">28</span> Basic stats: <span class="keyword">COMPLETE</span> <span class="keyword">Column</span> stats: <span class="keyword">NONE</span></div><div class="line">                    <span class="keyword">table</span>:</div><div class="line">                        <span class="keyword">input</span> <span class="keyword">format</span>: org.apache.hadoop.mapred.TextInputFormat</div><div class="line">                        <span class="keyword">output</span> <span class="keyword">format</span>: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat</div><div class="line">                        serde: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe</div><div class="line">      <span class="keyword">Local</span> <span class="keyword">Work</span>:</div><div class="line">        <span class="keyword">Map</span> Reduce <span class="keyword">Local</span> <span class="keyword">Work</span></div><div class="line"></div><div class="line">  Stage: Stage<span class="number">-0</span></div><div class="line">    <span class="keyword">Fetch</span> <span class="keyword">Operator</span></div><div class="line">      <span class="keyword">limit</span>: <span class="number">-1</span></div><div class="line">      Processor Tree:</div><div class="line">        ListSink</div><div class="line"></div><div class="line"><span class="keyword">Time</span> taken: <span class="number">0.16</span> seconds, Fetched: <span class="number">62</span> <span class="keyword">row</span>(s)</div></pre></td></tr></table></figure>
+<h5 id="執行計畫說明-1"><a href="#執行計畫說明-1" class="headerlink" title="執行計畫說明"></a>執行計畫說明</h5><p>上面為Map Join的執行計畫，下面將分段解釋所代表意思。</p>
+<ul>
+<li>此執行計畫共分成3個Stage，依次為Stage-4、Stage-3、Stage-0，且由後往前為依賴關係，需要先執行完Stage-4，才能執行Stage-3，最後執行Stage-0。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">Map Reduce Local Work</div><div class="line">  Alias -&gt; Map Local Tables:</div><div class="line">    b </div><div class="line">      Fetch Operator</div><div class="line">        limit: -1</div><div class="line">  Alias -&gt; Map Local Operator Tree:</div><div class="line">    b </div><div class="line">      TableScan</div><div class="line">        alias: b</div><div class="line">        Statistics: Num rows: 1 Data size: 15 Basic stats: COMPLETE Column stats: NONE</div><div class="line">        Filter Operator</div><div class="line">          predicate: id is not null (type: boolean)</div><div class="line">          Statistics: Num rows: 1 Data size: 15 Basic stats: COMPLETE Column stats: NONE</div><div class="line">          HashTable Sink Operator</div><div class="line">            keys:</div><div class="line">              0 id (type: int)</div></pre></td></tr></table></figure>
+<ul>
+<li>Map Reduce Local Work: 啟動一個MapReduce Local Task。對應圖中的MapReduce Local Task方框。</li>
+<li>TableScan<ul>
+<li>alias: b: 根據MetaData中的統計訊息自動決定b表為小表，並且進行讀入數據。</li>
+<li>HashTable Sink Operator: 輸出HashTable並存到HDFS上，對應圖中的HashTable File。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Stage: Stage-3</div><div class="line">  Map Reduce</div><div class="line">    Map Operator Tree:</div></pre></td></tr></table></figure>
+<ul>
+<li>Stage: Stage-3: 為一個MapReduce Job，但其只包含Map Task，並將計算結果輸出至HDFS上。</li>
+</ul>
+<h5 id="小結-1"><a href="#小結-1" class="headerlink" title="小結"></a>小結</h5><ul>
+<li><a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+JoinOptimization" title="JoinOptimization" target="_blank" rel="external">官方文檔 JoinOptimization</a></li>
+<li>上圖為Map Join的流程圖以及執行計畫，Map Join會將小表全部讀入記憶體中，並產生HashTable檔案，接著將HashTable加載到分布式緩存中。在map階段，直接拿HashTable與大表中的紀錄做匹配。</li>
+<li>由於在map中進行了join的操作，省去了shuffle與reduce的過程，執行效率提高很多，並且省去Shuffle階段要進行的大量資料傳輸，達成優化作業的作用。</li>
+<li>使用Map Join時要注意小表的大小，因為會將小表全部寫入分布式記憶體中，故當所需記憶體過大時，會發生OOM。而小表的上限判定值，可以根據屬性來設定。</li>
+<li>要使Map Join能夠順利進行，必須滿足: 除了一份表的資料分佈在不同的Map中之外，其他連接的表的資料必須在每個Map中有完整的複製。</li>
+</ul>
+<h3 id="Hive-log"><a href="#Hive-log" class="headerlink" title="Hive log"></a>Hive log</h3><ul>
+<li>查看執行Common join跟Map Join對應的Hive Log。</li>
+<li>Hive Log的位置在$HIVE_HOME/conf/hive-log4j.properties中的以下參數設定:<ul>
+<li>hive.log.dir=${java.io.tmpdir}/${user.name}</li>
+<li>hive.log.file=hive.log</li>
+</ul>
+</li>
+</ul>
+<h4 id="Common-Join-Log"><a href="#Common-Join-Log" class="headerlink" title="Common Join Log"></a>Common Join Log</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">2017-09-23 18:01:03,204 INFO  [main]: ql.Driver (Driver.java:compile(411)) - Compiling <span class="built_in">command</span>(queryId=hadoop_20170923175858_4f8377cd-a648-4c9e-8190-b0f7d4326f56): select a.id, a.name, b.age from a join b on a.id=b.id</div><div class="line">2017-09-23 18:01:03,334 INFO  [main]: ql.Driver (Driver.java:compile(463)) - Semantic Analysis Completed</div><div class="line">2017-09-23 18:01:03,334 INFO  [main]: ql.Driver (Driver.java:getSchema(245)) - Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:a.id, <span class="built_in">type</span>:int, comment:null), FieldSchema(name:a.name, <span class="built_in">type</span>:string, comment:null), FieldSchema(name:b.age, <span class="built_in">type</span>:int, comment:null)], properties:null)</div><div class="line">2017-09-23 18:01:03,345 INFO  [main]: ql.Driver (Driver.java:compile(541)) - Completed compiling <span class="built_in">command</span>(queryId=hadoop_20170923175858_4f8377cd-a648-4c9e-8190-b0f7d4326f56); Time taken: 0.141 seconds</div><div class="line">2017-09-23 18:01:03,346 INFO  [main]: ql.Driver (Driver.java:checkConcurrency(165)) - Concurrency mode is disabled, not creating a lock manager</div><div class="line">2017-09-23 18:01:03,346 INFO  [main]: ql.Driver (Driver.java:execute(1448)) - Executing <span class="built_in">command</span>(queryId=hadoop_20170923175858_4f8377cd-a648-4c9e-8190-b0f7d4326f56): select a.id, a.name, b.age from a join b on a.id=b.id</div><div class="line">2017-09-23 18:01:03,346 INFO  [main]: ql.Driver (SessionState.java:printInfo(927)) - Query ID = hadoop_20170923175858_4f8377cd-a648-4c9e-8190-b0f7d4326f56</div><div class="line">2017-09-23 18:01:03,347 INFO  [main]: ql.Driver (SessionState.java:printInfo(927)) - Total <span class="built_in">jobs</span> = 1</div><div class="line">2017-09-23 18:01:03,347 INFO  [main]: ql.Driver (SessionState.java:printInfo(927)) - Launching Job 1 out of 1</div><div class="line">2017-09-23 18:01:03,351 INFO  [main]: ql.Driver (Driver.java:launchTask(1772)) - Starting task [Stage-1:MAPRED] <span class="keyword">in</span> serial mode</div><div class="line">2017-09-23 18:01:03,354 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) - Number of reduce tasks not specified. Estimated from input data size: 1</div><div class="line">2017-09-23 18:01:03,354 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) - In order to change the average load <span class="keyword">for</span> a reducer (<span class="keyword">in</span> bytes):</div><div class="line">2017-09-23 18:01:03,355 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) -   <span class="built_in">set</span> hive.exec.reducers.bytes.per.reducer=&lt;number&gt;</div><div class="line">2017-09-23 18:01:03,355 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) - In order to <span class="built_in">limit</span> the maximum number of reducers:</div><div class="line">2017-09-23 18:01:03,355 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) -   <span class="built_in">set</span> hive.exec.reducers.max=&lt;number&gt;</div><div class="line">2017-09-23 18:01:03,355 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) - In order to <span class="built_in">set</span> a constant number of reducers:</div><div class="line">2017-09-23 18:01:03,356 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) -   <span class="built_in">set</span> mapreduce.job.reduces=&lt;number&gt;</div><div class="line">2017-09-23 18:01:03,357 INFO  [main]: mr.ExecDriver (ExecDriver.java:execute(286)) - Using org.apache.hadoop.hive.ql.io.CombineHiveInputFormat</div><div class="line">2017-09-23 18:01:03,357 INFO  [main]: mr.ExecDriver (ExecDriver.java:execute(308)) - adding libjars: file:///opt/software/hive/auxlib/com.hive.demo-1.0.jar</div><div class="line">2017-09-23 18:01:03,382 ERROR [main]: mr.ExecDriver (ExecDriver.java:execute(398)) - <span class="built_in">local</span></div><div class="line">2017-09-23 18:01:03,399 WARN  [main]: mapreduce.JobResourceUploader (JobResourceUploader.java:uploadFiles(64)) - Hadoop <span class="built_in">command</span>-line option parsing not performed. Implement the Tool interface and execute your application with ToolRunner to remedy this.</div><div class="line">2017-09-23 18:01:03,741 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) - Job running <span class="keyword">in</span>-process (<span class="built_in">local</span> Hadoop)</div><div class="line">2017-09-23 18:01:04,757 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) - 2017-09-23 18:01:04,757 Stage-1 map = 100%,  reduce = 100%</div><div class="line">2017-09-23 18:01:04,770 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) - Ended Job = job_local2008589424_0003</div><div class="line">2017-09-23 18:01:04,776 INFO  [main]: ql.Driver (SessionState.java:printInfo(927)) - MapReduce Jobs Launched: </div><div class="line">2017-09-23 18:01:04,777 INFO  [main]: ql.Driver (SessionState.java:printInfo(927)) - Stage-Stage-1:  HDFS Read: 264 HDFS Write: 0 SUCCESS</div><div class="line">2017-09-23 18:01:04,777 INFO  [main]: ql.Driver (SessionState.java:printInfo(927)) - Total MapReduce CPU Time Spent: 0 msec</div><div class="line">2017-09-23 18:01:04,777 INFO  [main]: ql.Driver (Driver.java:execute(1696)) - Completed executing <span class="built_in">command</span>(queryId=hadoop_20170923175858_4f8377cd-a648-4c9e-8190-b0f7d4326f56); Time taken: 1.43 seconds</div><div class="line">2017-09-23 18:01:04,777 INFO  [main]: ql.Driver (SessionState.java:printInfo(927)) - OK</div></pre></td></tr></table></figure>
+<h5 id="Common-Join-Log說明"><a href="#Common-Join-Log說明" class="headerlink" title="Common Join Log說明:"></a>Common Join Log說明:</h5><ul>
+<li>2017-09-23 18:01:04,757 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) - 2017-09-23 18:01:04,757 Stage-1 map = 100%,  reduce = 100%<ul>
+<li>需要進行Map與Reduce，也就是需要進行Shuffle操作。</li>
+</ul>
+</li>
+</ul>
+<h4 id="Map-Join-Log"><a href="#Map-Join-Log" class="headerlink" title="Map Join Log"></a>Map Join Log</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">2017-09-23 18:00:04,948 INFO  [main]: ql.Driver (Driver.java:compile(411)) - Compiling <span class="built_in">command</span>(queryId=hadoop_20170923175858_4f8377cd-a648-4c9e-8190-b0f7d4326f56): select a.id, a.name, b.age from a join b on a.id=b.id</div><div class="line">2017-09-23 18:00:05,100 INFO  [main]: ql.Driver (Driver.java:compile(463)) - Semantic Analysis Completed</div><div class="line">2017-09-23 18:00:05,102 INFO  [main]: ql.Driver (Driver.java:getSchema(245)) - Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:a.id, <span class="built_in">type</span>:int, comment:null), FieldSchema(name:a.name, <span class="built_in">type</span>:string, comment:null), FieldSchema(name:b.age, <span class="built_in">type</span>:int, comment:null)], properties:null)</div><div class="line">2017-09-23 18:00:05,112 INFO  [main]: ql.Driver (Driver.java:compile(541)) - Completed compiling <span class="built_in">command</span>(queryId=hadoop_20170923175858_4f8377cd-a648-4c9e-8190-b0f7d4326f56); Time taken: 0.164 seconds</div><div class="line">2017-09-23 18:00:05,112 INFO  [main]: ql.Driver (Driver.java:checkConcurrency(165)) - Concurrency mode is disabled, not creating a lock manager</div><div class="line">2017-09-23 18:00:05,112 INFO  [main]: ql.Driver (Driver.java:execute(1448)) - Executing <span class="built_in">command</span>(queryId=hadoop_20170923175858_4f8377cd-a648-4c9e-8190-b0f7d4326f56): select a.id, a.name, b.age from a join b on a.id=b.id</div><div class="line">2017-09-23 18:00:05,113 INFO  [main]: ql.Driver (SessionState.java:printInfo(927)) - Query ID = hadoop_20170923175858_4f8377cd-a648-4c9e-8190-b0f7d4326f56</div><div class="line">2017-09-23 18:00:05,120 INFO  [main]: ql.Driver (SessionState.java:printInfo(927)) - Total <span class="built_in">jobs</span> = 1</div><div class="line">2017-09-23 18:00:05,122 INFO  [main]: ql.Driver (Driver.java:launchTask(1772)) - Starting task [Stage-4:MAPREDLOCAL] <span class="keyword">in</span> serial mode</div><div class="line">2017-09-23 18:00:05,123 INFO  [main]: mr.MapredLocalTask (MapredLocalTask.java:executeInChildVM(159)) - Generating plan file file:/tmp/hadoop/6085132e-5e5c-465b-8e67-dd6b58d6518d/hive_2017-09-23_18-00-04_956_7187995778853783363-1/-<span class="built_in">local</span>-10005/plan.xml</div><div class="line">2017-09-23 18:00:05,278 INFO  [main]: mr.MapredLocalTask (MapredLocalTask.java:executeInChildVM(288)) - Executing: /opt/software/hadoop/bin/hadoop jar /opt/software/hive-1.1.0-cdh5.7.0/lib/hive-exec-1.1.0-cdh5.7.0.jar org.apache.hadoop.hive.ql.exec.mr.ExecDriver -localtask -plan file:/tmp/hadoop/6085132e-5e5c-465b-8e67-dd6b58d6518d/hive_2017-09-23_18-00-04_956_7187995778853783363-1/-<span class="built_in">local</span>-10005/plan.xml   -jobconffile file:/tmp/hadoop/6085132e-5e5c-465b-8e67-dd6b58d6518d/hive_2017-09-23_18-00-04_956_7187995778853783363-1/-<span class="built_in">local</span>-10006/jobconf.xml</div><div class="line">2017-09-23 18:00:10,522 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) - Execution completed successfully</div><div class="line">2017-09-23 18:00:10,522 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) - MapredLocal task succeeded</div><div class="line">2017-09-23 18:00:10,522 INFO  [main]: mr.MapredLocalTask (MapredLocalTask.java:executeInChildVM(313)) - Execution completed successfully</div><div class="line">2017-09-23 18:00:10,523 INFO  [main]: ql.Driver (SessionState.java:printInfo(927)) - Launching Job 1 out of 1</div><div class="line">2017-09-23 18:00:10,526 INFO  [main]: ql.Driver (Driver.java:launchTask(1772)) - Starting task [Stage-3:MAPRED] <span class="keyword">in</span> serial mode</div><div class="line">2017-09-23 18:00:10,526 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) - Number of reduce tasks is <span class="built_in">set</span> to 0 since theres no reduce operator</div><div class="line">2017-09-23 18:00:10,536 INFO  [main]: mr.ExecDriver (ExecDriver.java:execute(286)) - Using org.apache.hadoop.hive.ql.io.CombineHiveInputFormat</div><div class="line">2017-09-23 18:00:10,537 INFO  [main]: mr.ExecDriver (ExecDriver.java:execute(308)) - adding libjars: file:///opt/software/hive/auxlib/com.hive.demo-1.0.jar</div><div class="line">2017-09-23 18:00:10,545 ERROR [main]: mr.ExecDriver (ExecDriver.java:execute(398)) - <span class="built_in">local</span></div><div class="line">2017-09-23 18:00:10,564 WARN  [main]: mapreduce.JobResourceUploader (JobResourceUploader.java:uploadFiles(64)) - Hadoop <span class="built_in">command</span>-line option parsing not performed. Implement the Tool interface and execute your application with ToolRunner to remedy this.</div><div class="line">2017-09-23 18:00:10,963 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) - Job running <span class="keyword">in</span>-process (<span class="built_in">local</span> Hadoop)</div><div class="line">2017-09-23 18:00:11,969 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) - 2017-09-23 18:00:11,969 Stage-3 map = 100%,  reduce = 0%</div><div class="line">2017-09-23 18:00:11,977 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) - Ended Job = job_local1147667645_0002</div><div class="line">2017-09-23 18:00:11,981 INFO  [main]: ql.Driver (SessionState.java:printInfo(927)) - MapReduce Jobs Launched: </div><div class="line">2017-09-23 18:00:11,981 INFO  [main]: ql.Driver (SessionState.java:printInfo(927)) - Stage-Stage-3:  HDFS Read: 52 HDFS Write: 0 SUCCESS</div><div class="line">2017-09-23 18:00:11,981 INFO  [main]: ql.Driver (SessionState.java:printInfo(927)) - Total MapReduce CPU Time Spent: 0 msec</div><div class="line">2017-09-23 18:00:11,981 INFO  [main]: ql.Driver (Driver.java:execute(1696)) - Completed executing <span class="built_in">command</span>(queryId=hadoop_20170923175858_4f8377cd-a648-4c9e-8190-b0f7d4326f56); Time taken: 6.869 seconds</div><div class="line">2017-09-23 18:00:11,982 INFO  [main]: ql.Driver (SessionState.java:printInfo(927)) - OK</div></pre></td></tr></table></figure>
+<h5 id="Map-Join-Log說明"><a href="#Map-Join-Log說明" class="headerlink" title="Map Join Log說明:"></a>Map Join Log說明:</h5><ul>
+<li><p>2017-09-23 18:00:05,122 INFO  [main]: ql.Driver (Driver.java:launchTask(1772)) - Starting task [Stage-4:MAPREDLOCAL] in serial mode</p>
+<ul>
+<li>此為一個MapReduce Local Task。對應Map Join圖中的MapReduce Local Task方框。</li>
+</ul>
+</li>
+<li><p>2017-09-23 18:00:10,526 INFO  [main]: exec.Task (SessionState.java:printInfo(927)) - Number of reduce tasks is set to 0 since theres no reduce operator</p>
+<ul>
+<li>此操作沒有Reduce Task</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+          
+            <a href="/tags/Big-data/" rel="tag"># Big data</a>
+          
+            <a href="/tags/Hive/" rel="tag"># Hive</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/hive-dml/" rel="next" title="Hive DML">
+                <i class="fa fa-chevron-left"></i> Hive DML
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/builtin-functions/" rel="prev" title="Hive Built-in Functions">
+                Hive Built-in Functions <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hive-Join"><span class="nav-number">1.</span> <span class="nav-text">Hive Join</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Hive中的Join的用法"><span class="nav-number">1.1.</span> <span class="nav-text">Hive中的Join的用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#創建join示例所使用的表。"><span class="nav-number">1.1.1.</span> <span class="nav-text">創建join示例所使用的表。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Inner-Join"><span class="nav-number">1.1.2.</span> <span class="nav-text">Inner Join</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Left-Join"><span class="nav-number">1.1.3.</span> <span class="nav-text">Left Join</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Right-Join"><span class="nav-number">1.1.4.</span> <span class="nav-text">Right Join</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Full-Join"><span class="nav-number">1.1.5.</span> <span class="nav-text">Full Join</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cross-Join"><span class="nav-number">1.1.6.</span> <span class="nav-text">Cross Join</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hive-join"><span class="nav-number">1.2.</span> <span class="nav-text">Hive join</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Common-Join"><span class="nav-number">1.2.1.</span> <span class="nav-text">Common Join</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#執行計畫說明"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">執行計畫說明</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#小結"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">小結</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Map-Join"><span class="nav-number">1.2.2.</span> <span class="nav-text">Map Join</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#執行計畫說明-1"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">執行計畫說明</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#小結-1"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">小結</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hive-log"><span class="nav-number">1.3.</span> <span class="nav-text">Hive log</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Common-Join-Log"><span class="nav-number">1.3.1.</span> <span class="nav-text">Common Join Log</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Common-Join-Log說明"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">Common Join Log說明:</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Map-Join-Log"><span class="nav-number">1.3.2.</span> <span class="nav-text">Map Join Log</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Map-Join-Log說明"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">Map Join Log說明:</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

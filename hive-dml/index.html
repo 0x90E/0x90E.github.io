@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hadoop,Big data,Hive," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Hive Data Manipulation Language Hive DML 官方文檔  Loading files into tablesSyntax1LOAD DATA [LOCAL] INPATH &amp;apos;filepath&amp;apos; [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 .">
+<meta name="keywords" content="Hadoop,Big data,Hive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive DML">
+<meta property="og:url" content="https://0x90e.github.io/hive-dml/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Hive Data Manipulation Language Hive DML 官方文檔  Loading files into tablesSyntax1LOAD DATA [LOCAL] INPATH &amp;apos;filepath&amp;apos; [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 .">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2017-09-26T04:17:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hive DML">
+<meta name="twitter:description" content="Hive Data Manipulation Language Hive DML 官方文檔  Loading files into tablesSyntax1LOAD DATA [LOCAL] INPATH &amp;apos;filepath&amp;apos; [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 .">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/hive-dml/"/>
+
+
+
+
+
+  <title>Hive DML | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Chase Excellence，Sucess will follow.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/hive-dml/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hive DML</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-18T12:35:28+08:00">
+                2017-09-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Hive-Data-Manipulation-Language"><a href="#Hive-Data-Manipulation-Language" class="headerlink" title="Hive Data Manipulation Language"></a>Hive Data Manipulation Language</h2><ul>
+<li><a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML" title="Hive DML" target="_blank" rel="external">Hive DML 官方文檔</a></li>
+</ul>
+<h3 id="Loading-files-into-tables"><a href="#Loading-files-into-tables" class="headerlink" title="Loading files into tables"></a>Loading files into tables</h3><p>Syntax<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">LOAD DATA [LOCAL] INPATH &apos;filepath&apos; [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 ...)]</div></pre></td></tr></table></figure></p>
+<ul>
+<li>LOCAL: 是否從本地文件中載入資料，否則從HDFS中載入。</li>
+<li>‘filepath’: 可以為本地文件路徑，或HDFS路徑。</li>
+<li>OVERWRITE: 是否重寫資料，否則在尾端追加數據。</li>
+</ul>
+<h4 id="Loading-file-from-local-file"><a href="#Loading-file-from-local-file" class="headerlink" title="Loading file from local file"></a>Loading file from local file</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div></pre></td><td class="code"><pre><div class="line"><span class="comment">-- 創建一張空表</span></div><div class="line">hive&gt; </div><div class="line">    <span class="keyword">create</span> <span class="keyword">table</span> emp(</div><div class="line">    empno <span class="built_in">int</span>, </div><div class="line">    ename <span class="keyword">string</span>, </div><div class="line">    job <span class="keyword">string</span>, </div><div class="line">    mgr <span class="built_in">int</span>, </div><div class="line">    hiredate <span class="keyword">string</span>, </div><div class="line">    sal <span class="keyword">double</span>, </div><div class="line">    comm <span class="keyword">double</span>, </div><div class="line">    deptno <span class="built_in">int</span></div><div class="line">    )<span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span>;</div><div class="line">OK</div><div class="line">Time taken: 0.838 seconds</div><div class="line"></div><div class="line">hive&gt; show tables;</div><div class="line">OK</div><div class="line">emp</div><div class="line">Time taken: 0.199 seconds, Fetched: 2 row(s)</div><div class="line"></div><div class="line">hive&gt; select * from emp;</div><div class="line">OK</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">-- 從本地文件載入至emp</span></div><div class="line">hive&gt; load data local inpath '/home/hadoop/data/emp.txt' overwrite into table emp;</div><div class="line">Loading data to table default.emp</div><div class="line">Table default.emp stats: [numFiles=1, numRows=0, totalSize=700, rawDataSize=0]</div><div class="line">OK</div><div class="line">Time taken: 2.909 seconds</div><div class="line"></div><div class="line">hive&gt; select * from emp;</div><div class="line">OK</div><div class="line">7369	SMITH	CLERK	7902	1980-12-17	800.0	NULL	20</div><div class="line">7499	ALLEN	SALESMAN	7698	1981-2-20	1600.0	300.0	30</div><div class="line">7521	WARD	SALESMAN	7698	1981-2-22	1250.0	500.0	30</div><div class="line">7566	JONES	MANAGER	7839	1981-4-2	2975.0	NULL	20</div><div class="line">7654	MARTIN	SALESMAN	7698	1981-9-28	1250.0	1400.0	30</div><div class="line">7698	BLAKE	MANAGER	7839	1981-5-1	2850.0	NULL	30</div><div class="line">7782	CLARK	MANAGER	7839	1981-6-9	2450.0	NULL	10</div><div class="line">7788	SCOTT	ANALYST	7566	1987-4-19	3000.0	NULL	20</div><div class="line">7839	KING	PRESIDENT	NULL	1981-11-17	5000.0	NULL	10</div><div class="line">7844	TURNER	SALESMAN	7698	1981-9-8	1500.0	0.0	30</div><div class="line">7876	ADAMS	CLERK	7788	1987-5-23	1100.0	NULL	20</div><div class="line">7900	JAMES	CLERK	7698	1981-12-3	950.0	NULL	30</div><div class="line">7902	FORD	ANALYST	7566	1981-12-3	3000.0	NULL	20</div><div class="line">7934	MILLER	CLERK	7782	1982-1-23	1300.0	NULL	10</div><div class="line">8888	HIVE	PROGRAM	7839	1988-1-23	10300.0	NULL	NULL</div><div class="line">Time taken: 0.105 seconds, Fetched: 15 row(s)</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">-- 從本地文件讀取數據，並追加至emp尾部</span></div><div class="line">hive&gt; load data local inpath '/home/hadoop/data/emp.txt' into table emp;</div><div class="line">Loading data to table default.emp</div><div class="line">Table default.emp stats: [numFiles=2, numRows=0, totalSize=1400, rawDataSize=0]</div><div class="line">OK</div><div class="line">Time taken: 0.673 seconds</div><div class="line"></div><div class="line">hive&gt; select count(*) from emp;</div><div class="line">Query ID = hadoop_20170914005050_bccf96a2-df73-425a-83b5-6e7fe5e6772f</div><div class="line">Total jobs = 1</div><div class="line">Launching Job 1 out of 1</div><div class="line">Number of reduce tasks determined at compile time: 1</div><div class="line">In order to <span class="keyword">change</span> the average <span class="keyword">load</span> <span class="keyword">for</span> a reducer (<span class="keyword">in</span> <span class="keyword">bytes</span>):</div><div class="line">  <span class="keyword">set</span> hive.exec.reducers.bytes.per.reducer=&lt;<span class="built_in">number</span>&gt;</div><div class="line"><span class="keyword">In</span> <span class="keyword">order</span> <span class="keyword">to</span> <span class="keyword">limit</span> the maximum <span class="built_in">number</span> <span class="keyword">of</span> reducers:</div><div class="line">  <span class="keyword">set</span> hive.exec.reducers.max=&lt;<span class="built_in">number</span>&gt;</div><div class="line"><span class="keyword">In</span> <span class="keyword">order</span> <span class="keyword">to</span> <span class="keyword">set</span> a <span class="keyword">constant</span> <span class="built_in">number</span> <span class="keyword">of</span> reducers:</div><div class="line">  <span class="keyword">set</span> mapreduce.job.reduces=&lt;<span class="built_in">number</span>&gt;</div><div class="line">Job running <span class="keyword">in</span>-process (<span class="keyword">local</span> Hadoop)</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-14</span> <span class="number">01</span>:<span class="number">03</span>:<span class="number">29</span>,<span class="number">160</span> Stage<span class="number">-1</span> <span class="keyword">map</span> = <span class="number">100</span>%,  reduce = <span class="number">100</span>%</div><div class="line">Ended Job = job_local1150048630_0002</div><div class="line">MapReduce Jobs Launched: </div><div class="line">Stage-Stage<span class="number">-1</span>:  HDFS <span class="keyword">Read</span>: <span class="number">9800</span> HDFS Write: <span class="number">2800</span> <span class="keyword">SUCCESS</span></div><div class="line">Total MapReduce CPU <span class="keyword">Time</span> Spent: <span class="number">0</span> msec</div><div class="line">OK</div><div class="line"><span class="number">30</span></div></pre></td></tr></table></figure>
+<p>在進行資料追加時，顯示下面這行輸出:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Table default.emp stats: [numFiles=2, numRows=0, totalSize=1400, rawDataSize=0]</div></pre></td></tr></table></figure></p>
+<p>當中的numFiles表示在對應的hdfs中，包含2個文件。可以使用下列方式進行驗證。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[hadoop@cdh001 ~]$ hadoop fs -ls /user/hive/warehouse/emp</div><div class="line">Found 2 items</div><div class="line">-rwxr-xr-x   1 hadoop supergroup        700 2017-09-14 01:20 /user/hive/warehouse/emp/emp.txt</div><div class="line">-rwxr-xr-x   1 hadoop supergroup        700 2017-09-14 01:21 /user/hive/warehouse/emp/emp_copy_1.txt</div></pre></td></tr></table></figure></p>
+<h4 id="Loading-file-from-HDFS"><a href="#Loading-file-from-HDFS" class="headerlink" title="Loading file from HDFS"></a>Loading file from HDFS</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">-- 先將emp清空</span></div><div class="line">hive&gt; truncate table emp;</div><div class="line">OK</div><div class="line">Time taken: 0.222 seconds</div><div class="line"></div><div class="line"><span class="comment">-- 從HDFS上將數據載入</span></div><div class="line"><span class="comment">-- hdfs://cdh001:9000: 對應Hadoop中core-site.xml中的fs.defaultFS配置</span></div><div class="line">hive&gt; load data inpath 'hdfs://cdh001:9000/data/emp.txt' overwrite into table emp;</div><div class="line">Loading data to table default.emp</div><div class="line">Table default.emp stats: [numFiles=1, numRows=0, totalSize=700, rawDataSize=0]</div><div class="line">OK</div><div class="line">Time taken: 0.42 seconds</div><div class="line"></div><div class="line">hive&gt; select count(*) from emp;</div><div class="line">Query ID = hadoop_20170914005050_bccf96a2-df73-425a-83b5-6e7fe5e6772f</div><div class="line">Total jobs = 1</div><div class="line">Launching Job 1 out of 1</div><div class="line">Number of reduce tasks determined at compile time: 1</div><div class="line">In order to <span class="keyword">change</span> the average <span class="keyword">load</span> <span class="keyword">for</span> a reducer (<span class="keyword">in</span> <span class="keyword">bytes</span>):</div><div class="line">  <span class="keyword">set</span> hive.exec.reducers.bytes.per.reducer=&lt;<span class="built_in">number</span>&gt;</div><div class="line"><span class="keyword">In</span> <span class="keyword">order</span> <span class="keyword">to</span> <span class="keyword">limit</span> the maximum <span class="built_in">number</span> <span class="keyword">of</span> reducers:</div><div class="line">  <span class="keyword">set</span> hive.exec.reducers.max=&lt;<span class="built_in">number</span>&gt;</div><div class="line"><span class="keyword">In</span> <span class="keyword">order</span> <span class="keyword">to</span> <span class="keyword">set</span> a <span class="keyword">constant</span> <span class="built_in">number</span> <span class="keyword">of</span> reducers:</div><div class="line">  <span class="keyword">set</span> mapreduce.job.reduces=&lt;<span class="built_in">number</span>&gt;</div><div class="line">Job running <span class="keyword">in</span>-process (<span class="keyword">local</span> Hadoop)</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-14</span> <span class="number">01</span>:<span class="number">16</span>:<span class="number">58</span>,<span class="number">335</span> Stage<span class="number">-1</span> <span class="keyword">map</span> = <span class="number">100</span>%,  reduce = <span class="number">100</span>%</div><div class="line">Ended Job = job_local978141749_0004</div><div class="line">MapReduce Jobs Launched: </div><div class="line">Stage-Stage<span class="number">-1</span>:  HDFS <span class="keyword">Read</span>: <span class="number">11214</span> HDFS Write: <span class="number">2800</span> <span class="keyword">SUCCESS</span></div><div class="line">Total MapReduce CPU <span class="keyword">Time</span> Spent: <span class="number">0</span> msec</div><div class="line">OK</div><div class="line"><span class="number">15</span></div><div class="line"><span class="keyword">Time</span> taken: <span class="number">1.518</span> seconds, Fetched: <span class="number">1</span> <span class="keyword">row</span>(s)</div></pre></td></tr></table></figure>
+<h4 id="Inserting-data-into-Hive-Tables-from-queries"><a href="#Inserting-data-into-Hive-Tables-from-queries" class="headerlink" title="Inserting data into Hive Tables from queries"></a>Inserting data into Hive Tables from queries</h4><p>Syntax<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">INSERT OVERWRITE TABLE tablename1 [PARTITION (partcol1=val1, partcol2=val2 ...) [IF NOT EXISTS]] select_statement1 FROM from_statement;</div><div class="line">INSERT INTO TABLE tablename1 [PARTITION (partcol1=val1, partcol2=val2 ...)] select_statement1 FROM from_statement;</div></pre></td></tr></table></figure></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div></pre></td><td class="code"><pre><div class="line">hive&gt; </div><div class="line">    <span class="keyword">create</span> <span class="keyword">table</span> emp(</div><div class="line">    empno <span class="built_in">int</span>, </div><div class="line">    ename <span class="keyword">string</span>, </div><div class="line">    job <span class="keyword">string</span>, </div><div class="line">    mgr <span class="built_in">int</span>, </div><div class="line">    hiredate <span class="keyword">string</span>, </div><div class="line">    sal <span class="keyword">double</span>, </div><div class="line">    comm <span class="keyword">double</span>, </div><div class="line">    deptno <span class="built_in">int</span></div><div class="line">    )<span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span>;</div><div class="line">OK</div><div class="line">Time taken: 1.36 seconds</div><div class="line"></div><div class="line"><span class="comment">-- 從emp將全部的資料載入，並複寫emp2</span></div><div class="line">hive&gt; insert overwrite table emp2 select * from emp;</div><div class="line">Query ID = hadoop_20170914014141_a03e8794-0c51-414f-87d7-50236e8e1b36</div><div class="line">Total jobs = 3</div><div class="line">Launching Job 1 out of 3</div><div class="line">Number of reduce tasks is <span class="keyword">set</span> <span class="keyword">to</span> <span class="number">0</span> since there <span class="keyword">no</span> reduce <span class="keyword">operator</span></div><div class="line">Job running <span class="keyword">in</span>-process (<span class="keyword">local</span> Hadoop)</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-14</span> <span class="number">01</span>:<span class="number">45</span>:<span class="number">44</span>,<span class="number">802</span> Stage<span class="number">-1</span> <span class="keyword">map</span> = <span class="number">100</span>%,  reduce = <span class="number">0</span>%</div><div class="line">Ended Job = job_local2086758437_0002</div><div class="line">Stage<span class="number">-4</span> <span class="keyword">is</span> selected <span class="keyword">by</span> condition resolver.</div><div class="line">Stage<span class="number">-3</span> <span class="keyword">is</span> filtered <span class="keyword">out</span> <span class="keyword">by</span> condition resolver.</div><div class="line">Stage<span class="number">-5</span> <span class="keyword">is</span> filtered <span class="keyword">out</span> <span class="keyword">by</span> condition resolver.</div><div class="line">Moving <span class="keyword">data</span> <span class="keyword">to</span>: hdfs://cdh001:<span class="number">9000</span>/<span class="keyword">user</span>/hive/warehouse/emp2/.hive-staging_hive_2017<span class="number">-09</span><span class="number">-14</span>_01<span class="number">-45</span><span class="number">-43</span>_184_5687343240557641860<span class="number">-1</span>/-ext<span class="number">-10000</span></div><div class="line">Loading <span class="keyword">data</span> <span class="keyword">to</span> <span class="keyword">table</span> default.emp2</div><div class="line"><span class="keyword">Table</span> default.emp2 stats: [numFiles=<span class="number">1</span>, numRows=<span class="number">15</span>, totalSize=<span class="number">708</span>, rawDataSize=<span class="number">693</span>]</div><div class="line">MapReduce Jobs Launched: </div><div class="line">Stage-Stage<span class="number">-1</span>:  HDFS <span class="keyword">Read</span>: <span class="number">3586</span> HDFS Write: <span class="number">2963</span> <span class="keyword">SUCCESS</span></div><div class="line">Total MapReduce CPU <span class="keyword">Time</span> Spent: <span class="number">0</span> msec</div><div class="line">OK</div><div class="line"><span class="keyword">Time</span> taken: <span class="number">1.999</span> seconds</div><div class="line">hive&gt; <span class="keyword">select</span> * <span class="keyword">from</span> emp2;</div><div class="line">OK</div><div class="line">7369	SMITH	CLERK	7902	1980-12-17	800.0	NULL	20</div><div class="line">7499	ALLEN	SALESMAN	7698	1981-2-20	1600.0	300.0	30</div><div class="line">7521	WARD	SALESMAN	7698	1981-2-22	1250.0	500.0	30</div><div class="line">7566	JONES	MANAGER	7839	1981-4-2	2975.0	NULL	20</div><div class="line">7654	MARTIN	SALESMAN	7698	1981-9-28	1250.0	1400.0	30</div><div class="line">7698	BLAKE	MANAGER	7839	1981-5-1	2850.0	NULL	30</div><div class="line">7782	CLARK	MANAGER	7839	1981-6-9	2450.0	NULL	10</div><div class="line">7788	SCOTT	ANALYST	7566	1987-4-19	3000.0	NULL	20</div><div class="line">7839	KING	PRESIDENT	NULL	1981-11-17	5000.0	NULL	10</div><div class="line">7844	TURNER	SALESMAN	7698	1981-9-8	1500.0	0.0	30</div><div class="line">7876	ADAMS	CLERK	7788	1987-5-23	1100.0	NULL	20</div><div class="line">7900	JAMES	CLERK	7698	1981-12-3	950.0	NULL	30</div><div class="line">7902	FORD	ANALYST	7566	1981-12-3	3000.0	NULL	20</div><div class="line">7934	MILLER	CLERK	7782	1982-1-23	1300.0	NULL	10</div><div class="line">8888	HIVE	PROGRAM	7839	1988-1-23	10300.0	NULL	NULL</div><div class="line">Time taken: 0.127 seconds, Fetched: 15 row(s)</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">-- 從emp將全部的資料載入，並追加至emp2</span></div><div class="line">hive&gt; insert into table emp2 select * from emp;</div><div class="line">Query ID = hadoop_20170914014141_a03e8794-0c51-414f-87d7-50236e8e1b36</div><div class="line">Total jobs = 3</div><div class="line">Launching Job 1 out of 3</div><div class="line">Number of reduce tasks is <span class="keyword">set</span> <span class="keyword">to</span> <span class="number">0</span> since theres <span class="keyword">no</span> reduce <span class="keyword">operator</span></div><div class="line">Job running <span class="keyword">in</span>-process (<span class="keyword">local</span> Hadoop)</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-14</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">12</span>,<span class="number">327</span> Stage<span class="number">-1</span> <span class="keyword">map</span> = <span class="number">100</span>%,  reduce = <span class="number">0</span>%</div><div class="line">Ended Job = job_local1847471355_0004</div><div class="line">Stage<span class="number">-4</span> <span class="keyword">is</span> selected <span class="keyword">by</span> condition resolver.</div><div class="line">Stage<span class="number">-3</span> <span class="keyword">is</span> filtered <span class="keyword">out</span> <span class="keyword">by</span> condition resolver.</div><div class="line">Stage<span class="number">-5</span> <span class="keyword">is</span> filtered <span class="keyword">out</span> <span class="keyword">by</span> condition resolver.</div><div class="line">Moving <span class="keyword">data</span> <span class="keyword">to</span>: hdfs://cdh001:<span class="number">9000</span>/<span class="keyword">user</span>/hive/warehouse/emp2/.hive-staging_hive_2017<span class="number">-09</span><span class="number">-14</span>_01<span class="number">-50</span><span class="number">-10</span>_029_6901561759110802758<span class="number">-1</span>/-ext<span class="number">-10000</span></div><div class="line">Loading <span class="keyword">data</span> <span class="keyword">to</span> <span class="keyword">table</span> default.emp2</div><div class="line"><span class="keyword">Table</span> default.emp2 stats: [numFiles=<span class="number">2</span>, numRows=<span class="number">30</span>, totalSize=<span class="number">1416</span>, rawDataSize=<span class="number">1386</span>]</div><div class="line">MapReduce Jobs Launched: </div><div class="line">Stage-Stage<span class="number">-1</span>:  HDFS <span class="keyword">Read</span>: <span class="number">6540</span> HDFS Write: <span class="number">4517</span> <span class="keyword">SUCCESS</span></div><div class="line">Total MapReduce CPU <span class="keyword">Time</span> Spent: <span class="number">0</span> msec</div><div class="line">OK</div><div class="line"><span class="keyword">Time</span> taken: <span class="number">2.686</span> seconds</div><div class="line">hive&gt; <span class="keyword">select</span> * <span class="keyword">from</span> emp2;</div><div class="line">OK</div><div class="line">7369	SMITH	CLERK	7902	1980-12-17	800.0	NULL	20</div><div class="line">7499	ALLEN	SALESMAN	7698	1981-2-20	1600.0	300.0	30</div><div class="line">7521	WARD	SALESMAN	7698	1981-2-22	1250.0	500.0	30</div><div class="line">7566	JONES	MANAGER	7839	1981-4-2	2975.0	NULL	20</div><div class="line">7654	MARTIN	SALESMAN	7698	1981-9-28	1250.0	1400.0	30</div><div class="line">7698	BLAKE	MANAGER	7839	1981-5-1	2850.0	NULL	30</div><div class="line">7782	CLARK	MANAGER	7839	1981-6-9	2450.0	NULL	10</div><div class="line">7788	SCOTT	ANALYST	7566	1987-4-19	3000.0	NULL	20</div><div class="line">7839	KING	PRESIDENT	NULL	1981-11-17	5000.0	NULL	10</div><div class="line">7844	TURNER	SALESMAN	7698	1981-9-8	1500.0	0.0	30</div><div class="line">7876	ADAMS	CLERK	7788	1987-5-23	1100.0	NULL	20</div><div class="line">7900	JAMES	CLERK	7698	1981-12-3	950.0	NULL	30</div><div class="line">7902	FORD	ANALYST	7566	1981-12-3	3000.0	NULL	20</div><div class="line">7934	MILLER	CLERK	7782	1982-1-23	1300.0	NULL	10</div><div class="line">8888	HIVE	PROGRAM	7839	1988-1-23	10300.0	NULL	NULL</div><div class="line">7369	SMITH	CLERK	7902	1980-12-17	800.0	NULL	20</div><div class="line">7499	ALLEN	SALESMAN	7698	1981-2-20	1600.0	300.0	30</div><div class="line">7521	WARD	SALESMAN	7698	1981-2-22	1250.0	500.0	30</div><div class="line">7566	JONES	MANAGER	7839	1981-4-2	2975.0	NULL	20</div><div class="line">7654	MARTIN	SALESMAN	7698	1981-9-28	1250.0	1400.0	30</div><div class="line">7698	BLAKE	MANAGER	7839	1981-5-1	2850.0	NULL	30</div><div class="line">7782	CLARK	MANAGER	7839	1981-6-9	2450.0	NULL	10</div><div class="line">7788	SCOTT	ANALYST	7566	1987-4-19	3000.0	NULL	20</div><div class="line">7839	KING	PRESIDENT	NULL	1981-11-17	5000.0	NULL	10</div><div class="line">7844	TURNER	SALESMAN	7698	1981-9-8	1500.0	0.0	30</div><div class="line">7876	ADAMS	CLERK	7788	1987-5-23	1100.0	NULL	20</div><div class="line">7900	JAMES	CLERK	7698	1981-12-3	950.0	NULL	30</div><div class="line">7902	FORD	ANALYST	7566	1981-12-3	3000.0	NULL	20</div><div class="line">7934	MILLER	CLERK	7782	1982-1-23	1300.0	NULL	10</div><div class="line">8888	HIVE	PROGRAM	7839	1988-1-23	10300.0	NULL	NULL</div><div class="line">Time taken: 0.086 seconds, Fetched: 30 row(s)</div></pre></td></tr></table></figure>
+<h3 id="Writing-data-into-the-filesystem-from-queries"><a href="#Writing-data-into-the-filesystem-from-queries" class="headerlink" title="Writing data into the filesystem from queries"></a>Writing data into the filesystem from queries</h3><p>Syntax<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">INSERT OVERWRITE [LOCAL] DIRECTORY directory1</div><div class="line">  [ROW FORMAT row_format] [STORED AS file_format] (Note: Only available starting with Hive 0.11.0)</div><div class="line">  SELECT ... FROM ...</div></pre></td></tr></table></figure></p>
+<h4 id="Writing-data-into-the-local-file"><a href="#Writing-data-into-the-local-file" class="headerlink" title="Writing data into the local file"></a>Writing data into the local file</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">hive&gt; insert overwrite local directory '/home/hadoop/hive_data' </div><div class="line">      row format delimited fields terminated by '\t' <span class="keyword">select</span> * <span class="keyword">from</span> emp;</div><div class="line">Query ID = hadoop_20170914014141_a03e8794-0c51-414f-87d7-50236e8e1b36</div><div class="line">Total jobs = 1</div><div class="line">Launching Job 1 out of 1</div><div class="line">Number of reduce tasks is <span class="keyword">set</span> <span class="keyword">to</span> <span class="number">0</span> since there<span class="string">'s no reduce operator</span></div><div class="line"><span class="string">Job running in-process (local Hadoop)</span></div><div class="line"><span class="string">2017-09-15 00:17:19,523 Stage-1 map = 100%,  reduce = 0%</span></div><div class="line"><span class="string">Ended Job = job_local1952623901_0005</span></div><div class="line"><span class="string">Copying data to local directory /home/hadoop/hive_data</span></div><div class="line"><span class="string">MapReduce Jobs Launched: </span></div><div class="line"><span class="string">Stage-Stage-1:  HDFS Read: 8725 HDFS Write: 4517 SUCCESS</span></div><div class="line"><span class="string">Total MapReduce CPU Time Spent: 0 msec</span></div><div class="line"><span class="string">OK</span></div><div class="line"><span class="string">Time taken: 2.298 seconds</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">## 在對應的本地路徑確認導出的數據，並確認文件內容</span></div><div class="line">[hadoop@cdh001 hive_data]$ ls</div><div class="line">000000_0</div><div class="line">[hadoop@cdh001 hive_data]$ vim 000000_0 </div><div class="line"></div><div class="line">7369    SMITH   CLERK   7902    1980-12-17      800.0   \N      20</div><div class="line">7499    ALLEN   SALESMAN        7698    1981-2-20       1600.0  300.0   30</div><div class="line">7521    WARD    SALESMAN        7698    1981-2-22       1250.0  500.0   30</div><div class="line">7566    JONES   MANAGER 7839    1981-4-2        2975.0  \N      20</div><div class="line">7654    MARTIN  SALESMAN        7698    1981-9-28       1250.0  1400.0  30</div><div class="line">7698    BLAKE   MANAGER 7839    1981-5-1        2850.0  \N      30</div><div class="line">7782    CLARK   MANAGER 7839    1981-6-9        2450.0  \N      10</div><div class="line">7788    SCOTT   ANALYST 7566    1987-4-19       3000.0  \N      20</div><div class="line">7839    KING    PRESIDENT       \N      1981-11-17      5000.0  \N      10</div><div class="line">7844    TURNER  SALESMAN        7698    1981-9-8        1500.0  0.0     30</div><div class="line">7876    ADAMS   CLERK   7788    1987-5-23       1100.0  \N      20</div><div class="line">7900    JAMES   CLERK   7698    1981-12-3       950.0   \N      30</div><div class="line">7902    FORD    ANALYST 7566    1981-12-3       3000.0  \N      20</div><div class="line">7934    MILLER  CLERK   7782    1982-1-23       1300.0  \N      10</div><div class="line">8888    HIVE    PROGRAM 7839    1988-1-23       10300.0 \N      \N</div></pre></td></tr></table></figure>
+<h4 id="Writing-data-into-the-HDFS"><a href="#Writing-data-into-the-HDFS" class="headerlink" title="Writing data into the HDFS"></a>Writing data into the HDFS</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">hive&gt; insert overwrite directory 'hdfs://cdh001:9000/hive_data' row format delimited fields terminated by '\t' select * from emp;</div><div class="line">Query ID = hadoop_20170914014141_a03e8794-0c51-414f-87d7-50236e8e1b36</div><div class="line">Total jobs = 3</div><div class="line">Launching Job 1 out of 3</div><div class="line">Number of reduce tasks is <span class="keyword">set</span> <span class="keyword">to</span> <span class="number">0</span> since theres <span class="keyword">no</span> reduce <span class="keyword">operator</span></div><div class="line">Job running <span class="keyword">in</span>-process (<span class="keyword">local</span> Hadoop)</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-15</span> <span class="number">00</span>:<span class="number">27</span>:<span class="number">00</span>,<span class="number">633</span> Stage<span class="number">-1</span> <span class="keyword">map</span> = <span class="number">100</span>%,  reduce = <span class="number">0</span>%</div><div class="line">Ended Job = job_local1161905320_0006</div><div class="line">Stage<span class="number">-3</span> <span class="keyword">is</span> selected <span class="keyword">by</span> condition resolver.</div><div class="line">Stage<span class="number">-2</span> <span class="keyword">is</span> filtered <span class="keyword">out</span> <span class="keyword">by</span> condition resolver.</div><div class="line">Stage<span class="number">-4</span> <span class="keyword">is</span> filtered <span class="keyword">out</span> <span class="keyword">by</span> condition resolver.</div><div class="line">Moving <span class="keyword">data</span> <span class="keyword">to</span>: hdfs://cdh001:<span class="number">9000</span>/hive_data/.hive-staging_hive_2017<span class="number">-09</span><span class="number">-15</span>_00<span class="number">-26</span><span class="number">-59</span>_185_2874371608777769743<span class="number">-1</span>/-ext<span class="number">-10000</span></div><div class="line">Moving <span class="keyword">data</span> <span class="keyword">to</span>: hdfs://cdh001:<span class="number">9000</span>/hive_data</div><div class="line">MapReduce Jobs Launched: </div><div class="line">Stage-Stage<span class="number">-1</span>:  HDFS <span class="keyword">Read</span>: <span class="number">9425</span> HDFS Write: <span class="number">5225</span> <span class="keyword">SUCCESS</span></div><div class="line">Total MapReduce CPU <span class="keyword">Time</span> Spent: <span class="number">0</span> msec</div><div class="line">OK</div><div class="line"><span class="keyword">Time</span> taken: <span class="number">1.524</span> seconds</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">## 在對應的HDFS路徑確認導出的資料，並確認文件內容。</span></div><div class="line">[hadoop@cdh001 hive_data]$ hadoop fs -ls /hive_data</div><div class="line">Found 1 items</div><div class="line">-rwxr-xr-x   1 hadoop supergroup        708 2017-09-15 00:27 /hive_data/000000_0</div><div class="line"></div><div class="line">[hadoop@cdh001 hive_data]$ hadoop fs -cat /hive_data/000000_0</div><div class="line">7369	SMITH	CLERK	7902	1980-12-17	800.0	\N	20</div><div class="line">7499	ALLEN	SALESMAN	7698	1981-2-20	1600.0	300.0	30</div><div class="line">7521	WARD	SALESMAN	7698	1981-2-22	1250.0	500.0	30</div><div class="line">7566	JONES	MANAGER	7839	1981-4-2	2975.0	\N	20</div><div class="line">7654	MARTIN	SALESMAN	7698	1981-9-28	1250.0	1400.0	30</div><div class="line">7698	BLAKE	MANAGER	7839	1981-5-1	2850.0	\N	30</div><div class="line">7782	CLARK	MANAGER	7839	1981-6-9	2450.0	\N	10</div><div class="line">7788	SCOTT	ANALYST	7566	1987-4-19	3000.0	\N	20</div><div class="line">7839	KING	PRESIDENT	\N	1981-11-17	5000.0	\N	10</div><div class="line">7844	TURNER	SALESMAN	7698	1981-9-8	1500.0	0.0	30</div><div class="line">7876	ADAMS	CLERK	7788	1987-5-23	1100.0	\N	20</div><div class="line">7900	JAMES	CLERK	7698	1981-12-3	950.0	\N	30</div><div class="line">7902	FORD	ANALYST	7566	1981-12-3	3000.0	\N	20</div><div class="line">7934	MILLER	CLERK	7782	1982-1-23	1300.0	\N	10</div><div class="line">8888	HIVE	PROGRAM	7839	1988-1-23	10300.0	\N	\N</div></pre></td></tr></table></figure>
+<h3 id="Inserting-values-into-tables-from-SQL"><a href="#Inserting-values-into-tables-from-SQL" class="headerlink" title="Inserting values into tables from SQL"></a>Inserting values into tables from SQL</h3><ul>
+<li>大數據場景下不常使用。</li>
+<li>Hive 0.14開始支援。</li>
+</ul>
+<h3 id="Update"><a href="#Update" class="headerlink" title="Update"></a>Update</h3><ul>
+<li>大數據場景下不常使用。</li>
+<li>Hive 0.14開始支援。</li>
+</ul>
+<h3 id="Delete"><a href="#Delete" class="headerlink" title="Delete"></a>Delete</h3><ul>
+<li>大數據場景下不常使用。</li>
+<li>Hive 0.14開始支援。</li>
+</ul>
+<h3 id="Query"><a href="#Query" class="headerlink" title="Query"></a>Query</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="comment">-- 查詢emp中，所有的數據。</span></div><div class="line">hive&gt; select * from emp;</div><div class="line">OK</div><div class="line">7369	SMITH	CLERK	7902	1980-12-17	800.0	NULL	20</div><div class="line">7499	ALLEN	SALESMAN	7698	1981-2-20	1600.0	300.0	30</div><div class="line">7521	WARD	SALESMAN	7698	1981-2-22	1250.0	500.0	30</div><div class="line">7566	JONES	MANAGER	7839	1981-4-2	2975.0	NULL	20</div><div class="line">7654	MARTIN	SALESMAN	7698	1981-9-28	1250.0	1400.0	30</div><div class="line">7698	BLAKE	MANAGER	7839	1981-5-1	2850.0	NULL	30</div><div class="line">7782	CLARK	MANAGER	7839	1981-6-9	2450.0	NULL	10</div><div class="line">7788	SCOTT	ANALYST	7566	1987-4-19	3000.0	NULL	20</div><div class="line">7839	KING	PRESIDENT	NULL	1981-11-17	5000.0	NULL	10</div><div class="line">7844	TURNER	SALESMAN	7698	1981-9-8	1500.0	0.0	30</div><div class="line">7876	ADAMS	CLERK	7788	1987-5-23	1100.0	NULL	20</div><div class="line">7900	JAMES	CLERK	7698	1981-12-3	950.0	NULL	30</div><div class="line">7902	FORD	ANALYST	7566	1981-12-3	3000.0	NULL	20</div><div class="line">7934	MILLER	CLERK	7782	1982-1-23	1300.0	NULL	10</div><div class="line">8888	HIVE	PROGRAM	7839	1988-1-23	10300.0	NULL	NULL</div><div class="line">Time taken: 0.076 seconds, Fetched: 15 row(s)</div><div class="line"></div><div class="line"><span class="comment">-- 查詢emp中，ename為'SMITH'的紀錄</span></div><div class="line">hive&gt; select * from emp where ename='SMITH';</div><div class="line">OK</div><div class="line">7369	SMITH	CLERK	7902	1980-12-17	800.0	NULL	20</div><div class="line">Time taken: 0.221 seconds, Fetched: 1 row(s)</div><div class="line"></div><div class="line"><span class="comment">-- 查詢emp table中，sal區間在800~1500的紀錄</span></div><div class="line"><span class="comment">-- where between and 操作，是左右閉合的</span></div><div class="line">hive&gt; select ename, sal from emp where sal between 800 and 1500;</div><div class="line">OK</div><div class="line">SMITH	800.0</div><div class="line">WARD	1250.0</div><div class="line">MARTIN	1250.0</div><div class="line">TURNER	1500.0</div><div class="line">ADAMS	1100.0</div><div class="line">JAMES	950.0</div><div class="line">MILLER	1300.0</div><div class="line">Time taken: 0.081 seconds, Fetched: 7 row(s)</div><div class="line"></div><div class="line"><span class="comment">-- 查詢emp中，deptno是10, 30的數據。</span></div><div class="line">hive&gt; select ename, deptno from emp where deptno in (10,30);</div><div class="line">OK</div><div class="line">ALLEN	30</div><div class="line">WARD	30</div><div class="line">MARTIN	30</div><div class="line">BLAKE	30</div><div class="line">CLARK	10</div><div class="line">KING	10</div><div class="line">TURNER	30</div><div class="line">JAMES	30</div><div class="line">MILLER	10</div><div class="line">Time taken: 0.068 seconds, Fetched: 9 row(s)</div></pre></td></tr></table></figure>
+<h3 id="Aggregate-functions"><a href="#Aggregate-functions" class="headerlink" title="Aggregate functions"></a>Aggregate functions</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">hive&gt; select count(1), max(sal), min(sal), avg(sal) from emp;</div><div class="line">Query ID = hadoop_20170914014141_a03e8794-0c51-414f-87d7-50236e8e1b36</div><div class="line">Total jobs = 1</div><div class="line">Launching Job 1 out of 1</div><div class="line">Number of reduce tasks determined at compile time: 1</div><div class="line">In order to <span class="keyword">change</span> the average <span class="keyword">load</span> <span class="keyword">for</span> a reducer (<span class="keyword">in</span> <span class="keyword">bytes</span>):</div><div class="line">  <span class="keyword">set</span> hive.exec.reducers.bytes.per.reducer=&lt;<span class="built_in">number</span>&gt;</div><div class="line"><span class="keyword">In</span> <span class="keyword">order</span> <span class="keyword">to</span> <span class="keyword">limit</span> the maximum <span class="built_in">number</span> <span class="keyword">of</span> reducers:</div><div class="line">  <span class="keyword">set</span> hive.exec.reducers.max=&lt;<span class="built_in">number</span>&gt;</div><div class="line"><span class="keyword">In</span> <span class="keyword">order</span> <span class="keyword">to</span> <span class="keyword">set</span> a <span class="keyword">constant</span> <span class="built_in">number</span> <span class="keyword">of</span> reducers:</div><div class="line">  <span class="keyword">set</span> mapreduce.job.reduces=&lt;<span class="built_in">number</span>&gt;</div><div class="line">Job running <span class="keyword">in</span>-process (<span class="keyword">local</span> Hadoop)</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-15</span> <span class="number">00</span>:<span class="number">44</span>:<span class="number">49</span>,<span class="number">597</span> Stage<span class="number">-1</span> <span class="keyword">map</span> = <span class="number">100</span>%,  reduce = <span class="number">100</span>%</div><div class="line">Ended Job = job_local1747076311_0014</div><div class="line">MapReduce Jobs Launched: </div><div class="line">Stage-Stage<span class="number">-1</span>:  HDFS <span class="keyword">Read</span>: <span class="number">42650</span> HDFS Write: <span class="number">10450</span> <span class="keyword">SUCCESS</span></div><div class="line">Total MapReduce CPU <span class="keyword">Time</span> Spent: <span class="number">0</span> msec</div><div class="line">OK</div><div class="line"><span class="number">15</span>	<span class="number">10300.0</span>	<span class="number">800.0</span>	<span class="number">2621.6666666666665</span></div><div class="line"><span class="keyword">Time</span> taken: <span class="number">1.344</span> seconds, Fetched: <span class="number">1</span> <span class="keyword">row</span>(s)</div></pre></td></tr></table></figure>
+<h3 id="Group-by"><a href="#Group-by" class="headerlink" title="Group by"></a>Group by</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div></pre></td><td class="code"><pre><div class="line"><span class="comment">-- 查詢每個部門的平均薪水</span></div><div class="line">hive&gt; select deptno, avg(sal) from emp group by deptno;</div><div class="line">Query ID = hadoop_20170914014141_a03e8794-0c51-414f-87d7-50236e8e1b36</div><div class="line">Total jobs = 1</div><div class="line">Launching Job 1 out of 1</div><div class="line">Number of reduce tasks not specified. Estimated from input data size: 1</div><div class="line">In order to <span class="keyword">change</span> the average <span class="keyword">load</span> <span class="keyword">for</span> a reducer (<span class="keyword">in</span> <span class="keyword">bytes</span>):</div><div class="line">  <span class="keyword">set</span> hive.exec.reducers.bytes.per.reducer=&lt;<span class="built_in">number</span>&gt;</div><div class="line"><span class="keyword">In</span> <span class="keyword">order</span> <span class="keyword">to</span> <span class="keyword">limit</span> the maximum <span class="built_in">number</span> <span class="keyword">of</span> reducers:</div><div class="line">  <span class="keyword">set</span> hive.exec.reducers.max=&lt;<span class="built_in">number</span>&gt;</div><div class="line"><span class="keyword">In</span> <span class="keyword">order</span> <span class="keyword">to</span> <span class="keyword">set</span> a <span class="keyword">constant</span> <span class="built_in">number</span> <span class="keyword">of</span> reducers:</div><div class="line">  <span class="keyword">set</span> mapreduce.job.reduces=&lt;<span class="built_in">number</span>&gt;</div><div class="line">Job running <span class="keyword">in</span>-process (<span class="keyword">local</span> Hadoop)</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-16</span> <span class="number">00</span>:<span class="number">17</span>:<span class="number">45</span>,<span class="number">930</span> Stage<span class="number">-1</span> <span class="keyword">map</span> = <span class="number">100</span>%,  reduce = <span class="number">100</span>%</div><div class="line">Ended Job = job_local1889358448_0027</div><div class="line">MapReduce Jobs Launched: </div><div class="line">Stage-Stage<span class="number">-1</span>:  HDFS <span class="keyword">Read</span>: <span class="number">62250</span> HDFS Write: <span class="number">10450</span> <span class="keyword">SUCCESS</span></div><div class="line">Total MapReduce CPU <span class="keyword">Time</span> Spent: <span class="number">0</span> msec</div><div class="line">OK</div><div class="line"><span class="literal">NULL</span>	<span class="number">10300.0</span></div><div class="line"><span class="number">10</span>	<span class="number">2916.6666666666665</span></div><div class="line"><span class="number">20</span>	<span class="number">2175.0</span></div><div class="line"><span class="number">30</span>	<span class="number">1566.6666666666667</span></div><div class="line"><span class="keyword">Time</span> taken: <span class="number">1.328</span> seconds, Fetched: <span class="number">4</span> <span class="keyword">row</span>(s)</div><div class="line"></div><div class="line"><span class="comment">-- 查詢每個工作中在不同部門的最高薪水</span></div><div class="line">hive&gt; <span class="keyword">select</span> job, deptno, <span class="keyword">max</span>(sal) <span class="keyword">from</span> emp <span class="keyword">group</span> <span class="keyword">by</span> job, deptno;</div><div class="line">Query ID = hadoop_20170914014141_a03e8794-0c51-414f-87d7-50236e8e1b36</div><div class="line">Total jobs = 1</div><div class="line">Launching Job 1 out of 1</div><div class="line">Number of reduce tasks not specified. Estimated from input data size: 1</div><div class="line">In order to <span class="keyword">change</span> the average <span class="keyword">load</span> <span class="keyword">for</span> a reducer (<span class="keyword">in</span> <span class="keyword">bytes</span>):</div><div class="line">  <span class="keyword">set</span> hive.exec.reducers.bytes.per.reducer=&lt;<span class="built_in">number</span>&gt;</div><div class="line"><span class="keyword">In</span> <span class="keyword">order</span> <span class="keyword">to</span> <span class="keyword">limit</span> the maximum <span class="built_in">number</span> <span class="keyword">of</span> reducers:</div><div class="line">  <span class="keyword">set</span> hive.exec.reducers.max=&lt;<span class="built_in">number</span>&gt;</div><div class="line"><span class="keyword">In</span> <span class="keyword">order</span> <span class="keyword">to</span> <span class="keyword">set</span> a <span class="keyword">constant</span> <span class="built_in">number</span> <span class="keyword">of</span> reducers:</div><div class="line">  <span class="keyword">set</span> mapreduce.job.reduces=&lt;<span class="built_in">number</span>&gt;</div><div class="line">Job running <span class="keyword">in</span>-process (<span class="keyword">local</span> Hadoop)</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-16</span> <span class="number">00</span>:<span class="number">15</span>:<span class="number">51</span>,<span class="number">279</span> Stage<span class="number">-1</span> <span class="keyword">map</span> = <span class="number">0</span>%,  reduce = <span class="number">0</span>%</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-16</span> <span class="number">00</span>:<span class="number">15</span>:<span class="number">52</span>,<span class="number">281</span> Stage<span class="number">-1</span> <span class="keyword">map</span> = <span class="number">100</span>%,  reduce = <span class="number">100</span>%</div><div class="line">Ended Job = job_local1502275066_0025</div><div class="line">MapReduce Jobs Launched: </div><div class="line">Stage-Stage<span class="number">-1</span>:  HDFS <span class="keyword">Read</span>: <span class="number">59450</span> HDFS Write: <span class="number">10450</span> <span class="keyword">SUCCESS</span></div><div class="line">Total MapReduce CPU <span class="keyword">Time</span> Spent: <span class="number">0</span> msec</div><div class="line">OK</div><div class="line">ANALYST	<span class="number">20</span>	<span class="number">3000.0</span></div><div class="line">CLERK	<span class="number">10</span>	<span class="number">1300.0</span></div><div class="line">CLERK	<span class="number">20</span>	<span class="number">1100.0</span></div><div class="line">CLERK	<span class="number">30</span>	<span class="number">950.0</span></div><div class="line">MANAGER	<span class="number">10</span>	<span class="number">2450.0</span></div><div class="line">MANAGER	<span class="number">20</span>	<span class="number">2975.0</span></div><div class="line">MANAGER	<span class="number">30</span>	<span class="number">2850.0</span></div><div class="line">PRESIDENT	<span class="number">10</span>	<span class="number">5000.0</span></div><div class="line">PROGRAM	<span class="literal">NULL</span>	<span class="number">10300.0</span></div><div class="line">SALESMAN	<span class="number">30</span>	<span class="number">1600.0</span></div><div class="line"><span class="keyword">Time</span> taken: <span class="number">3.667</span> seconds, Fetched: <span class="number">10</span> <span class="keyword">row</span>(s)</div><div class="line"></div><div class="line"><span class="comment">-- 查詢各部門1982-01-01之前入職員工的平均薪水</span></div><div class="line">hive&gt; <span class="keyword">select</span> deptno, <span class="keyword">avg</span>(sal) <span class="keyword">from</span> emp <span class="keyword">where</span> hiredate &gt; <span class="keyword">to_date</span>(<span class="string">'1982-01-01'</span>) <span class="keyword">group</span> <span class="keyword">by</span> deptno;</div><div class="line">Query ID = hadoop_20170914014141_a03e8794-0c51-414f-87d7-50236e8e1b36</div><div class="line">Total jobs = 1</div><div class="line">Launching Job 1 out of 1</div><div class="line">Number of reduce tasks not specified. Estimated from input data size: 1</div><div class="line">In order to <span class="keyword">change</span> the average <span class="keyword">load</span> <span class="keyword">for</span> a reducer (<span class="keyword">in</span> <span class="keyword">bytes</span>):</div><div class="line">  <span class="keyword">set</span> hive.exec.reducers.bytes.per.reducer=&lt;<span class="built_in">number</span>&gt;</div><div class="line"><span class="keyword">In</span> <span class="keyword">order</span> <span class="keyword">to</span> <span class="keyword">limit</span> the maximum <span class="built_in">number</span> <span class="keyword">of</span> reducers:</div><div class="line">  <span class="keyword">set</span> hive.exec.reducers.max=&lt;<span class="built_in">number</span>&gt;</div><div class="line"><span class="keyword">In</span> <span class="keyword">order</span> <span class="keyword">to</span> <span class="keyword">set</span> a <span class="keyword">constant</span> <span class="built_in">number</span> <span class="keyword">of</span> reducers:</div><div class="line">  <span class="keyword">set</span> mapreduce.job.reduces=&lt;<span class="built_in">number</span>&gt;</div><div class="line">Job running <span class="keyword">in</span>-process (<span class="keyword">local</span> Hadoop)</div><div class="line"><span class="number">2017</span><span class="number">-09</span><span class="number">-16</span> <span class="number">00</span>:<span class="number">48</span>:<span class="number">00</span>,<span class="number">159</span> Stage<span class="number">-1</span> <span class="keyword">map</span> = <span class="number">100</span>%,  reduce = <span class="number">100</span>%</div><div class="line">Ended Job = job_local1055215937_0030</div><div class="line">MapReduce Jobs Launched: </div><div class="line">Stage-Stage<span class="number">-1</span>:  HDFS <span class="keyword">Read</span>: <span class="number">91650</span> HDFS Write: <span class="number">10450</span> <span class="keyword">SUCCESS</span></div><div class="line">Total MapReduce CPU <span class="keyword">Time</span> Spent: <span class="number">0</span> msec</div><div class="line">OK</div><div class="line"><span class="literal">NULL</span>	<span class="number">10300.0</span></div><div class="line"><span class="number">10</span>	<span class="number">1300.0</span></div><div class="line"><span class="number">20</span>	<span class="number">2050.0</span></div><div class="line"><span class="keyword">Time</span> taken: <span class="number">1.267</span> seconds, Fetched: <span class="number">3</span> <span class="keyword">row</span>(s)</div></pre></td></tr></table></figure>
+<ul>
+<li>在返回集字段中，這些字段不是包含在group by語句之後，作為分組的依據，否則一定包含在聚合函數中(Aggregate functions)，若不成立，則會報錯，如下:<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hive&gt; select deptno, ename, max(sal) from emp group by deptno; </div><div class="line">FAILED: SemanticException [Error 10025]: Line 1:15 Expression not <span class="keyword">in</span> GROUP BY key <span class="string">'ename'</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Case-when-then"><a href="#Case-when-then" class="headerlink" title="Case when then"></a>Case when then</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">hive&gt; select ename, sal,</div><div class="line">    &gt; case</div><div class="line">    &gt; when sal &gt; 1 and sal &lt;= 1000 then 'LOWER'</div><div class="line">    &gt; when sal &gt; 1000 and sal &lt;= 2000 then 'MIDDLE'</div><div class="line">    &gt; when sal &gt; 2000 and sal &lt;= 4000 then 'HIGH'</div><div class="line">    &gt; else 'HIGJEST' end</div><div class="line">    &gt; from emp;</div><div class="line">OK</div><div class="line">SMITH	800.0	LOWER</div><div class="line">ALLEN	1600.0	MIDDLE</div><div class="line">WARD	1250.0	MIDDLE</div><div class="line">JONES	2975.0	HIGH</div><div class="line">MARTIN	1250.0	MIDDLE</div><div class="line">BLAKE	2850.0	HIGH</div><div class="line">CLARK	2450.0	HIGH</div><div class="line">SCOTT	3000.0	HIGH</div><div class="line">KING	5000.0	HIGJEST</div><div class="line">TURNER	1500.0	MIDDLE</div><div class="line">ADAMS	1100.0	MIDDLE</div><div class="line">JAMES	950.0	LOWER</div><div class="line">FORD	3000.0	HIGH</div><div class="line">MILLER	1300.0	MIDDLE</div><div class="line">HIVE	10300.0	HIGJEST</div><div class="line">Time taken: 0.105 seconds, Fetched: 15 row(s)</div></pre></td></tr></table></figure>
+<h3 id="Import-Export"><a href="#Import-Export" class="headerlink" title="Import/Export"></a>Import/Export</h3><ul>
+<li>Hive 0.8.0 開始支持。</li>
+<li><a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+ImportExport&quot;Hive ImportExport&quot;" target="_blank" rel="external">Hive ImportExport 官方文檔</a></li>
+</ul>
+<h4 id="Export"><a href="#Export" class="headerlink" title="Export"></a>Export</h4><p>Syntax<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">EXPORT TABLE tablename [PARTITION (part_column=&quot;value&quot;[, ...])]</div><div class="line">  TO &apos;export_target_path&apos; [ FOR replication(&apos;eventid&apos;) ]</div></pre></td></tr></table></figure></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">hive&gt; export table emp to 'hdfs://cdh001:9000/hive_export_table';</div><div class="line">Copying data from file:/tmp/hadoop/2d0fe1f1-954f-4cb7-bc14-1f05d5de3555/hive_2017-09-16_01-23-59_248_7891813049757812255-1/-local-10000/_metadata</div><div class="line">Copying file: file:/tmp/hadoop/2d0fe1f1-954f-4cb7-bc14-1f05d5de3555/hive_2017-09-16_01-23-59_248_7891813049757812255-1/-local-10000/_metadata</div><div class="line">Copying data from hdfs://cdh001:9000/user/hive/warehouse/emp</div><div class="line">Copying file: hdfs://cdh001:9000/user/hive/warehouse/emp/emp.txt</div><div class="line">OK</div><div class="line">Time taken: 0.125 seconds</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[hadoop@cdh001 hive_data]$ hadoop fs -ls /hive_export_table</div><div class="line">Found 2 items</div><div class="line">-rwxr-xr-x   1 hadoop supergroup       1570 2017-09-16 01:23 /hive_export_table/_metadata</div><div class="line">drwxr-xr-x   - hadoop supergroup          0 2017-09-16 01:23 /hive_export_table/data</div></pre></td></tr></table></figure>
+<h4 id="Import"><a href="#Import" class="headerlink" title="Import"></a>Import</h4><p>Syntax<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">IMPORT [[EXTERNAL] TABLE new_or_original_tablename [PARTITION (part_column=&quot;value&quot;[, ...])]]</div><div class="line">  FROM &apos;source_path&apos;</div><div class="line">  [LOCATION &apos;import_target_path&apos;]</div></pre></td></tr></table></figure></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">hive&gt; show tables;</div><div class="line">OK</div><div class="line">emp</div><div class="line">emp2</div><div class="line">emp3</div><div class="line">emptest</div><div class="line">hdfsimport</div><div class="line">Time taken: 0.024 seconds, Fetched: 5 row(s)</div><div class="line"></div><div class="line">hive&gt; select * from hdfsimport;</div><div class="line">OK</div><div class="line">7369	SMITH	CLERK	7902	1980-12-17	800.0	NULL	20</div><div class="line">7499	ALLEN	SALESMAN	7698	1981-2-20	1600.0	300.0	30</div><div class="line">7521	WARD	SALESMAN	7698	1981-2-22	1250.0	500.0	30</div><div class="line">7566	JONES	MANAGER	7839	1981-4-2	2975.0	NULL	20</div><div class="line">7654	MARTIN	SALESMAN	7698	1981-9-28	1250.0	1400.0	30</div><div class="line">7698	BLAKE	MANAGER	7839	1981-5-1	2850.0	NULL	30</div><div class="line">7782	CLARK	MANAGER	7839	1981-6-9	2450.0	NULL	10</div><div class="line">7788	SCOTT	ANALYST	7566	1987-4-19	3000.0	NULL	20</div><div class="line">7839	KING	PRESIDENT	NULL	1981-11-17	5000.0	NULL	10</div><div class="line">7844	TURNER	SALESMAN	7698	1981-9-8	1500.0	0.0	30</div><div class="line">7876	ADAMS	CLERK	7788	1987-5-23	1100.0	NULL	20</div><div class="line">7900	JAMES	CLERK	7698	1981-12-3	950.0	NULL	30</div><div class="line">7902	FORD	ANALYST	7566	1981-12-3	3000.0	NULL	20</div><div class="line">7934	MILLER	CLERK	7782	1982-1-23	1300.0	NULL	10</div><div class="line">8888	HIVE	PROGRAM	7839	1988-1-23	10300.0	NULL	NULL</div><div class="line">Time taken: 0.062 seconds, Fetched: 15 row(s)</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+          
+            <a href="/tags/Big-data/" rel="tag"># Big data</a>
+          
+            <a href="/tags/Hive/" rel="tag"># Hive</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/hive-basic/" rel="next" title="Hive Basics">
+                <i class="fa fa-chevron-left"></i> Hive Basics
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/hive-join/" rel="prev" title="Hive Join">
+                Hive Join <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hive-Data-Manipulation-Language"><span class="nav-number">1.</span> <span class="nav-text">Hive Data Manipulation Language</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Loading-files-into-tables"><span class="nav-number">1.1.</span> <span class="nav-text">Loading files into tables</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Loading-file-from-local-file"><span class="nav-number">1.1.1.</span> <span class="nav-text">Loading file from local file</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Loading-file-from-HDFS"><span class="nav-number">1.1.2.</span> <span class="nav-text">Loading file from HDFS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Inserting-data-into-Hive-Tables-from-queries"><span class="nav-number">1.1.3.</span> <span class="nav-text">Inserting data into Hive Tables from queries</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Writing-data-into-the-filesystem-from-queries"><span class="nav-number">1.2.</span> <span class="nav-text">Writing data into the filesystem from queries</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Writing-data-into-the-local-file"><span class="nav-number">1.2.1.</span> <span class="nav-text">Writing data into the local file</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Writing-data-into-the-HDFS"><span class="nav-number">1.2.2.</span> <span class="nav-text">Writing data into the HDFS</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inserting-values-into-tables-from-SQL"><span class="nav-number">1.3.</span> <span class="nav-text">Inserting values into tables from SQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Update"><span class="nav-number">1.4.</span> <span class="nav-text">Update</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Delete"><span class="nav-number">1.5.</span> <span class="nav-text">Delete</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Query"><span class="nav-number">1.6.</span> <span class="nav-text">Query</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Aggregate-functions"><span class="nav-number">1.7.</span> <span class="nav-text">Aggregate functions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Group-by"><span class="nav-number">1.8.</span> <span class="nav-text">Group by</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Case-when-then"><span class="nav-number">1.9.</span> <span class="nav-text">Case when then</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Import-Export"><span class="nav-number">1.10.</span> <span class="nav-text">Import/Export</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Export"><span class="nav-number">1.10.1.</span> <span class="nav-text">Export</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Import"><span class="nav-number">1.10.2.</span> <span class="nav-text">Import</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

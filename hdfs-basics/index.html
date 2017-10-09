@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hadoop,Big data,HDFS," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="HDFS(Hadoop Distributed File System)Introduction Apache HDFS官網 可運行在普通且廉價的硬體上 高容錯能力 提供應用程式對數據的高吞吐量(high throughput)訪問，適用於具有大數據集的應用程式  Assumptions and Goals Hardware Failure 快速硬體錯誤偵測與自動復原機制   Streaming">
+<meta name="keywords" content="Hadoop,Big data,HDFS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HDFS Basics">
+<meta property="og:url" content="https://0x90e.github.io/hdfs-basics/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="HDFS(Hadoop Distributed File System)Introduction Apache HDFS官網 可運行在普通且廉價的硬體上 高容錯能力 提供應用程式對數據的高吞吐量(high throughput)訪問，適用於具有大數據集的應用程式  Assumptions and Goals Hardware Failure 快速硬體錯誤偵測與自動復原機制   Streaming">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2017-09-13T04:40:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HDFS Basics">
+<meta name="twitter:description" content="HDFS(Hadoop Distributed File System)Introduction Apache HDFS官網 可運行在普通且廉價的硬體上 高容錯能力 提供應用程式對數據的高吞吐量(high throughput)訪問，適用於具有大數據集的應用程式  Assumptions and Goals Hardware Failure 快速硬體錯誤偵測與自動復原機制   Streaming">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/hdfs-basics/"/>
+
+
+
+
+
+  <title>HDFS Basics | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Chase Excellence，Sucess will follow.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/hdfs-basics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HDFS Basics</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-27T00:15:01+08:00">
+                2017-08-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="HDFS-Hadoop-Distributed-File-System"><a href="#HDFS-Hadoop-Distributed-File-System" class="headerlink" title="HDFS(Hadoop Distributed File System)"></a>HDFS(Hadoop Distributed File System)</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><ul>
+<li><a href="http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html" title="HDFS" target="_blank" rel="external">Apache HDFS官網</a></li>
+<li>可運行在普通且廉價的硬體上</li>
+<li>高容錯能力</li>
+<li>提供應用程式對數據的高吞吐量(high throughput)訪問，適用於具有大數據集的應用程式</li>
+</ul>
+<h3 id="Assumptions-and-Goals"><a href="#Assumptions-and-Goals" class="headerlink" title="Assumptions and Goals"></a>Assumptions and Goals</h3><ul>
+<li>Hardware Failure<ul>
+<li>快速硬體錯誤偵測與自動復原機制</li>
+</ul>
+</li>
+<li>Streaming Data Access<ul>
+<li>供數據批次處理的應用程式使用，並追求數據訪問的高吞吐量</li>
+</ul>
+</li>
+<li>Large Data Sets<ul>
+<li>支持大文件存儲，並支持高聚合數據带寬及高擴展性</li>
+</ul>
+</li>
+<li>Simple Coherency Model<ul>
+<li>支持write-once-read-many access的文件存取模型</li>
+</ul>
+</li>
+<li>Moving Computation is Cheaper than Moving Data<ul>
+<li>將應用程式的計算移動到數據所在節點附近進行運算，降低網路阻塞，並提高數據吞吐量</li>
+</ul>
+</li>
+<li>Portability Across Heterogeneous Hardware and Software Platforms<ul>
+<li>支持平台間的可移植性</li>
+</ul>
+</li>
+</ul>
+<h3 id="Core-components"><a href="#Core-components" class="headerlink" title="Core components"></a>Core components</h3><p>HDFS是一個主從式架構(master/slave)，一個HDFS集群(cluster)內，包含一個NameNode與多個DataNode。HDFS提供文件系統命名空間(File System Namespace)給使用者，讓使用者將數據儲存在文件中。下列分別說明NameNode與DataNodes。</p>
+<ul>
+<li><p>NameNode</p>
+<ul>
+<li>Master(單個)</li>
+<li>管理File System Namespace，例如文件開啟、關閉、重新命名文件或資料夾</li>
+<li>決定Block儲存的DataNode</li>
+<li>負責響應客戶端的請求，以及文件存取權限控制</li>
+<li>負責管理以下數據:<ul>
+<li>元數據(Metadata)管理:<ul>
+<li>文件名稱</li>
+<li>文件屬性(權限、創建時間、副本係數)</li>
+</ul>
+</li>
+<li>文件目錄結構</li>
+<li>文件對應的Block，以及Block所存放的DataNode</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>DataNodes</p>
+<ul>
+<li>Slaves(一個以上)</li>
+<li>一般是一個節點執行一個DataNode</li>
+<li>存放Block</li>
+<li>執行Block的創建、刪除與副本操作</li>
+<li>每隔3秒向NameNode發送Heartbeat<ul>
+<li>Heartbeat表示該DataNode運作正常</li>
+</ul>
+</li>
+<li>每隔10個Heartbeat(30秒)，向NameNode發送BlockReport<ul>
+<li>BlockReport包含該DataNode上所有的Block列表</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>其他說明:<ul>
+<li>NameNode與DataNodes皆可運行在普通的機器上。</li>
+<li>NameNode與DataNodes皆使用JAVA實作，故任何支援JAVA運行的機器皆可執行。</li>
+<li>NameNode與DataNodes一般是運行在不同的機器上。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Blocks"><a href="#Blocks" class="headerlink" title="Blocks"></a>Blocks</h3><ul>
+<li>在HDFS中，文件會根據hdfs-default.xml或hdfs-site.xml中的dfs.blocksize參數進行切割成Blocks。</li>
+<li>dfs.blocksize預設為128M，當檔案大於128M時，則會進行切割，直到最後一個Block等於或小於128M。</li>
+<li>寫入時，文件會拆分成多個Block儲存在不同的DataNode。</li>
+<li>讀取時，則從DataNodes中取出Blocks進行合併。</li>
+</ul>
+<h3 id="File-System-Namespace"><a href="#File-System-Namespace" class="headerlink" title="File System Namespace"></a>File System Namespace</h3><ul>
+<li>File System Namespace的結構與傳統檔案系統相同，並且支持對檔案的創建、刪除、搬移，重新命名等操作。</li>
+<li>支持用戶容量配額與訪問權限控制。</li>
+<li>不支持硬連結與軟連結。</li>
+<li>NameNode負責管理File System Namespace。</li>
+<li>任何File System Namespace與其屬性的改變，都記錄在NameNode中。</li>
+<li>應用程序可以設置文件的副本係數，副本係數的資訊儲存在NameNode中。</li>
+</ul>
+<h3 id="Data-Replication"><a href="#Data-Replication" class="headerlink" title="Data Replication"></a>Data Replication</h3><ul>
+<li>HDFS設計目的是為了在跨機器的集群中，提供高可靠的超大文件儲存服務。</li>
+<li>為了高容錯能力，將Blocks進行多副本方式儲存。</li>
+<li>每個文件的Block大小與副本係數都是可以設置的。</li>
+<li>副本係數是指一個Block副本的數量。</li>
+<li>預設副本係數為3。生產環境設為5或7。</li>
+<li>副本係數可以在文件創建設置，也可以在之後進行修改。</li>
+<li>HDFS文件都是一次性寫入的(write-once)，並嚴格要求一次只能有一個Client進行寫入。</li>
+<li>NameNode管理Block的複製，並週期性的接收DataNode的Heartbeat與BlockReport，</li>
+<li>根據BlockReport，對寫入文件的副本進行合理的安排。</li>
+</ul>
+<h3 id="Replica-Selection"><a href="#Replica-Selection" class="headerlink" title="Replica Selection"></a>Replica Selection</h3><ul>
+<li>優先將一個Block的副本放置在不同的機器上。</li>
+<li>分為積架環境與一般環境說明:<ul>
+<li>一般環境:<ul>
+<li>在DataNode中執行文件寫入:<ul>
+<li>挑選當前DataNode進行第一個Block副本放置處，節省網路傳輸成本。</li>
+<li>其他副本則以不重複原則，進行隨機挑選。</li>
+</ul>
+</li>
+<li>在其他節點執行文件寫入:<ul>
+<li>以不重複原則，進行隨機挑選。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>積架環境:<ul>
+<li>在DataNode中執行文件寫入:<ul>
+<li>挑選當前DataNode進行第一個Block副本放置處。節省網路傳輸成本。</li>
+<li>優先挑選不同的積架中的DataNode進行寫入，直到所有副本處理完畢。</li>
+</ul>
+</li>
+<li>在其他節點執行文件寫入:<ul>
+<li>根據資源狀況挑選DataNode。</li>
+<li>優先挑選不同的積架中的DataNode進行寫入，直到所有副本處理完畢。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+          
+            <a href="/tags/Big-data/" rel="tag"># Big data</a>
+          
+            <a href="/tags/HDFS/" rel="tag"># HDFS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/hadoop-compile/" rel="next" title="Compile Hadoop source code">
+                <i class="fa fa-chevron-left"></i> Compile Hadoop source code
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/hdfs-read-write-procedure/" rel="prev" title="HDFS文件讀寫流程">
+                HDFS文件讀寫流程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS-Hadoop-Distributed-File-System"><span class="nav-number">1.</span> <span class="nav-text">HDFS(Hadoop Distributed File System)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Introduction"><span class="nav-number">1.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Assumptions-and-Goals"><span class="nav-number">1.2.</span> <span class="nav-text">Assumptions and Goals</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Core-components"><span class="nav-number">1.3.</span> <span class="nav-text">Core components</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Blocks"><span class="nav-number">1.4.</span> <span class="nav-text">Blocks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#File-System-Namespace"><span class="nav-number">1.5.</span> <span class="nav-text">File System Namespace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-Replication"><span class="nav-number">1.6.</span> <span class="nav-text">Data Replication</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Replica-Selection"><span class="nav-number">1.7.</span> <span class="nav-text">Replica Selection</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
