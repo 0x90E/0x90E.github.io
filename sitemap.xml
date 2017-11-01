@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://0x90e.github.io/hbase-installation/</loc>
+    
+    <lastmod>2017-11-01T17:11:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0x90e.github.io/mysql-install-from-source/</loc>
+    
+    <lastmod>2017-10-11T17:03:31.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0x90e.github.io/verify_a_signature_with_certificate/</loc>
     
     <lastmod>2017-10-09T17:55:05.000Z</lastmod>
@@ -40,13 +54,6 @@
     <loc>https://0x90e.github.io/spark-compile/</loc>
     
     <lastmod>2017-10-09T17:51:29.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://0x90e.github.io/mysql-install-from-source/</loc>
-    
-    <lastmod>2017-10-09T17:51:17.000Z</lastmod>
     
   </url>
   
