@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Alluxio," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Alluxio InstationDownload Alluxio Download Alluxio12345678910111213# 解壓縮下載的tar包，或者自行編譯的tar包[root@testmain ~]# tar -zxvf alluxio-1.6.0-hadoop-2.8-bin.tar.gz -C /opt/software[root@testmain ~]# cd /opt">
+<meta name="keywords" content="Alluxio">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Alluxio Instation">
+<meta property="og:url" content="https://0x90e.github.io/alluxio-instation/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Alluxio InstationDownload Alluxio Download Alluxio12345678910111213# 解壓縮下載的tar包，或者自行編譯的tar包[root@testmain ~]# tar -zxvf alluxio-1.6.0-hadoop-2.8-bin.tar.gz -C /opt/software[root@testmain ~]# cd /opt">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0x90e.github.io/2017/11/08/alluxio_web.png">
+<meta property="og:updated_time" content="2017-11-07T16:45:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Alluxio Instation">
+<meta name="twitter:description" content="Alluxio InstationDownload Alluxio Download Alluxio12345678910111213# 解壓縮下載的tar包，或者自行編譯的tar包[root@testmain ~]# tar -zxvf alluxio-1.6.0-hadoop-2.8-bin.tar.gz -C /opt/software[root@testmain ~]# cd /opt">
+<meta name="twitter:image" content="https://0x90e.github.io/2017/11/08/alluxio_web.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/alluxio-instation/"/>
+
+
+
+
+
+  <title>Alluxio Instation | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/alluxio-instation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Alluxio Instation</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-08T00:23:34+08:00">
+                2017-11-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Alluxio-Instation"><a href="#Alluxio-Instation" class="headerlink" title="Alluxio Instation"></a>Alluxio Instation</h2><h3 id="Download-Alluxio"><a href="#Download-Alluxio" class="headerlink" title="Download Alluxio"></a>Download Alluxio</h3><ul>
+<li><a href="https://www.alluxio.org/download" title="Download Alluxio" target="_blank" rel="external">Download Alluxio</a><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 解壓縮下載的tar包，或者自行編譯的tar包</span></div><div class="line">[root@testmain ~]<span class="comment"># tar -zxvf alluxio-1.6.0-hadoop-2.8-bin.tar.gz -C /opt/software</span></div><div class="line">[root@testmain ~]<span class="comment"># cd /opt/software</span></div><div class="line">[root@testmain software]<span class="comment"># ln -s alluxio-1.6.0-hadoop-2.8 alluxio</span></div><div class="line"><span class="comment"># 將file owner更改為啟動Alluxio的Linux user</span></div><div class="line">[root@testmain software]<span class="comment"># sudo chown -R hadoop:hadoop alluxio-1.6.0-hadoop-2.8/</span></div><div class="line">[root@testmain software]<span class="comment"># sudo chown -R hadoop:hadoop alluxio</span></div><div class="line"></div><div class="line"><span class="comment"># 配置環境變量</span></div><div class="line">[root@testmain software]<span class="comment"># sudo vim /etc/profile</span></div><div class="line"><span class="built_in">export</span> ALLUXIO_HOME=<span class="string">"/opt/software/alluxio"</span></div><div class="line"><span class="built_in">export</span> PATH=<span class="string">"<span class="variable">$ALLUXIO_HOME</span>/bin:<span class="variable">$PATH</span>"</span></div><div class="line">[root@testmain software]<span class="comment"># source /etc/profile</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<a id="more"></a>
+<h4 id="Configure-Alluxio"><a href="#Configure-Alluxio" class="headerlink" title="Configure Alluxio"></a>Configure Alluxio</h4><ul>
+<li><a href="https://www.alluxio.org/docs/1.6/en/Getting-Started.html" title="Alluxio Quick Start Guide" target="_blank" rel="external">Alluxio Quick Start Guide</a><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@testmain software]<span class="comment"># cd alluxio</span></div><div class="line">[root@testmain alluxio]<span class="comment"># cp conf/alluxio-site.properties.template conf/alluxio-site.properties</span></div><div class="line">[root@testmain alluxio]<span class="comment"># vim conf/alluxio-site.properties</span></div><div class="line"><span class="comment">## 將文件內此行註解取消</span></div><div class="line">alluxio.master.hostname=localhost</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Validate-Alluxio-environment"><a href="#Validate-Alluxio-environment" class="headerlink" title="Validate Alluxio environment"></a>Validate Alluxio environment</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 切換至啟動Alluxio的Linux user</span></div><div class="line">[root@testmain alluxio]<span class="comment"># su - hadoop</span></div><div class="line"><span class="comment"># 驗證Alluxio的本地運行環境</span></div><div class="line">[hadoop@testmain ~]$ alluxio validateEnv <span class="built_in">local</span></div><div class="line">2017-11-05 18:35:27,468 INFO  ConfigurationUtils - Configuration file /opt/software/alluxioBuild1.6/conf/alluxio-site.properties loaded.</div><div class="line">Validating proxy.web.port.available...OK</div><div class="line">Validating master.web.port.available...OK</div><div class="line">Validating worker.web.port.available...OK</div><div class="line">Validating ssh.masters.reachable...OK</div><div class="line">Validating worker.storage.space...OK</div><div class="line">Validating ufs.root.accessible...Unable to list under file system path /opt/software/alluxioBuild1.6/underFSStorage.</div><div class="line">Failed</div><div class="line">Validating ulimit.nproc...OK</div><div class="line">Validating worker.rpc.port.available...OK</div><div class="line">Validating ulimit.nofile...OK</div><div class="line">Validating ssh.workers.reachable...OK</div><div class="line">Validating worker.ramdisk.mount.privilege...[sudo] password <span class="keyword">for</span> hadoop: </div><div class="line">OK</div><div class="line">Validating master.rpc.port.available...OK</div><div class="line">Validating worker.data.port.available...OK</div><div class="line">Validation failed. Total failures: 1.</div><div class="line"><span class="comment"># Validating ufs.root.accessible...Unable to list under file system path </span></div><div class="line"><span class="comment"># /opt/software/alluxioBuild1.6/underFSStorage.</span></div><div class="line"><span class="comment"># 錯誤指出無法使用指定路徑中的目錄，直接創建一個</span></div><div class="line">[hadoop@testmain ~]$ mkdir /opt/software/alluxioBuild1.6/underFSStorage</div><div class="line"></div><div class="line"><span class="comment"># 再次驗證Alluxio的本地運行環境</span></div><div class="line">[hadoop@testmain ~]$ alluxio validateEnv all</div><div class="line">2017-11-05 18:36:02,074 INFO  ConfigurationUtils - Configuration file /opt/software/alluxioBuild1.6/conf/alluxio-site.properties loaded.</div><div class="line">Validating master environment on localhost...</div><div class="line">2017-11-05 18:36:03,245 INFO  ConfigurationUtils - Configuration file /opt/software/alluxioBuild1.6/conf/alluxio-site.properties loaded.</div><div class="line">Validating proxy.web.port.available...OK</div><div class="line">Validating ssh.masters.reachable...OK</div><div class="line">Validating ssh.workers.reachable...OK</div><div class="line">Validating ufs.root.accessible...OK</div><div class="line">Validating ulimit.nofile...OK</div><div class="line">Validating ulimit.nproc...OK</div><div class="line">Validating master.rpc.port.available...OK</div><div class="line">Validating master.web.port.available...OK</div><div class="line">Validation succeeded.</div><div class="line">Connection to localhost closed.</div><div class="line">Validating worker environment on localhost...</div><div class="line">2017-11-05 18:36:03,938 INFO  ConfigurationUtils - Configuration file /opt/software/alluxioBuild1.6/conf/alluxio-site.properties loaded.</div><div class="line">Validating proxy.web.port.available...OK</div><div class="line">Validating ssh.masters.reachable...OK</div><div class="line">Validating ssh.workers.reachable...OK</div><div class="line">Validating ufs.root.accessible...OK</div><div class="line">Validating ulimit.nofile...OK</div><div class="line">Validating ulimit.nproc...OK</div><div class="line">Validating worker.data.port.available...OK</div><div class="line">Validating worker.ramdisk.mount.privilege...[sudo] password <span class="keyword">for</span> hadoop: </div><div class="line">OK</div><div class="line">Validating worker.rpc.port.available...OK</div><div class="line">Validating worker.storage.space...OK</div><div class="line">Validating worker.web.port.available...OK</div><div class="line">Validation succeeded.</div><div class="line">Connection to localhost closed.</div><div class="line"></div><div class="line"><span class="comment"># 如果要將Alluxio運行在集群中，則要驗證所有節點的運行環境</span></div><div class="line">[hadoop@testmain ~]$ alluxio validateEnv all</div><div class="line">2017-11-04 23:36:57,178 INFO  ConfigurationUtils - Configuration file /opt/software/alluxio-1.6.0-hadoop-2.8/conf/alluxio-site.properties loaded.</div><div class="line">Validating master environment on localhost...</div><div class="line">2017-11-04 23:36:57,738 INFO  ConfigurationUtils - Configuration file /opt/software/alluxio-1.6.0-hadoop-2.8/conf/alluxio-site.properties loaded.</div><div class="line">Validating proxy.web.port.available...OK</div><div class="line">Validating ssh.masters.reachable...OK</div><div class="line">Validating ssh.workers.reachable...OK</div><div class="line">Validating ufs.root.accessible...OK</div><div class="line">Validating ulimit.nofile...The user <span class="built_in">limit</span> <span class="keyword">for</span> number of open files is too small. The current value is 4096. It should be bigger than 16384</div><div class="line">Failed</div><div class="line">Validating ulimit.nproc...The user <span class="built_in">limit</span> <span class="keyword">for</span> number of user processes is too small. The current value is 1024. It should be bigger than 16384</div><div class="line">Failed</div><div class="line">Validating master.rpc.port.available...OK</div><div class="line">Validating master.web.port.available...OK</div><div class="line">Validation failed. Total failures: 2.</div><div class="line">Connection to localhost closed.</div><div class="line">Validating worker environment on localhost...</div><div class="line">2017-11-04 23:36:58,323 INFO  ConfigurationUtils - Configuration file /opt/software/alluxio-1.6.0-hadoop-2.8/conf/alluxio-site.properties loaded.</div><div class="line">Validating proxy.web.port.available...OK</div><div class="line">Validating ssh.masters.reachable...OK</div><div class="line">Validating ssh.workers.reachable...OK</div><div class="line">Validating ufs.root.accessible...OK</div><div class="line">Validating ulimit.nofile...The user <span class="built_in">limit</span> <span class="keyword">for</span> number of open files is too small. The current value is 4096. It should be bigger than 16384</div><div class="line">Failed</div><div class="line">Validating ulimit.nproc...The user <span class="built_in">limit</span> <span class="keyword">for</span> number of user processes is too small. The current value is 1024. It should be bigger than 16384</div><div class="line">Failed</div><div class="line">Validating worker.data.port.available...OK</div><div class="line">Validating worker.ramdisk.mount.privilege...[sudo] password <span class="keyword">for</span> hadoop: </div><div class="line">OK</div><div class="line">Validating worker.rpc.port.available...OK</div><div class="line">Validating worker.storage.space...RAM disk is not mounted at /mnt/ramdisk, skip validation.</div><div class="line">OK</div><div class="line">Validating worker.web.port.available...OK</div><div class="line">Validation failed. Total failures: 2.</div><div class="line">Connection to localhost closed.</div><div class="line"><span class="comment"># 上述錯誤指出，當前Linux user的open files跟processes上限次數不足</span></div><div class="line"></div><div class="line"><span class="comment"># 透過修改此文件，進行當前Linux user的open files跟processes上限次數設定</span></div><div class="line">[hadoop@testmain ~]$ sudo vim /etc/security/limits.conf</div><div class="line">hadoop - nofile 16384</div><div class="line">hadoop - nproc 16384</div><div class="line"></div><div class="line"><span class="comment"># 進行登出登入，並確認修改是否生效</span></div><div class="line">[hadoop@testmain ~]$ <span class="built_in">ulimit</span> -a</div><div class="line">core file size          (blocks, -c) 0</div><div class="line">data seg size           (kbytes, -d) unlimited</div><div class="line">scheduling priority             (-e) 0</div><div class="line">file size               (blocks, -f) unlimited</div><div class="line">pending signals                 (-i) 30374</div><div class="line">max locked memory       (kbytes, -l) 64</div><div class="line">max memory size         (kbytes, -m) unlimited</div><div class="line">open files                      (-n) 16384</div><div class="line">pipe size            (512 bytes, -p) 8</div><div class="line">POSIX message queues     (bytes, -q) 819200</div><div class="line">real-time priority              (-r) 0</div><div class="line">stack size              (kbytes, -s) 10240</div><div class="line">cpu time               (seconds, -t) unlimited</div><div class="line">max user processes              (-u) 16384</div><div class="line">virtual memory          (kbytes, -v) unlimited</div><div class="line">file locks                      (-x) unlimited</div><div class="line"></div><div class="line"><span class="comment"># 再次進行環境驗證</span></div><div class="line">[hadoop@testmain ~]$ alluxio validateEnv all</div><div class="line">2017-11-05 18:38:56,955 INFO  ConfigurationUtils - Configuration file /opt/software/alluxioBuild1.6/conf/alluxio-site.properties loaded.</div><div class="line">Validating master environment on localhost...</div><div class="line">2017-11-05 18:38:57,532 INFO  ConfigurationUtils - Configuration file /opt/software/alluxioBuild1.6/conf/alluxio-site.properties loaded.</div><div class="line">Validating proxy.web.port.available...OK</div><div class="line">Validating ssh.masters.reachable...OK</div><div class="line">Validating ssh.workers.reachable...OK</div><div class="line">Validating ufs.root.accessible...OK</div><div class="line">Validating ulimit.nofile...OK</div><div class="line">Validating ulimit.nproc...OK</div><div class="line">Validating master.rpc.port.available...OK</div><div class="line">Validating master.web.port.available...OK</div><div class="line">Validation succeeded.</div><div class="line">Connection to localhost closed.</div><div class="line">Validating worker environment on localhost...</div><div class="line">2017-11-05 18:38:58,151 INFO  ConfigurationUtils - Configuration file /opt/software/alluxioBuild1.6/conf/alluxio-site.properties loaded.</div><div class="line">Validating proxy.web.port.available...OK</div><div class="line">Validating ssh.masters.reachable...OK</div><div class="line">Validating ssh.workers.reachable...OK</div><div class="line">Validating ufs.root.accessible...OK</div><div class="line">Validating ulimit.nofile...OK</div><div class="line">Validating ulimit.nproc...OK</div><div class="line">Validating worker.data.port.available...OK</div><div class="line">Validating worker.ramdisk.mount.privilege...[sudo] password <span class="keyword">for</span> hadoop: </div><div class="line">OK</div><div class="line">Validating worker.rpc.port.available...OK</div><div class="line">Validating worker.storage.space...OK</div><div class="line">Validating worker.web.port.available...OK</div><div class="line">Validation succeeded.</div></pre></td></tr></table></figure>
+<h3 id="Start-Alluxio"><a href="#Start-Alluxio" class="headerlink" title="Start Alluxio"></a>Start Alluxio</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 格式化Alluxio，為啟動Alluxio做準備</span></div><div class="line">[hadoop@testmain ~]$ alluxio format</div><div class="line">Executing the following <span class="built_in">command</span> on all worker nodes and logging to /opt/software/alluxioBuild1.6/logs/task.log: /opt/software/alluxio/bin/alluxio formatWorker</div><div class="line">Waiting <span class="keyword">for</span> tasks to finish...</div><div class="line">All tasks finished</div><div class="line">Formatting Alluxio Master @ testmain</div><div class="line">2017-11-05 18:38:26,989 INFO  ConfigurationUtils - Configuration file /opt/software/alluxioBuild1.6/conf/alluxio-site.properties loaded.</div><div class="line">2017-11-05 18:38:26,996 INFO  Format - Formatting master journal: /opt/software/alluxioBuild1.6/journal/</div><div class="line">2017-11-05 18:38:27,065 INFO  UfsJournal - Formatting /opt/software/alluxioBuild1.6/journal/BlockMaster/v1</div><div class="line">2017-11-05 18:38:27,114 INFO  UfsJournal - Formatting /opt/software/alluxioBuild1.6/journal/FileSystemMaster/v1</div><div class="line">2017-11-05 18:38:27,116 INFO  Format - Formatting complete</div><div class="line"></div><div class="line"><span class="comment"># 在localhost啟動Alluxio</span></div><div class="line">[hadoop@testmain ~]$ alluxio-start.sh <span class="built_in">local</span></div><div class="line">Killed 0 processes on testmain</div><div class="line">Killed 0 processes on testmain</div><div class="line">Killed 0 processes on testmain</div><div class="line">Killed 0 processes on testmain</div><div class="line">Starting master @ testmain. Logging to /opt/software/alluxio-1.6.0-hadoop-2.8/logs</div><div class="line">Starting secondary master @ testmain. Logging to /opt/software/alluxio-1.6.0-hadoop-2.8/logs</div><div class="line">Formatting RamFS: /mnt/ramdisk (2668407466)</div><div class="line">[sudo] password <span class="keyword">for</span> hadoop: </div><div class="line">Starting worker @ testmain. Logging to /opt/software/alluxio-1.6.0-hadoop-2.8/logs</div><div class="line">Starting proxy @ testmain. Logging to /opt/software/alluxio-1.6.0-hadoop-2.8/logs</div><div class="line"></div><div class="line"><span class="comment"># 使用jps確認Alluxio相關程序的運行狀況</span></div><div class="line">[hadoop@testmain ~]$ jps</div><div class="line">4467 Jps</div><div class="line">4419 AlluxioWorker</div><div class="line">4421 AlluxioProxy</div><div class="line">4237 AlluxioMaster</div><div class="line">4239 AlluxioSecondaryMaster</div></pre></td></tr></table></figure>
+<h3 id="Files-operation-in-Alluxio"><a href="#Files-operation-in-Alluxio" class="headerlink" title="Files operation in Alluxio"></a>Files operation in Alluxio</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[hadoop@testmain ~]$ alluxio fs ls /</div><div class="line">[hadoop@testmain ~]$ <span class="built_in">echo</span> <span class="string">"Hello world"</span> &gt;&gt; testFile</div><div class="line"><span class="comment"># 將本地文件上傳至Alluxio</span></div><div class="line">[hadoop@testmain ~]$ alluxio fs copyFromLocal testFile /</div><div class="line">Copied file:///home/hadoop/testFile to /</div><div class="line">[hadoop@testmain ~]$ alluxio fs ls /</div><div class="line">-rw-r--r-- hadoop         hadoop                      12   NOT_PERSISTED 11-04-2017 23:57:33:994 100% /testFile</div></pre></td></tr></table></figure>
+<h3 id="View-on-the-Website"><a href="#View-on-the-Website" class="headerlink" title="View on the Website"></a>View on the Website</h3><ul>
+<li>透過ip/domain:19999訪問Alluxio頁面<br><br><img src="/2017/11/08/alluxio_web.png" width="900">
+</li>
+</ul>
+<h3 id="Stop-Alluxio"><a href="#Stop-Alluxio" class="headerlink" title="Stop Alluxio"></a>Stop Alluxio</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[hadoop@testmain ~]$ alluxio-stop.sh <span class="built_in">local</span></div><div class="line">Killed 1 processes on testmain</div><div class="line">Killed 1 processes on testmain</div><div class="line">Killed 1 processes on testmain</div><div class="line">Killed 1 processes on testmain</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Alluxio/" rel="tag"># Alluxio</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/hbase-installation/" rel="next" title="HBase Installation">
+                <i class="fa fa-chevron-left"></i> HBase Installation
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Alluxio-Instation"><span class="nav-number">1.</span> <span class="nav-text">Alluxio Instation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Download-Alluxio"><span class="nav-number">1.1.</span> <span class="nav-text">Download Alluxio</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Configure-Alluxio"><span class="nav-number">1.1.1.</span> <span class="nav-text">Configure Alluxio</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Validate-Alluxio-environment"><span class="nav-number">1.2.</span> <span class="nav-text">Validate Alluxio environment</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Start-Alluxio"><span class="nav-number">1.3.</span> <span class="nav-text">Start Alluxio</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Files-operation-in-Alluxio"><span class="nav-number">1.4.</span> <span class="nav-text">Files operation in Alluxio</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View-on-the-Website"><span class="nav-number">1.5.</span> <span class="nav-text">View on the Website</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stop-Alluxio"><span class="nav-number">1.6.</span> <span class="nav-text">Stop Alluxio</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
