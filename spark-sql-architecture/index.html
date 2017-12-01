@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Hadoop,Hive,Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Spark SQL architecture">
+<meta name="keywords" content="Hadoop,Hive,Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark SQL Architecture">
+<meta property="og:url" content="https://0x90e.github.io/spark-sql-architecture/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Spark SQL architecture">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0x90e.github.io/2017/12/02/spark-sql-architecture/spark_sql_architecture.svg">
+<meta property="og:updated_time" content="2017-12-01T17:25:06.849Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark SQL Architecture">
+<meta name="twitter:description" content="Spark SQL architecture">
+<meta name="twitter:image" content="https://0x90e.github.io/2017/12/02/spark-sql-architecture/spark_sql_architecture.svg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/spark-sql-architecture/"/>
+
+
+
+
+
+  <title>Spark SQL Architecture | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-sql-architecture/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Spark SQL Architecture</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-02T01:16:28+08:00">
+                2017-12-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Spark-SQL-architecture"><a href="#Spark-SQL-architecture" class="headerlink" title="Spark SQL architecture"></a>Spark SQL architecture</h2><img src="/2017/12/02/spark-sql-architecture/spark_sql_architecture.svg" width="900">
+<a id="more"></a>
+<h3 id="Spark-SQL-Execution-Plan"><a href="#Spark-SQL-Execution-Plan" class="headerlink" title="Spark SQL Execution Plan"></a>Spark SQL Execution Plan</h3><p>透過 Spark SQL執行計畫對應Spark SQL架構圖說明</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line">spark-sql&gt; select * from test;</div><div class="line">10	ACCOUNTING	NEW YORK</div><div class="line">20	RESEARCH	DALLAS</div><div class="line">30	SALES	CHICAGO</div><div class="line">40	OPERATIONS	BOSTON</div><div class="line">Time taken: 6.141 seconds, Fetched 4 row(s)</div><div class="line"></div><div class="line">spark-sql&gt; explain extended</div><div class="line">         &gt; select</div><div class="line">         &gt; a.key*(4+5),</div><div class="line">         &gt; b.value</div><div class="line">         &gt; from</div><div class="line">         &gt; test a join test b</div><div class="line">         &gt; on a.key=b.key and a.key&gt;10;</div><div class="line">17/11/27 23:53:06 INFO execution.SparkSqlParser: Parsing command: <span class="keyword">explain</span> <span class="keyword">extended</span></div><div class="line"><span class="keyword">select</span></div><div class="line">a.key*(<span class="number">4</span>+<span class="number">5</span>),</div><div class="line">b.value</div><div class="line"><span class="keyword">from</span></div><div class="line"><span class="keyword">test</span> a <span class="keyword">join</span> <span class="keyword">test</span> b</div><div class="line"><span class="keyword">on</span> a.key=b.key <span class="keyword">and</span> a.key&gt;<span class="number">10</span></div><div class="line"><span class="number">17</span>/<span class="number">11</span>/<span class="number">27</span> <span class="number">23</span>:<span class="number">53</span>:<span class="number">06</span> INFO metastore.HiveMetaStore: <span class="number">0</span>: get_table : db=<span class="keyword">default</span> tbl=<span class="keyword">test</span></div><div class="line"><span class="number">17</span>/<span class="number">11</span>/<span class="number">27</span> <span class="number">23</span>:<span class="number">53</span>:<span class="number">06</span> INFO HiveMetaStore.audit: ugi=hadoop	ip=<span class="keyword">unknown</span>-ip-addr	cmd=get_table : db=<span class="keyword">default</span> tbl=<span class="keyword">test</span>	</div><div class="line"><span class="number">17</span>/<span class="number">11</span>/<span class="number">27</span> <span class="number">23</span>:<span class="number">53</span>:<span class="number">06</span> INFO parser.CatalystSqlParser: Parsing command: <span class="keyword">string</span></div><div class="line"><span class="number">17</span>/<span class="number">11</span>/<span class="number">27</span> <span class="number">23</span>:<span class="number">53</span>:<span class="number">06</span> INFO parser.CatalystSqlParser: Parsing command: <span class="keyword">string</span></div><div class="line"><span class="number">17</span>/<span class="number">11</span>/<span class="number">27</span> <span class="number">23</span>:<span class="number">53</span>:<span class="number">06</span> INFO metastore.HiveMetaStore: <span class="number">0</span>: get_table : db=<span class="keyword">default</span> tbl=<span class="keyword">test</span></div><div class="line"><span class="number">17</span>/<span class="number">11</span>/<span class="number">27</span> <span class="number">23</span>:<span class="number">53</span>:<span class="number">06</span> INFO HiveMetaStore.audit: ugi=hadoop	ip=<span class="keyword">unknown</span>-ip-addr	cmd=get_table : db=<span class="keyword">default</span> tbl=<span class="keyword">test</span>	</div><div class="line"><span class="number">17</span>/<span class="number">11</span>/<span class="number">27</span> <span class="number">23</span>:<span class="number">53</span>:<span class="number">06</span> INFO parser.CatalystSqlParser: Parsing command: <span class="keyword">string</span></div><div class="line"><span class="number">17</span>/<span class="number">11</span>/<span class="number">27</span> <span class="number">23</span>:<span class="number">53</span>:<span class="number">06</span> INFO parser.CatalystSqlParser: Parsing command: <span class="keyword">string</span></div><div class="line"><span class="number">17</span>/<span class="number">11</span>/<span class="number">27</span> <span class="number">23</span>:<span class="number">53</span>:<span class="number">06</span> INFO codegen.CodeGenerator: Code <span class="keyword">generated</span> <span class="keyword">in</span> <span class="number">36.760962</span> ms</div><div class="line">== Parsed <span class="keyword">Logical</span> Plan ==</div><div class="line"><span class="string">'Project [unresolvedalias(('</span>a.key * (<span class="number">4</span> + <span class="number">5</span>)), <span class="keyword">None</span>), <span class="string">'b.value]</span></div><div class="line"><span class="string">+- '</span><span class="keyword">Join</span> <span class="keyword">Inner</span>, ((<span class="string">'a.key = '</span>b.key) &amp;&amp; (<span class="string">'a.key &gt; 10))</span></div><div class="line"><span class="string">   :- '</span>SubqueryAlias a</div><div class="line">   :  +- <span class="string">'UnresolvedRelation `test`</span></div><div class="line"><span class="string">   +- '</span>SubqueryAlias b</div><div class="line">      +- <span class="string">'UnresolvedRelation `test`</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">== Analyzed Logical Plan ==</span></div><div class="line"><span class="string">(CAST(key AS DOUBLE) * CAST((4 + 5) AS DOUBLE)): double, value: string</span></div><div class="line"><span class="string">Project [(cast(key#93 as double) * cast((4 + 5) as double)) AS (CAST(key AS DOUBLE) * CAST((4 + 5) AS DOUBLE))#97, value#96]</span></div><div class="line"><span class="string">+- Join Inner, ((key#93 = key#95) &amp;&amp; (cast(key#93 as int) &gt; 10))</span></div><div class="line"><span class="string">   :- SubqueryAlias a</span></div><div class="line"><span class="string">   :  +- SubqueryAlias test</span></div><div class="line"><span class="string">   :     +- CatalogRelation `default`.`test`, org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, [key#93, value#94]</span></div><div class="line"><span class="string">   +- SubqueryAlias b</span></div><div class="line"><span class="string">      +- SubqueryAlias test</span></div><div class="line"><span class="string">         +- CatalogRelation `default`.`test`, org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, [key#95, value#96]</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">== Optimized Logical Plan ==</span></div><div class="line"><span class="string">Project [(cast(key#93 as double) * 9.0) AS (CAST(key AS DOUBLE) * CAST((4 + 5) AS DOUBLE))#97, value#96]</span></div><div class="line"><span class="string">+- Join Inner, (key#93 = key#95)</span></div><div class="line"><span class="string">   :- Project [key#93]</span></div><div class="line"><span class="string">   :  +- Filter (isnotnull(key#93) &amp;&amp; (cast(key#93 as int) &gt; 10))</span></div><div class="line"><span class="string">   :     +- CatalogRelation `default`.`test`, org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, [key#93, value#94]</span></div><div class="line"><span class="string">   +- Filter (isnotnull(key#95) &amp;&amp; (cast(key#95 as int) &gt; 10))</span></div><div class="line"><span class="string">      +- CatalogRelation `default`.`test`, org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, [key#95, value#96]</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">== Physical Plan ==</span></div><div class="line"><span class="string">*Project [(cast(key#93 as double) * 9.0) AS (CAST(key AS DOUBLE) * CAST((4 + 5) AS DOUBLE))#97, value#96]</span></div><div class="line"><span class="string">+- *SortMergeJoin [key#93], [key#95], Inner</span></div><div class="line"><span class="string">   :- *Sort [key#93 ASC NULLS FIRST], false, 0</span></div><div class="line"><span class="string">   :  +- Exchange hashpartitioning(key#93, 200)</span></div><div class="line"><span class="string">   :     +- *Filter (isnotnull(key#93) &amp;&amp; (cast(key#93 as int) &gt; 10))</span></div><div class="line"><span class="string">   :        +- HiveTableScan [key#93], CatalogRelation `default`.`test`, org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, [key#93, value#94]</span></div><div class="line"><span class="string">   +- *Sort [key#95 ASC NULLS FIRST], false, 0</span></div><div class="line"><span class="string">      +- Exchange hashpartitioning(key#95, 200)</span></div><div class="line"><span class="string">         +- *Filter (isnotnull(key#95) &amp;&amp; (cast(key#95 as int) &gt; 10))</span></div><div class="line"><span class="string">            +- HiveTableScan [key#95, value#96], CatalogRelation `default`.`test`, org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, [key#95, value#96]</span></div><div class="line"><span class="string">Time taken: 0.541 seconds, Fetched 1 row(s)</span></div><div class="line"><span class="string">17/11/27 23:53:06 INFO CliDriver: Time taken: 0.541 seconds, Fetched 1 row(s)</span></div><div class="line"><span class="string">spark-sql&gt;</span></div></pre></td></tr></table></figure>
+<p><br></p>
+<h4 id="分別說明各階段"><a href="#分別說明各階段" class="headerlink" title="分別說明各階段"></a>分別說明各階段</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">== Parsed Logical Plan ==</div><div class="line">'Project [unresolvedalias(('a.key * (4 + 5)), None), 'b.value]</div><div class="line">+- 'Join Inner, (('a.key = 'b.key) &amp;&amp; ('a.key &gt; 10))</div><div class="line">   :- 'SubqueryAlias a</div><div class="line">   :  +- 'UnresolvedRelation `test`</div><div class="line">   +- 'SubqueryAlias b</div><div class="line">      +- 'UnresolvedRelation `test`</div></pre></td></tr></table></figure>
+<ul>
+<li>對應Unresolved Logical Plan階段</li>
+<li>Project後顯示最終輸出字段的相關訊息</li>
+<li>Join Inner指出有一個Join Inner操作，join條件為((‘a.key = ‘b.key) &amp;&amp; (‘a.key &gt; 10))</li>
+<li>SubqueryAlias為參與操作的表</li>
+<li>此階段尚未對SQL語法進行解析(Unresolved)<br><br></li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">== Analyzed Logical Plan ==</div><div class="line">(CAST(key AS DOUBLE) * CAST((4 + 5) AS DOUBLE)): double, value: string</div><div class="line">Project [(cast(key#93 as double) * cast((4 + 5) as double)) AS (CAST(key AS DOUBLE) * CAST((4 + 5) AS DOUBLE))#97, value#96]</div><div class="line">+- Join Inner, ((key#93 = key#95) &amp;&amp; (cast(key#93 as int) &gt; 10))</div><div class="line">   :- SubqueryAlias a</div><div class="line">   :  +- SubqueryAlias test</div><div class="line">   :     +- CatalogRelation `default`.`test`, org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, [key#93, value#94]</div><div class="line">   +- SubqueryAlias b</div><div class="line">      +- SubqueryAlias test</div><div class="line">         +- CatalogRelation `default`.`test`, org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, [key#95, value#96]</div></pre></td></tr></table></figure>
+<ul>
+<li>對應Logical Plan階段</li>
+<li>經過Schema Catalog階段產生Logical Plan的輸入，明確得知database與table的資訊</li>
+<li>CatalogRelation指出，參與操作的database與table的訊息，以及包含的欄位，例如a是來自default database中的test table，當中包含key與value欄位</li>
+<li>org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe指出此table使用的序列化與反序列化的演算法</li>
+<li>此階段已經對SQL語法進行解析，並已知database與table的明確資訊</li>
+<li>此階段對最終輸出結果(Project)進行類型轉換(cast)<br><br></li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">== Optimized Logical Plan ==</div><div class="line">Project [(cast(key#93 as double) * 9.0) AS (CAST(key AS DOUBLE) * CAST((4 + 5) AS DOUBLE))#97, value#96]</div><div class="line">+- Join Inner, (key#93 = key#95)</div><div class="line">   :- Project [key#93]</div><div class="line">   :  +- Filter (isnotnull(key#93) &amp;&amp; (cast(key#93 as int) &gt; 10))</div><div class="line">   :     +- CatalogRelation `default`.`test`, org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, [key#93, value#94]</div><div class="line">   +- Filter (isnotnull(key#95) &amp;&amp; (cast(key#95 as int) &gt; 10))</div><div class="line">      +- CatalogRelation `default`.`test`, org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, [key#95, value#96]</div></pre></td></tr></table></figure>
+<ul>
+<li>對應Optimized Logical Plan階段</li>
+<li>Filter指出對參與操作的數據過濾，換句話說，就是進行位次下壓，減少處理的數據量，提高性能。<br><br></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">== Physical Plan ==</div><div class="line">*Project [(cast(key#93 as double) * 9.0) AS (CAST(key AS DOUBLE) * CAST((4 + 5) AS DOUBLE))#97, value#96]</div><div class="line">+- *SortMergeJoin [key#93], [key#95], Inner</div><div class="line">   :- *Sort [key#93 ASC NULLS FIRST], false, 0</div><div class="line">   :  +- Exchange hashpartitioning(key#93, 200)</div><div class="line">   :     +- *Filter (isnotnull(key#93) &amp;&amp; (cast(key#93 as int) &gt; 10))</div><div class="line">   :        +- HiveTableScan [key#93], CatalogRelation `default`.`test`, org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, [key#93, value#94]</div><div class="line">   +- *Sort [key#95 ASC NULLS FIRST], false, 0</div><div class="line">      +- Exchange hashpartitioning(key#95, 200)</div><div class="line">         +- *Filter (isnotnull(key#95) &amp;&amp; (cast(key#95 as int) &gt; 10))</div><div class="line">            +- HiveTableScan [key#95, value#96], CatalogRelation `default`.`test`, org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, [key#95, value#96]</div></pre></td></tr></table></figure>
+<ul>
+<li>對應Physical Plans階段</li>
+<li>Inner Join經由內部轉換成SortMergeJoin</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+          
+            <a href="/tags/Hive/" rel="tag"># Hive</a>
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/spark-sql-basic/" rel="next" title="Spark SQL working with Hive">
+                <i class="fa fa-chevron-left"></i> Spark SQL working with Hive
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-SQL-architecture"><span class="nav-number">1.</span> <span class="nav-text">Spark SQL architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spark-SQL-Execution-Plan"><span class="nav-number">1.1.</span> <span class="nav-text">Spark SQL Execution Plan</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分別說明各階段"><span class="nav-number">1.1.1.</span> <span class="nav-text">分別說明各階段</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
