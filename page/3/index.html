@@ -76,13 +76,12 @@
 
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="tags">
-<meta property="og:url" content="https://0x90e.github.io/tags/index.html">
+<meta property="og:title" content="0x90e&#39;s Blog">
+<meta property="og:url" content="https://0x90e.github.io/page/3/index.html">
 <meta property="og:site_name" content="0x90e&#39;s Blog">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2017-10-08T16:09:32.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tags">
+<meta name="twitter:title" content="0x90e&#39;s Blog">
 
 
 
@@ -112,13 +111,13 @@
 
 
 
-  <link rel="canonical" href="https://0x90e.github.io/tags/"/>
+  <link rel="canonical" href="https://0x90e.github.io/page/3/"/>
 
 
 
 
 
-  <title>tags | 0x90e's Blog</title>
+  <title>0x90e's Blog</title>
   
 
 
@@ -146,7 +145,8 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left 
+  page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -239,44 +239,168 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
+  <section id="posts" class="posts-expand">
+    
+      
 
-  <div id="posts" class="posts-expand">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/verify_a_signature_with_certificate/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
     
-    
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h2 class="post-title" itemprop="name headline">tags</h2>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-                12 tags in total
-            </div>
-            <div class="tag-cloud-tags">
-              <a href="/tags/Alluxio/" style="font-size: 15.6px; color: #a7a7a7">Alluxio</a> <a href="/tags/Data-mining/" style="font-size: 15.6px; color: #a7a7a7">Data mining</a> <a href="/tags/HBase/" style="font-size: 12px; color: #ccc">HBase</a> <a href="/tags/HDFS/" style="font-size: 19.2px; color: #818181">HDFS</a> <a href="/tags/Hadoop/" style="font-size: 30px; color: #111">Hadoop</a> <a href="/tags/Hive/" style="font-size: 26.4px; color: #363636">Hive</a> <a href="/tags/NLP/" style="font-size: 12px; color: #ccc">NLP</a> <a href="/tags/Openssl/" style="font-size: 12px; color: #ccc">Openssl</a> <a href="/tags/RF/" style="font-size: 12px; color: #ccc">RF</a> <a href="/tags/SVM/" style="font-size: 12px; color: #ccc">SVM</a> <a href="/tags/Spark/" style="font-size: 22.8px; color: #5c5c5c">Spark</a> <a href="/tags/YARN/" style="font-size: 12px; color: #ccc">YARN</a>
-            </div>
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/verify_a_signature_with_certificate/" itemprop="url">Verify a signature with certificate</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-12T15:24:52+08:00">
+                2017-02-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Security/" itemprop="url" rel="index">
+                    <span itemprop="name">Security</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="所需檔案建立"><a href="#所需檔案建立" class="headerlink" title="所需檔案建立"></a>所需檔案建立</h3><h4 id="建立CA基礎設施"><a href="#建立CA基礎設施" class="headerlink" title="建立CA基礎設施"></a>建立CA基礎設施</h4><ol>
+<li>建立CA基礎設施，步驟可參考<a href="https://jamielinux.com/docs/openssl-certificate-authority/introduction.html" target="_blank" rel="external">openssl-certificate-authority</a></li>
+<li>透過以上步驟可獲得Certificate與Private key<ul>
+<li>Certificate位置: /root/ca/intermediate/certs/www.example.com.cert.pem</li>
+<li>Private key位置: /root/ca/intermediate/private/www.example.com.key.pem</li>
+</ul>
+</li>
+</ol>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/verify_a_signature_with_certificate/#more" rel="contents">
+              Read more &raquo;
+            </a>
           </div>
+          <!--/noindex-->
         
-      </div>
-      
-      
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
+  
+  
+  
+  </article>
+
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+  </nav>
+
 
 
           </div>
@@ -284,10 +408,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -537,10 +657,6 @@
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
-
-
 
   
 
