@@ -75,20 +75,18 @@
 
 
 
-<meta name="description" content="Spark SQL DataSet and DataFrame Spark SQL DataSet and DataFrame  DataSet 分布式的資料集合 Spark 1.6後開始支持 增強RDD的特性: 支持強類型(Strong typing) 支持Lambda方法 可使用Spark SQL的最佳化執行引擎來執行DataSet操作   可以使用JVM物件來構建，或者執行transform">
+<meta name="description" content="Spark Sql DataFrame OperationsCode1234567891011121314151617181920212223242526272829303132import org.apache.spark.sql.SparkSessionobject DataFrameDemo &amp;#123;  def main(args: Array[String]): Unit = &amp;#12">
 <meta name="keywords" content="Spark">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spark SQL DataSet and DataFrame">
-<meta property="og:url" content="https://0x90e.github.io/spark-sql-dataset-dataframe/index.html">
+<meta property="og:title" content="Spark Sql DataFrame Operations">
+<meta property="og:url" content="https://0x90e.github.io/spark-sql-dataFrame-operations/index.html">
 <meta property="og:site_name" content="0x90e&#39;s Blog">
-<meta property="og:description" content="Spark SQL DataSet and DataFrame Spark SQL DataSet and DataFrame  DataSet 分布式的資料集合 Spark 1.6後開始支持 增強RDD的特性: 支持強類型(Strong typing) 支持Lambda方法 可使用Spark SQL的最佳化執行引擎來執行DataSet操作   可以使用JVM物件來構建，或者執行transform">
+<meta property="og:description" content="Spark Sql DataFrame OperationsCode1234567891011121314151617181920212223242526272829303132import org.apache.spark.sql.SparkSessionobject DataFrameDemo &amp;#123;  def main(args: Array[String]): Unit = &amp;#12">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://0x90e.github.io/2017/12/04/spark-sql-dataset-dataframe/rdd_vs_dataframe.svg">
-<meta property="og:updated_time" content="2017-12-04T18:07:50.730Z">
+<meta property="og:updated_time" content="2017-12-07T18:07:32.401Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spark SQL DataSet and DataFrame">
-<meta name="twitter:description" content="Spark SQL DataSet and DataFrame Spark SQL DataSet and DataFrame  DataSet 分布式的資料集合 Spark 1.6後開始支持 增強RDD的特性: 支持強類型(Strong typing) 支持Lambda方法 可使用Spark SQL的最佳化執行引擎來執行DataSet操作   可以使用JVM物件來構建，或者執行transform">
-<meta name="twitter:image" content="https://0x90e.github.io/2017/12/04/spark-sql-dataset-dataframe/rdd_vs_dataframe.svg">
+<meta name="twitter:title" content="Spark Sql DataFrame Operations">
+<meta name="twitter:description" content="Spark Sql DataFrame OperationsCode1234567891011121314151617181920212223242526272829303132import org.apache.spark.sql.SparkSessionobject DataFrameDemo &amp;#123;  def main(args: Array[String]): Unit = &amp;#12">
 
 
 
@@ -118,13 +116,13 @@
 
 
 
-  <link rel="canonical" href="https://0x90e.github.io/spark-sql-dataset-dataframe/"/>
+  <link rel="canonical" href="https://0x90e.github.io/spark-sql-dataFrame-operations/"/>
 
 
 
 
 
-  <title>Spark SQL DataSet and DataFrame | 0x90e's Blog</title>
+  <title>Spark Sql DataFrame Operations | 0x90e's Blog</title>
   
 
 
@@ -260,7 +258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-sql-dataset-dataframe/">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-sql-dataFrame-operations/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="0x90e">
@@ -277,7 +275,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">Spark SQL DataSet and DataFrame</h2>
+          <h2 class="post-title" itemprop="name headline">Spark Sql DataFrame Operations</h2>
         
 
         <div class="post-meta">
@@ -289,8 +287,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-05T01:52:29+08:00">
-                2017-12-05
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-08T02:01:12+08:00">
+                2017-12-08
               </time>
             
 
@@ -354,47 +352,47 @@
       
 
       
-        <h2 id="Spark-SQL-DataSet-and-DataFrame"><a href="#Spark-SQL-DataSet-and-DataFrame" class="headerlink" title="Spark SQL DataSet and DataFrame"></a>Spark SQL DataSet and DataFrame</h2><ul>
-<li><a href="http://spark.apache.org/docs/latest/sql-programming-guide.html#datasets-and-dataframes" title="Spark SQL DataSet and DataFrame" target="_blank" rel="external">Spark SQL DataSet and DataFrame</a></li>
-</ul>
-<h3 id="DataSet"><a href="#DataSet" class="headerlink" title="DataSet"></a>DataSet</h3><ul>
-<li>分布式的資料集合</li>
-<li>Spark 1.6後開始支持</li>
-<li>增強RDD的特性:<ul>
-<li>支持強類型(Strong typing)</li>
-<li>支持Lambda方法</li>
-<li>可使用Spark SQL的最佳化執行引擎來執行DataSet操作</li>
+        <h2 id="Spark-Sql-DataFrame-Operations"><a href="#Spark-Sql-DataFrame-Operations" class="headerlink" title="Spark Sql DataFrame Operations"></a>Spark Sql DataFrame Operations</h2><h3 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> org.apache.spark.sql.<span class="type">SparkSession</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">DataFrameDemo</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</div><div class="line"></div><div class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span></div><div class="line">      .builder().master(<span class="string">"local[2]"</span>)</div><div class="line">      .appName(<span class="string">"DataFrameDemo"</span>)</div><div class="line">      .getOrCreate()</div><div class="line"></div><div class="line">    <span class="keyword">val</span> df = spark.read.format(<span class="string">"json"</span>).load(<span class="string">"file/people.json"</span>)</div><div class="line">    println(<span class="string">"Displays the content of the DataFrame to stdout"</span>)</div><div class="line">    df.show()</div><div class="line"></div><div class="line">    println(<span class="string">"Print the schema in a tree format"</span>)</div><div class="line">    df.printSchema()</div><div class="line"></div><div class="line">    println(<span class="string">"Select only the name column"</span>)</div><div class="line">    df.select(<span class="string">"name"</span>).show()</div><div class="line"></div><div class="line">    <span class="comment">// This import is needed to use the $-notation</span></div><div class="line">    <span class="keyword">import</span> spark.implicits._</div><div class="line"></div><div class="line">    println(<span class="string">"Select everybody, but increment the age by 1"</span>)</div><div class="line">    df.select($<span class="string">"name"</span>, $<span class="string">"age"</span> + <span class="number">1</span>).show()</div><div class="line"></div><div class="line">    println(<span class="string">"Select people older than 21"</span>)</div><div class="line">    df.filter($<span class="string">"age"</span> &gt; <span class="number">21</span>).show()</div><div class="line"></div><div class="line">    spark.stop()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="Explanation"><a href="#Explanation" class="headerlink" title="Explanation"></a>Explanation</h3><h4 id="來源檔案內容"><a href="#來源檔案內容" class="headerlink" title="來源檔案內容"></a>來源檔案內容</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[hadoop@hadoop-01 file]<span class="comment"># cat people.json </span></div><div class="line">&#123;<span class="string">"name"</span>:<span class="string">"Michael"</span>&#125;</div><div class="line">&#123;<span class="string">"name"</span>:<span class="string">"Andy"</span>, <span class="string">"age"</span>:30&#125;</div><div class="line">&#123;<span class="string">"name"</span>:<span class="string">"Justin"</span>, <span class="string">"age"</span>:19&#125;</div></pre></td></tr></table></figure>
+<h4 id="對應輸出"><a href="#對應輸出" class="headerlink" title="對應輸出"></a>對應輸出</h4><ul>
+<li>df.show()<ul>
+<li>顯示當前DataFrame內的紀錄</li>
+<li>根據DataFrame源碼顯示，show()只會顯示前20條紀錄</li>
 </ul>
 </li>
-<li>可以使用JVM物件來構建，或者執行transformation方法來構建，例如map,flatMap等等</li>
-<li>可以使用Java或Scala來進行操作，Python暫時不支持DataSet API<a id="more"></a>
-</li>
 </ul>
-<h3 id="DataFrame"><a href="#DataFrame" class="headerlink" title="DataFrame"></a>DataFrame</h3><ul>
-<li>等同於DataSet，其中的columns帶有名稱</li>
-<li>Spark 1.3之前稱作SchemaRDD，Spark 1.3開始用DataFrame取代，兩者在本質上沒有區別，都是將Schema作用於RDD之上</li>
-<li>類似於relational database中的table，或者Python或R內的DataFrame，並且透過底層的優化提升效率</li>
-<li>構建DataFrame的方法:<ul>
-<li>結構化的資料文件</li>
-<li>Hive中的table</li>
-<li>外部的database</li>
-<li>已構建出來的RDD</li>
-</ul>
-</li>
-<li>支持Scala、Java、Python與R</li>
-<li>在Scala與Java當中，DataFrame使用Row類型的DataSet來表示，及為Dataset[Row]</li>
-<li>引用DataFrame後，無論是在處理小量數據或者分布式數據的處理上，程式處理上皆可以使用相同的方式進行處理</li>
-</ul>
-<h3 id="RDD-vs-DataFrame"><a href="#RDD-vs-DataFrame" class="headerlink" title="RDD vs. DataFrame"></a>RDD vs. DataFrame</h3><img src="/2017/12/04/spark-sql-dataset-dataframe/rdd_vs_dataframe.svg" width="500">
-<p>透過上圖可以得知:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Displays the content of the DataFrame to stdout</div><div class="line">+----+-------+</div><div class="line">| age|   name|</div><div class="line">+----+-------+</div><div class="line">|null|Michael|</div><div class="line">|  30|   Andy|</div><div class="line">|  19| Justin|</div><div class="line">+----+-------+</div></pre></td></tr></table></figure>
 <ul>
-<li>RDD只能闡述整體紀錄的類型，而DataFrame可以闡述每個紀錄中column的名稱與類型</li>
-<li>DataFrame中每一個column皆為相同類型，故可以得到更好壓縮比例，整體的存儲會比RDD減少很多</li>
-<li>因為DataFrame可以闡述每個紀錄中column的名稱與類型，故在操作處理上可以進行更深入的優化</li>
-<li>使用RDD進行編寫程式時，不同的實作語言有著不同的底層處理，Java/Scala的底層是使用JVM，而Python則是Python直譯器，故不同實作程式在效能上有所差異</li>
-<li>DataFrame無論實作程式語言，皆會透過Catalystu優化後得到Logic Plan，最後到執行環境開始執行，故不同實作程式在效能上是沒有差異的</li>
+<li>df.printSchema()<ul>
+<li>透過樹狀結構將DataFrame中的schema列印出來</li>
+<li>DataFrame會自行對json格式內的紀錄進行類型推導，譬如age的類型為long</li>
 </ul>
-
+</li>
+<li>df.select(“name”).show()<ul>
+<li>顯示特定column name的紀錄</li>
+<li>指定的column name入參為String類型</li>
+<li>API source: select(col: String, cols: String*): DataFrame</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Print the schema <span class="keyword">in</span> a tree format</div><div class="line">root</div><div class="line"> |-- age: long (nullable = <span class="literal">true</span>)</div><div class="line"> |-- name: string (nullable = <span class="literal">true</span>)</div><div class="line"></div><div class="line">Select only the name column</div><div class="line">+-------+</div><div class="line">|   name|</div><div class="line">+-------+</div><div class="line">|Michael|</div><div class="line">|   Andy|</div><div class="line">| Justin|</div><div class="line">+-------+</div></pre></td></tr></table></figure>
+<ul>
+<li>import spark.implicits._<ul>
+<li>引用隱式轉換，確保column類型可以正常使用</li>
+</ul>
+</li>
+<li>df.select($”name”, $”age” + 1).show()<ul>
+<li>入參為column類型</li>
+<li>API source: select(cols: Column*): DataFrame </li>
+</ul>
+</li>
+<li>df.filter($”age” &gt; 21).show()<ul>
+<li>透過columnt輸入過濾條件</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Select everybody, but increment the age by 1</div><div class="line">+-------+---------+</div><div class="line">|   name|(age + 1)|</div><div class="line">+-------+---------+</div><div class="line">|Michael|     null|</div><div class="line">|   Andy|       31|</div><div class="line">| Justin|       20|</div><div class="line">+-------+---------+</div><div class="line"></div><div class="line">Select people older than 21</div><div class="line">+---+----+</div><div class="line">|age|name|</div><div class="line">+---+----+</div><div class="line">| 30|Andy|</div><div class="line">+---+----+</div></pre></td></tr></table></figure>
       
     </div>
     
@@ -424,8 +422,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/spark-sql-architecture/" rel="next" title="Spark SQL Architecture">
-                <i class="fa fa-chevron-left"></i> Spark SQL Architecture
+              <a href="/spark-sql-dataset-dataframe/" rel="next" title="Spark SQL DataSet and DataFrame">
+                <i class="fa fa-chevron-left"></i> Spark SQL DataSet and DataFrame
               </a>
             
           </div>
@@ -433,10 +431,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/spark-sql-dataFrame-operations/" rel="prev" title="Spark Sql DataFrame Operations">
-                Spark Sql DataFrame Operations <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -588,7 +582,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-SQL-DataSet-and-DataFrame"><span class="nav-number">1.</span> <span class="nav-text">Spark SQL DataSet and DataFrame</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DataSet"><span class="nav-number">1.1.</span> <span class="nav-text">DataSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DataFrame"><span class="nav-number">1.2.</span> <span class="nav-text">DataFrame</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RDD-vs-DataFrame"><span class="nav-number">1.3.</span> <span class="nav-text">RDD vs. DataFrame</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-Sql-DataFrame-Operations"><span class="nav-number">1.</span> <span class="nav-text">Spark Sql DataFrame Operations</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Code"><span class="nav-number">1.1.</span> <span class="nav-text">Code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Explanation"><span class="nav-number">1.2.</span> <span class="nav-text">Explanation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#來源檔案內容"><span class="nav-number">1.2.1.</span> <span class="nav-text">來源檔案內容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#對應輸出"><span class="nav-number">1.2.2.</span> <span class="nav-text">對應輸出</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

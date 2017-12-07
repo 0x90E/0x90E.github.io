@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://0x90e.github.io/spark-sql-dataFrame-operations/</loc>
+    
+    <lastmod>2017-12-07T18:07:32.401Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0x90e.github.io/spark-sql-dataset-dataframe/</loc>
     
     <lastmod>2017-12-04T18:07:50.730Z</lastmod>
