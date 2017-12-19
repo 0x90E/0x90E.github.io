@@ -254,6 +254,152 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/hive-join/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/hive-join/" itemprop="url">Hive Join</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-24T14:17:48+08:00">
+                2017-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="Hive-Join"><a href="#Hive-Join" class="headerlink" title="Hive Join"></a>Hive Join</h2><h3 id="Hive中的Join的用法"><a href="#Hive中的Join的用法" class="headerlink" title="Hive中的Join的用法"></a>Hive中的Join的用法</h3><h4 id="創建join示例所使用的表。"><a href="#創建join示例所使用的表。" class="headerlink" title="創建join示例所使用的表。"></a>創建join示例所使用的表。</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="comment">-- 創建table a </span></div><div class="line">hive&gt; create table a(</div><div class="line">    id int,</div><div class="line">    name string</div><div class="line">    )row format delimited fields terminated by '\t';</div><div class="line">OK</div><div class="line"></div><div class="line"><span class="comment">-- 從本地文件載入資料</span></div><div class="line">hive&gt; load data local inpath '/home/hadoop/data/a_join.txt' into table a;</div><div class="line">Loading data to table default.a</div><div class="line">Table default.a stats: [numFiles=1, totalSize=26]</div><div class="line">OK</div><div class="line">Time taken: 0.293 seconds</div><div class="line"></div><div class="line"></div><div class="line">hive&gt; select * from a;</div><div class="line">OK</div><div class="line">1	zhangsa</div><div class="line">2	lisi</div><div class="line">3	wangwu</div><div class="line">Time taken: 0.055 seconds, Fetched: 3 row(s)</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">-- 創建table b</span></div><div class="line">hive&gt; create table b(</div><div class="line">    id int,</div><div class="line">    age int</div><div class="line">    ) row format delimited fields terminated by '\t';</div><div class="line">OK</div><div class="line"></div><div class="line"><span class="comment">-- 從本地文件載入資料</span></div><div class="line">hive&gt; load data local inpath '/home/hadoop/data/b_join.txt' into table b;</div><div class="line">Loading data to table default.b</div><div class="line">Table default.b stats: [numFiles=1, totalSize=15]</div><div class="line">OK</div><div class="line">Time taken: 0.241 seconds</div><div class="line"></div><div class="line"></div><div class="line">hive&gt; select * from b;</div><div class="line">OK</div><div class="line">1	28</div><div class="line">2	19</div><div class="line">4	21</div><div class="line">Time taken: 0.089 seconds, Fetched: 3 row(s)</div></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/hive-join/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/hive-dml/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1610,153 +1756,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/nlp-gram/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="0x90e">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="0x90e's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/nlp-gram/" itemprop="url">NLP N-gram</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-03T00:38:06+08:00">
-                2017-07-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Machine-learning/" itemprop="url" rel="index">
-                    <span itemprop="name">Machine learning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="N-gram-Language-Model"><a href="#N-gram-Language-Model" class="headerlink" title="N-gram Language Model"></a>N-gram Language Model</h2><h3 id="定義"><a href="#定義" class="headerlink" title="定義"></a>定義</h3><p>為一種統計語言模型(Statistical Language Model)，統計語言模型定義:<br><img src="/2017/07/03/nlp-gram/img_1.svg" width="500"></p>
-<p>而N-gram又稱為N元模型，N-gram是指一段語句中包含N個Token，譬如abcde，則2-gram依次為:<br>ab, bc, cd, de<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/nlp-gram/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1811,7 +1810,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1833,7 +1832,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
