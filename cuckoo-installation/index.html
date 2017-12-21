@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Cuckoo," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Cuckoo InstallationBaisc Info Host OS: Ubuntu 16.04 LST Guest OS: Windows 7 x64 Professional SP1  Cuckoo: 2.0.5 Virtualization software: VirtualBox 5.0.40 Python Version: 2.7.14 Python Virtual Environ">
+<meta name="keywords" content="Cuckoo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cuckoo Installation">
+<meta property="og:url" content="https://0x90e.github.io/cuckoo-installation/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Cuckoo InstallationBaisc Info Host OS: Ubuntu 16.04 LST Guest OS: Windows 7 x64 Professional SP1  Cuckoo: 2.0.5 Virtualization software: VirtualBox 5.0.40 Python Version: 2.7.14 Python Virtual Environ">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0x90e.github.io/2017/12/22/cuckoo_installation/disable-windows-update.png">
+<meta property="og:image" content="https://0x90e.github.io/2017/12/22/cuckoo_installation/disable_firewall.png">
+<meta property="og:image" content="https://0x90e.github.io/2017/12/22/cuckoo_installation/disable-uac.png">
+<meta property="og:image" content="https://0x90e.github.io/2017/12/22/cuckoo_installation/add_paython_env_variables.png">
+<meta property="og:image" content="https://0x90e.github.io/2017/12/22/cuckoo_installation/virtualbox_hostonly_network_setting.png">
+<meta property="og:image" content="https://0x90e.github.io/2017/12/22/cuckoo_installation/guest_os_virtualbox_network_setting.png">
+<meta property="og:image" content="https://0x90e.github.io/2017/12/22/cuckoo_installation/guest_os_network_setting.png">
+<meta property="og:image" content="https://0x90e.github.io/2017/12/22/cuckoo_installation/cuckoo_web.png">
+<meta property="og:updated_time" content="2017-12-21T18:57:17.402Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cuckoo Installation">
+<meta name="twitter:description" content="Cuckoo InstallationBaisc Info Host OS: Ubuntu 16.04 LST Guest OS: Windows 7 x64 Professional SP1  Cuckoo: 2.0.5 Virtualization software: VirtualBox 5.0.40 Python Version: 2.7.14 Python Virtual Environ">
+<meta name="twitter:image" content="https://0x90e.github.io/2017/12/22/cuckoo_installation/disable-windows-update.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/cuckoo-installation/"/>
+
+
+
+
+
+  <title>Cuckoo Installation | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/cuckoo-installation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Cuckoo Installation</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-22T02:02:36+08:00">
+                2017-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Security/" itemprop="url" rel="index">
+                    <span itemprop="name">Security</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Cuckoo-Installation"><a href="#Cuckoo-Installation" class="headerlink" title="Cuckoo Installation"></a>Cuckoo Installation</h2><h3 id="Baisc-Info"><a href="#Baisc-Info" class="headerlink" title="Baisc Info"></a>Baisc Info</h3><ul>
+<li>Host OS: Ubuntu 16.04 LST</li>
+<li>Guest OS: Windows 7 x64 Professional SP1 </li>
+<li><a href="https://cuckoosandbox.org/" title="Cuckoo: 2.0.5" target="_blank" rel="external">Cuckoo: 2.0.5</a></li>
+<li>Virtualization software: VirtualBox 5.0.40</li>
+<li>Python Version: 2.7.14</li>
+<li>Python Virtual Environment: Conda<ul>
+<li>本文章中所有的Host OS pip安裝皆在Conda虛擬環境中執行，以便於Python library管理</li>
+<li>不使用虛擬環境(Conda/Virtualenv)，不影響Cuckoo的安裝與使用<a id="more"></a>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Installing-Requirements-on-Host-OS"><a href="#Installing-Requirements-on-Host-OS" class="headerlink" title="Installing Requirements on Host OS"></a>Installing Requirements on Host OS</h3><ul>
+<li><a href="https://cuckoo.sh/docs/installation/host/requirements.html" title="Installing Requirements" target="_blank" rel="external">Installing Requirements</a></li>
+</ul>
+<h4 id="Install-Python-libraries"><a href="#Install-Python-libraries" class="headerlink" title="Install Python libraries"></a>Install Python libraries</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install python python-pip python-dev libffi-dev libssl-dev</div><div class="line"><span class="comment"># 使用Conda作爲Python的虛擬環境(Virtual Environment)，所以沒有安裝virtualenv的library</span></div><div class="line">$ sudo apt-get install -y python-setuptools</div><div class="line">$ sudo apt-get install -y libjpeg-dev zlib1g-dev swig</div><div class="line"><span class="comment"># 安裝pillow所需library</span></div><div class="line">$ sudo apt-get install -y libtiff5-dev libjpeg8-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk</div></pre></td></tr></table></figure>
+<h4 id="Install-MongoDB"><a href="#Install-MongoDB" class="headerlink" title="Install MongoDB:"></a>Install MongoDB:</h4><ul>
+<li>若要使用Django web界面，則需要安裝MongoDB<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install -y mongodb</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Install-tcpdump"><a href="#Install-tcpdump" class="headerlink" title="Install tcpdump:"></a>Install tcpdump:</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install -y apparmor-utils</div><div class="line"><span class="comment"># 若使用預設的CWD目錄(~/.cuckoo)，則要禁用AppArmor對tcpdump的安全配置，否則AppArmor會阻止PCAP文件的創建</span></div><div class="line">$ sudo aa-disable /usr/sbin/tcpdump</div><div class="line">$ sudo apt-get install tcpdump</div><div class="line"></div><div class="line"><span class="comment"># tcpdump執行需要root權限，若不想讓Cuckoo使用root權限執行，那麼可以使用下列指令設定</span></div><div class="line">$ sudo <span class="built_in">setcap</span> cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump</div><div class="line"><span class="comment"># 驗證上列指令</span></div><div class="line">$ <span class="built_in">getcap</span> /usr/sbin/tcpdump</div><div class="line">/usr/sbin/tcpdump = cap_net_admin,cap_net_raw+eip</div><div class="line"></div><div class="line"><span class="comment"># 若沒有setcap指令，可以使用下列指令安裝</span></div><div class="line">$ sudo apt-get install libcap2-bin</div></pre></td></tr></table></figure>
+<h4 id="Install-Volatility"><a href="#Install-Volatility" class="headerlink" title="Install Volatility"></a>Install Volatility</h4><ul>
+<li>Volatility是記憶體的鑑識分析工具(forensic analysis)，爲可選安裝</li>
+<li>Cuckoo利用Volatility檢查樣本是否有使用逃避Cuckoo分析的rootkit技術<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install -y volatility</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Install-M2Crypto"><a href="#Install-M2Crypto" class="headerlink" title="Install M2Crypto"></a>Install M2Crypto</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo pip install m2crypto==0.24.0</div></pre></td></tr></table></figure>
+<h4 id="Network-Configuration"><a href="#Network-Configuration" class="headerlink" title="Network Configuration"></a>Network Configuration</h4><ul>
+<li>因爲使用Host-only的虛擬網路模式，虛擬機只能通過Host OS才能訪問網路，所以Host OS需要有以下服務<ul>
+<li>流量轉發服務</li>
+<li>NAT機制</li>
+<li>DNS服務</li>
+</ul>
+</li>
+<li><p>流量轉發服務</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo vim /etc/sysctl.conf</div><div class="line"><span class="comment"># Uncomment the next line to enable packet forwarding for IPv4</span></div><div class="line">net.ipv4.ip_forward=1</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用iptables提供NAT機制</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ sudo iptables -A FORWARD -o eth0 -i vboxnet0 -s 192.168.56.0/24 -m conntrack --ctstate NEW -j ACCEPT</div><div class="line">$ sudo iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT</div><div class="line">$ sudo iptables -A POSTROUTING -t nat -j MASQUERADE</div><div class="line"></div><div class="line">$ sudo iptables -t nat -A POSTROUTING -o eth0 -s 192.168.56.0/24 -j MASQUERADE</div><div class="line"></div><div class="line"><span class="comment"># 持久化iptables的設定</span></div><div class="line">$ sudo vim /etc/network/interfaces</div><div class="line"><span class="comment"># 於文件最後新增下列兩行</span></div><div class="line">pre-up iptables-restore &lt; /etc/iptables.rules <span class="comment"># 開機時啓動iptables規則</span></div><div class="line">post-down iptables-save &gt; /etc/iptables.rules <span class="comment"># 關機前保存當前所有的iptables的規則</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>DNS服務</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install -y dnsmasq</div><div class="line">$ sudo service dnsmasq start</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Installing-Cuckoo-on-Host-OS"><a href="#Installing-Cuckoo-on-Host-OS" class="headerlink" title="Installing Cuckoo on Host OS"></a>Installing Cuckoo on Host OS</h3><h4 id="Create-a-user"><a href="#Create-a-user" class="headerlink" title="Create a user"></a>Create a user</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo adduser cuckoo</div><div class="line"><span class="comment"># 將cuckoo user加入vboxusers group，需先安裝VirtualBox</span></div><div class="line">$ sudo usermod -a -G vboxusers cuckoo</div></pre></td></tr></table></figure>
+<h4 id="Install-Cuckoo"><a href="#Install-Cuckoo" class="headerlink" title="Install Cuckoo"></a>Install Cuckoo</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ pip install -U pip setuptools</div><div class="line">$ pip install cuckoo</div></pre></td></tr></table></figure>
+<h3 id="Creation-of-the-Virtual-Machine"><a href="#Creation-of-the-Virtual-Machine" class="headerlink" title="Creation of the Virtual Machine"></a>Creation of the Virtual Machine</h3><ul>
+<li><a href="https://cuckoo.sh/docs/installation/guest/index.html" title="Preparing the Guest" target="_blank" rel="external">Preparing the Guest</a></li>
+</ul>
+<h4 id="Create-the-Virtual-Machine"><a href="#Create-the-Virtual-Machine" class="headerlink" title="Create the Virtual Machine"></a>Create the Virtual Machine</h4><ul>
+<li>本文章使用VirtualBox+Windows 7作爲虛擬機，此類文章可以依照網上的其他文章建立</li>
+<li>關閉Windows的自動更新功能<img src="/2017/12/22/cuckoo_installation/disable-windows-update.png" width="500"></li>
+<li>關閉Windows的防火牆功能<img src="/2017/12/22/cuckoo_installation/disable_firewall.png" width="500"></li>
+<li>關閉Windows的UAC<img src="/2017/12/22/cuckoo_installation/disable-uac.png" width="500"></li>
+<li>可以額外在Guest OS(Windows 7)安裝PDF readers，Office，Adobe Flash，瀏覽器等可能觸發惡意樣本行爲的軟體，記得關閉軟體的自動更新功能</li>
+</ul>
+<h4 id="Install-Requirements"><a href="#Install-Requirements" class="headerlink" title="Install Requirements"></a>Install Requirements</h4><ul>
+<li>下載<a href="https://www.python.org/downloads/release/python-2713/" title="Windows x86-64 MSI installer" target="_blank" rel="external">Windows x86-64 MSI installer</a>，並雙擊檔案進行安裝</li>
+<li><p>將Python加入作業系統PAHT環境變數，預設python路徑在C:\Python27\</p>
+<img src="/2017/12/22/cuckoo_installation/add_paython_env_variables.png" width="500">
+</li>
+<li><p>安裝Python Imaging Library (PIL) </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&gt;<span class="built_in">cd</span> C:\Python27\Scripts</div><div class="line">&gt;pip install Pillow</div><div class="line">Collecting Pillow</div><div class="line">  Downloading Pillow-4.3.0-cp27-cp27m-win32.whl (1.3MB</div><div class="line">    100% |<span class="comment">################################| 1.3MB 114k</span></div><div class="line">Collecting olefile (from Pillow)</div><div class="line">  Downloading olefile-0.44.zip (74kB)</div><div class="line">    100% |<span class="comment">################################| 81kB 145kB</span></div><div class="line">Installing collected packages: olefile, Pillow</div><div class="line">  Running setup.py install <span class="keyword">for</span> olefile ... <span class="keyword">done</span></div><div class="line">Successfully installed Pillow-4.3.0 olefile-0.44</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Guest-OS-Configuration"><a href="#Guest-OS-Configuration" class="headerlink" title="Guest OS Configuration"></a>Guest OS Configuration</h4><ul>
+<li>將Cuckoo的agent.py設定爲開機自啓動<ul>
+<li>該文件原始位置在Host OS的CWD子目錄中，預設在~/.cuckoo/agent/agent.py</li>
+<li>將agent.py檔名修改爲agent.pyw，避免啓動時的執行視窗</li>
+<li>將agent.pyw移入Guest OS的下列指定目錄內<ul>
+<li>C:\Users[USER]\AppData\Roaming\MicroSoft\Windows\Start Menu\Programs\Startup\</li>
+<li>[USER]是指Windows user名稱</li>
+<li>例如: C:\Users\analyzer\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</li>
+<li>AppData爲隱藏目錄，記得打開顯示隱藏目錄的Windows選項</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>配置系統開機自動登入<ul>
+<li>使用Administrator權限啓動cmd，並依序在cmd中輸入以下指令</li>
+<li>[USERNAME]與[PASSWORD]需替換爲登入的Windows user與對應的password<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;reg add <span class="string">"hklm\software\Microsoft\Windows NT\CurrentVersion\WinLogon"</span> /v DefaultUserName /d [USERNAME] /t REG_SZ /f</div><div class="line">&gt;reg add <span class="string">"hklm\software\Microsoft\Windows NT\CurrentVersion\WinLogon"</span> /v DefaultPassword /d [PASSWORD] /t REG_SZ /f</div><div class="line">&gt;reg add <span class="string">"hklm\software\Microsoft\Windows NT\CurrentVersion\WinLogon"</span> /v AutoAdminLogon /d 1 /t REG_SZ /f</div><div class="line">&gt;reg add <span class="string">"hklm\system\CurrentControlSet\Control\TerminalServer"</span> /v AllowRemoteRPC /d 0x01 /t REG_DWORD /f</div><div class="line">&gt;reg add <span class="string">"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"</span> /v LocalAccountTokenFilterPolicy /d 0x01 /t REG_DWORD /f</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Network-Configuration-1"><a href="#Network-Configuration-1" class="headerlink" title="Network Configuration"></a>Network Configuration</h4><ul>
+<li><p>在Host OS下開啟Virtualbox的網路設定，新增一組HostOnly的網路介面 [vboxnet0]</p>
+<img src="/2017/12/22/cuckoo_installation/virtualbox_hostonly_network_setting.png" width="500">
+</li>
+<li><p>打開Guest OS的VirtualBox網路設定，指定使用HostOnly的網路介面 [vboxnet0]</p>
+<img src="/2017/12/22/cuckoo_installation/guest_os_virtualbox_network_setting.png" width="500">
+</li>
+</ul>
+<ul>
+<li>指定Guest OS內的網路設定<ul>
+<li>Default geteway與Preferred DNS sever皆指定到HostOnly的IP<img src="/2017/12/22/cuckoo_installation/guest_os_network_setting.png" width="500">
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>檢驗網路是否設定正確</p>
+<ul>
+<li><p>Host OS</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ping 192.168.56.101</div></pre></td></tr></table></figure>
+</li>
+<li><p>Guest OS</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt;ping 192.168.56.1</div><div class="line">&gt;ping www.google.com</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>當Guest OS的設定與測試都正常後，請將虛擬機儲存一個snapshot</li>
+</ul>
+<h3 id="Cuckoo-Configuration"><a href="#Cuckoo-Configuration" class="headerlink" title="Cuckoo Configuration"></a>Cuckoo Configuration</h3><ul>
+<li><a href="https://cuckoo.sh/docs/installation/host/configuration.html" title="Cuckoo Configuration" target="_blank" rel="external">Cuckoo Configuration</a></li>
+<li>conf檔案放置在Host OS的CWD/conf中，預設在~/.cuckoo/conf</li>
+<li>配置virtualbox.conf</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">$ vim virtualbox.conf</div><div class="line"><span class="comment"># Specify a comma-separated list of available machines to be used. For each</span></div><div class="line"><span class="comment"># specified ID you have to define a dedicated section containing the details</span></div><div class="line"><span class="comment"># on the respective machine. (E.g. cuckoo1,cuckoo2,cuckoo3)</span></div><div class="line">machines = cuckoo1 <span class="comment"># 指定VirtualBox中Geust OS的虛擬機名稱</span></div><div class="line"></div><div class="line"></div><div class="line">[cuckoo1] <span class="comment"># 對應machines</span></div><div class="line"><span class="comment"># Specify the label name of the current machine as specified in your</span></div><div class="line"><span class="comment"># VirtualBox configuration.</span></div><div class="line">label = cuckoo1  </div><div class="line"></div><div class="line"><span class="comment"># Specify the operating system platform used by current machine</span></div><div class="line"><span class="comment"># [windows/darwin/linux].</span></div><div class="line">platform = windows</div><div class="line"></div><div class="line"><span class="comment"># Specify the IP address of the current virtual machine. Make sure that the</span></div><div class="line"><span class="comment"># IP address is valid and that the host machine is able to reach it. If not,</span></div><div class="line"><span class="comment"># the analysis will fail.</span></div><div class="line">ip = 192.168.56.101 <span class="comment"># 指定VirtualBox中Geust OS的IP位置</span></div></pre></td></tr></table></figure>
+<ul>
+<li>配置reporting.conf</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">$ vim reporting.conf</div><div class="line">[jsondump]</div><div class="line">enabled = yes <span class="comment"># no -&gt; yes</span></div><div class="line">indent = 4</div><div class="line">calls = yes</div><div class="line"></div><div class="line">[singlefile]</div><div class="line"><span class="comment"># Enable creation of report.html and/or report.pdf?</span></div><div class="line">enabled = yes <span class="comment"># no -&gt; yes</span></div><div class="line"><span class="comment"># Enable creation of report.html?</span></div><div class="line">html = yes <span class="comment"># no -&gt; yes</span></div><div class="line"><span class="comment"># Enable creation of report.pdf?</span></div><div class="line">pdf = yes <span class="comment"># no -&gt; yes</span></div><div class="line"></div><div class="line">[mongodb]</div><div class="line">enabled = yes <span class="comment"># no -&gt; yes</span></div><div class="line">host = 127.0.0.1</div><div class="line">port = 27017</div><div class="line">db = cuckoo</div><div class="line">store_memdump = yes </div><div class="line">paginate = 100</div></pre></td></tr></table></figure>
+<h3 id="Usage-Cuckoo"><a href="#Usage-Cuckoo" class="headerlink" title="Usage Cuckoo"></a>Usage Cuckoo</h3><h4 id="Starting-Cuckoo"><a href="#Starting-Cuckoo" class="headerlink" title="Starting Cuckoo"></a>Starting Cuckoo</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">$ cuckoo</div><div class="line"></div><div class="line">           _______                   _____                    _____</div><div class="line">          /::\    \                 /\    \                  /\    \</div><div class="line">         /::::\    \               /::\____\                /::\    \</div><div class="line">        /::::::\    \             /::::|   |               /::::\    \</div><div class="line">       /::::::::\    \           /:::::|   |              /::::::\    \</div><div class="line">      /:::/~~\:::\    \         /::::::|   |             /:::/\:::\    \</div><div class="line">     /:::/    \:::\    \       /:::/|::|   |            /:::/  \:::\    \</div><div class="line">    /:::/    / \:::\    \     /:::/ |::|   |           /:::/    \:::\    \</div><div class="line">   /:::/____/   \:::\____\   /:::/  |::|___|______    /:::/    / \:::\    \</div><div class="line">  |:::|    |     |:::|    | /:::/   |::::::::\    \  /:::/    /   \:::\ ___\</div><div class="line">  |:::|____|     |:::|    |/:::/    |:::::::::\____\/:::/____/  ___\:::|    |</div><div class="line">   \:::\    \   /:::/    / \::/    / ~~~~~/:::/    /\:::\    \ /\  /:::|____|</div><div class="line">    \:::\    \ /:::/    /   \/____/      /:::/    /  \:::\    /::\ \::/    /</div><div class="line">     \:::\    /:::/    /                /:::/    /    \:::\   \:::\ \/____/</div><div class="line">      \:::\__/:::/    /                /:::/    /      \:::\   \:::\____\</div><div class="line">       \::::::::/    /                /:::/    /        \:::\  /:::/    /</div><div class="line">        \::::::/    /                /:::/    /          \:::\/:::/    /</div><div class="line">         \::::/    /                /:::/    /            \::::::/    /</div><div class="line">          \::/____/                /:::/    /              \::::/    /</div><div class="line">           ~~                      \::/    /                \::/____/</div><div class="line">                                    \/____/</div><div class="line">                                                       it&apos;s Cuckoo!</div><div class="line"></div><div class="line"> Cuckoo Sandbox 2.0.5</div><div class="line"> www.cuckoosandbox.org</div><div class="line"> Copyright (c) 2010-2017</div><div class="line"></div><div class="line">=======================================================================</div><div class="line">    Welcome to Cuckoo Sandbox, this appears to be your first run!</div><div class="line">    We will now set you up with our default configuration.</div><div class="line">    You will be able to see and modify the Cuckoo configuration,</div><div class="line">    Yara rules, Cuckoo Signatures, and much more to your likings</div><div class="line">    by exploring the /home/albert/.cuckoo directory.</div><div class="line"></div><div class="line">    Among other configurable items of most interest is the</div><div class="line">    new location for your Cuckoo configuration:</div><div class="line">              /home/albert/.cuckoo/conf</div><div class="line">=======================================================================</div><div class="line"></div><div class="line">Cuckoo has finished setting up the default configuration.</div><div class="line">Please modify the default settings where required and</div><div class="line">start Cuckoo again (by running `cuckoo` or `cuckoo -d`).</div></pre></td></tr></table></figure>
+<h4 id="Web-Interface"><a href="#Web-Interface" class="headerlink" title="Web Interface"></a>Web Interface</h4><ul>
+<li>使用web上傳樣本進行分析<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ cuckoo web runserver</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><br><br><img src="/2017/12/22/cuckoo_installation/cuckoo_web.png" width="500"></p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li><a href="http://jameshclai.blogspot.com/2017/03/cuckoo-sandbox.html" title="How to Install Cuckoo Sandbox" target="_blank" rel="external">How to Install Cuckoo Sandbox</a></li>
+<li><a href="http://www.freebuf.com/sectool/108533.html&quot;自动化恶意软件分析系统Cuckoo安装、配置详解&quot;" target="_blank" rel="external">自动化恶意软件分析系统Cuckoo安装、配置详解</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Cuckoo/" rel="tag"># Cuckoo</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/cuckoo-install-failure-pillow/" rel="next" title="Cuckoo Install Failure(pillow)">
+                <i class="fa fa-chevron-left"></i> Cuckoo Install Failure(pillow)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Cuckoo-Installation"><span class="nav-number">1.</span> <span class="nav-text">Cuckoo Installation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Baisc-Info"><span class="nav-number">1.1.</span> <span class="nav-text">Baisc Info</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Installing-Requirements-on-Host-OS"><span class="nav-number">1.2.</span> <span class="nav-text">Installing Requirements on Host OS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Install-Python-libraries"><span class="nav-number">1.2.1.</span> <span class="nav-text">Install Python libraries</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Install-MongoDB"><span class="nav-number">1.2.2.</span> <span class="nav-text">Install MongoDB:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Install-tcpdump"><span class="nav-number">1.2.3.</span> <span class="nav-text">Install tcpdump:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Install-Volatility"><span class="nav-number">1.2.4.</span> <span class="nav-text">Install Volatility</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Install-M2Crypto"><span class="nav-number">1.2.5.</span> <span class="nav-text">Install M2Crypto</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Network-Configuration"><span class="nav-number">1.2.6.</span> <span class="nav-text">Network Configuration</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Installing-Cuckoo-on-Host-OS"><span class="nav-number">1.3.</span> <span class="nav-text">Installing Cuckoo on Host OS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Create-a-user"><span class="nav-number">1.3.1.</span> <span class="nav-text">Create a user</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Install-Cuckoo"><span class="nav-number">1.3.2.</span> <span class="nav-text">Install Cuckoo</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Creation-of-the-Virtual-Machine"><span class="nav-number">1.4.</span> <span class="nav-text">Creation of the Virtual Machine</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Create-the-Virtual-Machine"><span class="nav-number">1.4.1.</span> <span class="nav-text">Create the Virtual Machine</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Install-Requirements"><span class="nav-number">1.4.2.</span> <span class="nav-text">Install Requirements</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Guest-OS-Configuration"><span class="nav-number">1.4.3.</span> <span class="nav-text">Guest OS Configuration</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Network-Configuration-1"><span class="nav-number">1.4.4.</span> <span class="nav-text">Network Configuration</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cuckoo-Configuration"><span class="nav-number">1.5.</span> <span class="nav-text">Cuckoo Configuration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Usage-Cuckoo"><span class="nav-number">1.6.</span> <span class="nav-text">Usage Cuckoo</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Starting-Cuckoo"><span class="nav-number">1.6.1.</span> <span class="nav-text">Starting Cuckoo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Web-Interface"><span class="nav-number">1.6.2.</span> <span class="nav-text">Web Interface</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">1.7.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
