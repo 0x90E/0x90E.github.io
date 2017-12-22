@@ -64,7 +64,7 @@
 
 
 
-  <meta name="keywords" content="Hadoop,HDFS," />
+  <meta name="keywords" content="Cuckoo," />
 
 
 
@@ -75,18 +75,21 @@
 
 
 
-<meta name="description" content="HDFS(Hadoop Distributed File System)Introduction Apache HDFS官網 可運行在普通且廉價的硬體上 高容錯能力 提供應用程式對數據的高吞吐量(high throughput)訪問，適用於具有大數據集的應用程式">
-<meta name="keywords" content="Hadoop,HDFS">
+<meta name="description" content="Cuckoo Network Analysis FailureBaisc Info: Error Message: CuckooOperationalError: Error running tcpdump to sniff the network traffic during the analysis OS: Ubuntu 16.04 LST Cuckoo: 2.0.5 Python Versi">
+<meta name="keywords" content="Cuckoo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="HDFS Basics">
-<meta property="og:url" content="https://0x90e.github.io/hdfs-basics/index.html">
+<meta property="og:title" content="Cuckoo Network Analysis Failure">
+<meta property="og:url" content="https://0x90e.github.io/cuckoo-network-analysis-failure/index.html">
 <meta property="og:site_name" content="0x90e&#39;s Blog">
-<meta property="og:description" content="HDFS(Hadoop Distributed File System)Introduction Apache HDFS官網 可運行在普通且廉價的硬體上 高容錯能力 提供應用程式對數據的高吞吐量(high throughput)訪問，適用於具有大數據集的應用程式">
+<meta property="og:description" content="Cuckoo Network Analysis FailureBaisc Info: Error Message: CuckooOperationalError: Error running tcpdump to sniff the network traffic during the analysis OS: Ubuntu 16.04 LST Cuckoo: 2.0.5 Python Versi">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2017-10-09T17:50:28.000Z">
+<meta property="og:image" content="https://0x90e.github.io/2017/12/22/cuckoo_network_analysis_failure/network_analysis_failure.png">
+<meta property="og:image" content="https://0x90e.github.io/2017/12/22/cuckoo_network_analysis_failure/network_analysis_success.png">
+<meta property="og:updated_time" content="2017-12-22T16:46:07.841Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HDFS Basics">
-<meta name="twitter:description" content="HDFS(Hadoop Distributed File System)Introduction Apache HDFS官網 可運行在普通且廉價的硬體上 高容錯能力 提供應用程式對數據的高吞吐量(high throughput)訪問，適用於具有大數據集的應用程式">
+<meta name="twitter:title" content="Cuckoo Network Analysis Failure">
+<meta name="twitter:description" content="Cuckoo Network Analysis FailureBaisc Info: Error Message: CuckooOperationalError: Error running tcpdump to sniff the network traffic during the analysis OS: Ubuntu 16.04 LST Cuckoo: 2.0.5 Python Versi">
+<meta name="twitter:image" content="https://0x90e.github.io/2017/12/22/cuckoo_network_analysis_failure/network_analysis_failure.png">
 
 
 
@@ -116,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://0x90e.github.io/hdfs-basics/"/>
+  <link rel="canonical" href="https://0x90e.github.io/cuckoo-network-analysis-failure/"/>
 
 
 
 
 
-  <title>HDFS Basics | 0x90e's Blog</title>
+  <title>Cuckoo Network Analysis Failure | 0x90e's Blog</title>
   
 
 
@@ -258,7 +261,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/hdfs-basics/">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/cuckoo-network-analysis-failure/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="0x90e">
@@ -275,7 +278,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">HDFS Basics</h2>
+          <h2 class="post-title" itemprop="name headline">Cuckoo Network Analysis Failure</h2>
         
 
         <div class="post-meta">
@@ -287,8 +290,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-27T00:15:01+08:00">
-                2017-08-27
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-23T00:39:31+08:00">
+                2017-12-23
               </time>
             
 
@@ -310,8 +313,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Big-data/" itemprop="url" rel="index">
-                    <span itemprop="name">Big data</span>
+                  <a href="/categories/Security/" itemprop="url" rel="index">
+                    <span itemprop="name">Security</span>
                   </a>
                 </span>
 
@@ -352,137 +355,31 @@
       
 
       
-        <h2 id="HDFS-Hadoop-Distributed-File-System"><a href="#HDFS-Hadoop-Distributed-File-System" class="headerlink" title="HDFS(Hadoop Distributed File System)"></a>HDFS(Hadoop Distributed File System)</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><ul>
-<li><a href="http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html" title="HDFS" target="_blank" rel="external">Apache HDFS官網</a></li>
-<li>可運行在普通且廉價的硬體上</li>
-<li>高容錯能力</li>
-<li>提供應用程式對數據的高吞吐量(high throughput)訪問，適用於具有大數據集的應用程式<a id="more"></a>
-<h3 id="Assumptions-and-Goals"><a href="#Assumptions-and-Goals" class="headerlink" title="Assumptions and Goals"></a>Assumptions and Goals</h3></li>
-<li>Hardware Failure<ul>
-<li>快速硬體錯誤偵測與自動復原機制</li>
+        <h2 id="Cuckoo-Network-Analysis-Failure"><a href="#Cuckoo-Network-Analysis-Failure" class="headerlink" title="Cuckoo Network Analysis Failure"></a>Cuckoo Network Analysis Failure</h2><h3 id="Baisc-Info"><a href="#Baisc-Info" class="headerlink" title="Baisc Info:"></a>Baisc Info:</h3><ul>
+<li>Error Message: CuckooOperationalError: Error running tcpdump to sniff the network traffic during the analysis</li>
+<li>OS: Ubuntu 16.04 LST</li>
+<li>Cuckoo: 2.0.5</li>
+<li>Python Version: 2.7</li>
 </ul>
+<a id="more"></a>
+<h3 id="Failure-Description"><a href="#Failure-Description" class="headerlink" title="Failure Description"></a>Failure Description</h3><ul>
+<li>Cuckoo Web UI上的Network Analysis頁面無法出現分析結果<img src="/2017/12/22/cuckoo_network_analysis_failure/network_analysis_failure.png" width="700"></li>
+<li><p>已經使用下列指令禁用AppArmor對tcpdump的安全配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo aa-disable /usr/sbin/tcpdump</div></pre></td></tr></table></figure>
 </li>
-<li>Streaming Data Access<ul>
-<li>供數據批次處理的應用程式使用，並追求數據訪問的高吞吐量</li>
-</ul>
+<li><p>使用下列指令檢查AppArmor對tcpdump的狀態，tcpdump沒有在禁用列表內</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">$ sudo aa-status --verbose</div><div class="line">apparmor module is loaded.</div><div class="line">20 profiles are loaded.</div><div class="line">20 profiles are <span class="keyword">in</span> enforce mode.</div><div class="line">   /sbin/dhclient</div><div class="line">   /usr/bin/evince</div><div class="line">   /usr/bin/evince-previewer</div><div class="line">   /usr/bin/evince-previewer//sanitized_helper</div><div class="line">   /usr/bin/evince-thumbnailer</div><div class="line">   /usr/bin/evince-thumbnailer//sanitized_helper</div><div class="line">   /usr/bin/evince//sanitized_helper</div><div class="line">   /usr/bin/ubuntu-core-launcher</div><div class="line">   /usr/lib/NetworkManager/nm-dhcp-client.action</div><div class="line">   /usr/lib/NetworkManager/nm-dhcp-helper</div><div class="line">   /usr/lib/connman/scripts/dhclient-script</div><div class="line">   /usr/lib/cups/backend/cups-pdf</div><div class="line">   /usr/lib/lightdm/lightdm-guest-session</div><div class="line">   /usr/lib/lightdm/lightdm-guest-session//chromium</div><div class="line">   /usr/sbin/cups-browsed</div><div class="line">   /usr/sbin/cupsd</div><div class="line">   /usr/sbin/cupsd//third_party</div><div class="line">   /usr/sbin/ippusbxd</div><div class="line">   webbrowser-app</div><div class="line">   webbrowser-app//oxide_helper</div><div class="line">0 profiles are <span class="keyword">in</span> complain mode.</div><div class="line">3 processes have profiles defined.</div><div class="line">3 processes are <span class="keyword">in</span> enforce mode.</div><div class="line">   /usr/bin/evince (5165) </div><div class="line">   /usr/bin/evince (31898) </div><div class="line">   /usr/sbin/cups-browsed (844) </div><div class="line">0 processes are <span class="keyword">in</span> complain mode.</div><div class="line">0 processes are unconfined but have a profile defined.</div></pre></td></tr></table></figure>
 </li>
-<li>Large Data Sets<ul>
-<li>支持大文件存儲，並支持高聚合數據带寬及高擴展性</li>
-</ul>
-</li>
-<li>Simple Coherency Model<ul>
-<li>支持write-once-read-many access的文件存取模型</li>
-</ul>
-</li>
-<li>Moving Computation is Cheaper than Moving Data<ul>
-<li>將應用程式的計算移動到數據所在節點附近進行運算，降低網路阻塞，並提高數據吞吐量</li>
-</ul>
-</li>
-<li>Portability Across Heterogeneous Hardware and Software Platforms<ul>
-<li>支持平台間的可移植性</li>
-</ul>
+<li><p>但cuckoo的log仍出現錯誤訊息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">~/.cuckoo/<span class="built_in">log</span>$ tail -F cuckoo.log</div><div class="line"><span class="comment"># ...</span></div><div class="line">CuckooOperationalError: Error running tcpdump to sniff the network traffic during the analysis; </div><div class="line">stdout = <span class="string">''</span> and stderr = <span class="string">'tcpdump: ~/.cuckoo/storage/analyses/14/dump.pcap: Permission denied\n'</span>. </div><div class="line">Did you <span class="built_in">enable</span> the extra capabilities to allow running tcpdump as non-root user and <span class="built_in">disable</span> </div><div class="line">AppArmor properly (the latter only applies to Ubuntu-based distributions with AppArmor, </div><div class="line">see also https://cuckoo.sh/docs/faq/index.html<span class="comment">#permission-denied-for-tcpdump)?</span></div><div class="line"><span class="comment"># ...</span></div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h3 id="Core-components"><a href="#Core-components" class="headerlink" title="Core components"></a>Core components</h3><p>HDFS是一個主從式架構(master/slave)，一個HDFS集群(cluster)內，包含一個NameNode與多個DataNode。HDFS提供文件系統命名空間(File System Namespace)給使用者，讓使用者將數據儲存在文件中。下列分別說明NameNode與DataNodes。</p>
-<ul>
-<li><p>NameNode</p>
-<ul>
-<li>Master(單個)</li>
-<li>管理File System Namespace，例如文件開啟、關閉、重新命名文件或資料夾</li>
-<li>決定Block儲存的DataNode</li>
-<li>負責響應客戶端的請求，以及文件存取權限控制</li>
-<li>負責管理以下數據:<ul>
-<li>元數據(Metadata)管理:<ul>
-<li>文件名稱</li>
-<li>文件屬性(權限、創建時間、副本係數)</li>
-</ul>
+<h3 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h3><ul>
+<li><p>將tcpdump的模式從enforce轉成complain模式</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ sudo aa-complain /usr/sbin/tcpdump</div><div class="line">Setting /usr/sbin/tcpdump to complain mode.</div><div class="line"></div><div class="line"><span class="comment"># 確認tcpdump的模式</span></div><div class="line">$ sudo grep tcpdump /sys/kernel/security/apparmor/profiles</div><div class="line">/usr/sbin/tcpdump (complain)</div></pre></td></tr></table></figure>
 </li>
-<li>文件目錄結構</li>
-<li>文件對應的Block，以及Block所存放的DataNode</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>DataNodes</p>
-<ul>
-<li>Slaves(一個以上)</li>
-<li>一般是一個節點執行一個DataNode</li>
-<li>存放Block</li>
-<li>執行Block的創建、刪除與副本操作</li>
-<li>每隔3秒向NameNode發送Heartbeat<ul>
-<li>Heartbeat表示該DataNode運作正常</li>
-</ul>
-</li>
-<li>每隔10個Heartbeat(30秒)，向NameNode發送BlockReport<ul>
-<li>BlockReport包含該DataNode上所有的Block列表</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>其他說明:<ul>
-<li>NameNode與DataNodes皆可運行在普通的機器上。</li>
-<li>NameNode與DataNodes皆使用JAVA實作，故任何支援JAVA運行的機器皆可執行。</li>
-<li>NameNode與DataNodes一般是運行在不同的機器上。</li>
-</ul>
-</li>
-</ul>
-<h3 id="Blocks"><a href="#Blocks" class="headerlink" title="Blocks"></a>Blocks</h3><ul>
-<li>在HDFS中，文件會根據hdfs-default.xml或hdfs-site.xml中的dfs.blocksize參數進行切割成Blocks。</li>
-<li>dfs.blocksize預設為128M，當檔案大於128M時，則會進行切割，直到最後一個Block等於或小於128M。</li>
-<li>寫入時，文件會拆分成多個Block儲存在不同的DataNode。</li>
-<li>讀取時，則從DataNodes中取出Blocks進行合併。</li>
-</ul>
-<h3 id="File-System-Namespace"><a href="#File-System-Namespace" class="headerlink" title="File System Namespace"></a>File System Namespace</h3><ul>
-<li>File System Namespace的結構與傳統檔案系統相同，並且支持對檔案的創建、刪除、搬移，重新命名等操作。</li>
-<li>支持用戶容量配額與訪問權限控制。</li>
-<li>不支持硬連結與軟連結。</li>
-<li>NameNode負責管理File System Namespace。</li>
-<li>任何File System Namespace與其屬性的改變，都記錄在NameNode中。</li>
-<li>應用程序可以設置文件的副本係數，副本係數的資訊儲存在NameNode中。</li>
-</ul>
-<h3 id="Data-Replication"><a href="#Data-Replication" class="headerlink" title="Data Replication"></a>Data Replication</h3><ul>
-<li>HDFS設計目的是為了在跨機器的集群中，提供高可靠的超大文件儲存服務。</li>
-<li>為了高容錯能力，將Blocks進行多副本方式儲存。</li>
-<li>每個文件的Block大小與副本係數都是可以設置的。</li>
-<li>副本係數是指一個Block副本的數量。</li>
-<li>預設副本係數為3。生產環境設為5或7。</li>
-<li>副本係數可以在文件創建設置，也可以在之後進行修改。</li>
-<li>HDFS文件都是一次性寫入的(write-once)，並嚴格要求一次只能有一個Client進行寫入。</li>
-<li>NameNode管理Block的複製，並週期性的接收DataNode的Heartbeat與BlockReport，</li>
-<li>根據BlockReport，對寫入文件的副本進行合理的安排。</li>
-</ul>
-<h3 id="Replica-Selection"><a href="#Replica-Selection" class="headerlink" title="Replica Selection"></a>Replica Selection</h3><ul>
-<li>優先將一個Block的副本放置在不同的機器上。</li>
-<li>分為積架環境與一般環境說明:<ul>
-<li>一般環境:<ul>
-<li>在DataNode中執行文件寫入:<ul>
-<li>挑選當前DataNode進行第一個Block副本放置處，節省網路傳輸成本。</li>
-<li>其他副本則以不重複原則，進行隨機挑選。</li>
-</ul>
-</li>
-<li>在其他節點執行文件寫入:<ul>
-<li>以不重複原則，進行隨機挑選。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>積架環境:<ul>
-<li>在DataNode中執行文件寫入:<ul>
-<li>挑選當前DataNode進行第一個Block副本放置處。節省網路傳輸成本。</li>
-<li>優先挑選不同的積架中的DataNode進行寫入，直到所有副本處理完畢。</li>
-</ul>
-</li>
-<li>在其他節點執行文件寫入:<ul>
-<li>根據資源狀況挑選DataNode。</li>
-<li>優先挑選不同的積架中的DataNode進行寫入，直到所有副本處理完畢。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
+<li><p>就可以在對應的頁面看到Network Analysis</p>
+<img src="/2017/12/22/cuckoo_network_analysis_failure/network_analysis_success.png" width="700"></li>
 </ul>
 
       
@@ -501,9 +398,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
-          
-            <a href="/tags/HDFS/" rel="tag"># HDFS</a>
+            <a href="/tags/Cuckoo/" rel="tag"># Cuckoo</a>
           
         </div>
       
@@ -516,8 +411,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/hadoop-compile/" rel="next" title="Compile Hadoop source code">
-                <i class="fa fa-chevron-left"></i> Compile Hadoop source code
+              <a href="/cuckoo-installation/" rel="next" title="Cuckoo Installation">
+                <i class="fa fa-chevron-left"></i> Cuckoo Installation
               </a>
             
           </div>
@@ -525,10 +420,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/hdfs-read-write-procedure/" rel="prev" title="HDFS文件讀寫流程">
-                HDFS文件讀寫流程 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -680,7 +571,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS-Hadoop-Distributed-File-System"><span class="nav-number">1.</span> <span class="nav-text">HDFS(Hadoop Distributed File System)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Introduction"><span class="nav-number">1.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Assumptions-and-Goals"><span class="nav-number">1.2.</span> <span class="nav-text">Assumptions and Goals</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Core-components"><span class="nav-number">1.3.</span> <span class="nav-text">Core components</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Blocks"><span class="nav-number">1.4.</span> <span class="nav-text">Blocks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#File-System-Namespace"><span class="nav-number">1.5.</span> <span class="nav-text">File System Namespace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-Replication"><span class="nav-number">1.6.</span> <span class="nav-text">Data Replication</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Replica-Selection"><span class="nav-number">1.7.</span> <span class="nav-text">Replica Selection</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Cuckoo-Network-Analysis-Failure"><span class="nav-number">1.</span> <span class="nav-text">Cuckoo Network Analysis Failure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Baisc-Info"><span class="nav-number">1.1.</span> <span class="nav-text">Baisc Info:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Failure-Description"><span class="nav-number">1.2.</span> <span class="nav-text">Failure Description</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Solution"><span class="nav-number">1.3.</span> <span class="nav-text">Solution</span></a></li></ol></li></ol></div>
             
 
           </div>
