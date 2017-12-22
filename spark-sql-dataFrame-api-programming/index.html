@@ -64,7 +64,7 @@
 
 
 
-  <meta name="keywords" content="Cuckoo," />
+  <meta name="keywords" content="Spark," />
 
 
 
@@ -75,21 +75,18 @@
 
 
 
-<meta name="description" content="Cuckoo Network Analysis FailureBaisc Info: Error Message: CuckooOperationalError: Error running tcpdump to sniff the network traffic during the analysis OS: Ubuntu 16.04 LST Cuckoo: 2.0.5 Python Versi">
-<meta name="keywords" content="Cuckoo">
+<meta name="description" content="Spark SQL DataFrame API Programming 此文章舉出多個常用的DataFrame API例子 DataFrame常用API皆在org.apache.spark.sql的Dataset.scala和functions.scala內，可以透過觀看相關程式源碼來熟悉DataFrame">
+<meta name="keywords" content="Spark">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Cuckoo Network Analysis Failure">
-<meta property="og:url" content="https://0x90e.github.io/cuckoo-network-analysis-failure/index.html">
+<meta property="og:title" content="spark_sql_dataFrame_api_programming">
+<meta property="og:url" content="https://0x90e.github.io/spark-sql-dataFrame-api-programming/index.html">
 <meta property="og:site_name" content="0x90e&#39;s Blog">
-<meta property="og:description" content="Cuckoo Network Analysis FailureBaisc Info: Error Message: CuckooOperationalError: Error running tcpdump to sniff the network traffic during the analysis OS: Ubuntu 16.04 LST Cuckoo: 2.0.5 Python Versi">
+<meta property="og:description" content="Spark SQL DataFrame API Programming 此文章舉出多個常用的DataFrame API例子 DataFrame常用API皆在org.apache.spark.sql的Dataset.scala和functions.scala內，可以透過觀看相關程式源碼來熟悉DataFrame">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://0x90e.github.io/2017/12/22/cuckoo_network_analysis_failure/network_analysis_failure.png">
-<meta property="og:image" content="https://0x90e.github.io/2017/12/22/cuckoo_network_analysis_failure/network_analysis_success.png">
-<meta property="og:updated_time" content="2017-12-22T16:46:07.841Z">
+<meta property="og:updated_time" content="2017-12-22T16:52:47.538Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cuckoo Network Analysis Failure">
-<meta name="twitter:description" content="Cuckoo Network Analysis FailureBaisc Info: Error Message: CuckooOperationalError: Error running tcpdump to sniff the network traffic during the analysis OS: Ubuntu 16.04 LST Cuckoo: 2.0.5 Python Versi">
-<meta name="twitter:image" content="https://0x90e.github.io/2017/12/22/cuckoo_network_analysis_failure/network_analysis_failure.png">
+<meta name="twitter:title" content="spark_sql_dataFrame_api_programming">
+<meta name="twitter:description" content="Spark SQL DataFrame API Programming 此文章舉出多個常用的DataFrame API例子 DataFrame常用API皆在org.apache.spark.sql的Dataset.scala和functions.scala內，可以透過觀看相關程式源碼來熟悉DataFrame">
 
 
 
@@ -119,13 +116,13 @@
 
 
 
-  <link rel="canonical" href="https://0x90e.github.io/cuckoo-network-analysis-failure/"/>
+  <link rel="canonical" href="https://0x90e.github.io/spark-sql-dataFrame-api-programming/"/>
 
 
 
 
 
-  <title>Cuckoo Network Analysis Failure | 0x90e's Blog</title>
+  <title>spark_sql_dataFrame_api_programming | 0x90e's Blog</title>
   
 
 
@@ -261,7 +258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/cuckoo-network-analysis-failure/">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-sql-dataFrame-api-programming/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="0x90e">
@@ -278,7 +275,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">Cuckoo Network Analysis Failure</h2>
+          <h2 class="post-title" itemprop="name headline">spark_sql_dataFrame_api_programming</h2>
         
 
         <div class="post-meta">
@@ -290,7 +287,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-23T00:39:31+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-23T00:48:50+08:00">
                 2017-12-23
               </time>
             
@@ -313,8 +310,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Security/" itemprop="url" rel="index">
-                    <span itemprop="name">Security</span>
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
                   </a>
                 </span>
 
@@ -355,33 +352,12 @@
       
 
       
-        <h2 id="Cuckoo-Network-Analysis-Failure"><a href="#Cuckoo-Network-Analysis-Failure" class="headerlink" title="Cuckoo Network Analysis Failure"></a>Cuckoo Network Analysis Failure</h2><h3 id="Baisc-Info"><a href="#Baisc-Info" class="headerlink" title="Baisc Info:"></a>Baisc Info:</h3><ul>
-<li>Error Message: CuckooOperationalError: Error running tcpdump to sniff the network traffic during the analysis</li>
-<li>OS: Ubuntu 16.04 LST</li>
-<li>Cuckoo: 2.0.5</li>
-<li>Python Version: 2.7</li>
-</ul>
-<a id="more"></a>
-<h3 id="Failure-Description"><a href="#Failure-Description" class="headerlink" title="Failure Description"></a>Failure Description</h3><ul>
-<li>Cuckoo Web UI上的Network Analysis頁面無法出現分析結果<img src="/2017/12/22/cuckoo_network_analysis_failure/network_analysis_failure.png" width="700"></li>
-<li><p>已經使用下列指令禁用AppArmor對tcpdump的安全配置</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo aa-disable /usr/sbin/tcpdump</div></pre></td></tr></table></figure>
-</li>
-<li><p>使用下列指令檢查AppArmor對tcpdump的狀態，tcpdump沒有在禁用列表內</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">$ sudo aa-status --verbose</div><div class="line">apparmor module is loaded.</div><div class="line">20 profiles are loaded.</div><div class="line">20 profiles are <span class="keyword">in</span> enforce mode.</div><div class="line">   /sbin/dhclient</div><div class="line">   /usr/bin/evince</div><div class="line">   /usr/bin/evince-previewer</div><div class="line">   /usr/bin/evince-previewer//sanitized_helper</div><div class="line">   /usr/bin/evince-thumbnailer</div><div class="line">   /usr/bin/evince-thumbnailer//sanitized_helper</div><div class="line">   /usr/bin/evince//sanitized_helper</div><div class="line">   /usr/bin/ubuntu-core-launcher</div><div class="line">   /usr/lib/NetworkManager/nm-dhcp-client.action</div><div class="line">   /usr/lib/NetworkManager/nm-dhcp-helper</div><div class="line">   /usr/lib/connman/scripts/dhclient-script</div><div class="line">   /usr/lib/cups/backend/cups-pdf</div><div class="line">   /usr/lib/lightdm/lightdm-guest-session</div><div class="line">   /usr/lib/lightdm/lightdm-guest-session//chromium</div><div class="line">   /usr/sbin/cups-browsed</div><div class="line">   /usr/sbin/cupsd</div><div class="line">   /usr/sbin/cupsd//third_party</div><div class="line">   /usr/sbin/ippusbxd</div><div class="line">   webbrowser-app</div><div class="line">   webbrowser-app//oxide_helper</div><div class="line">0 profiles are <span class="keyword">in</span> complain mode.</div><div class="line">3 processes have profiles defined.</div><div class="line">3 processes are <span class="keyword">in</span> enforce mode.</div><div class="line">   /usr/bin/evince (5165) </div><div class="line">   /usr/bin/evince (31898) </div><div class="line">   /usr/sbin/cups-browsed (844) </div><div class="line">0 processes are <span class="keyword">in</span> complain mode.</div><div class="line">0 processes are unconfined but have a profile defined.</div></pre></td></tr></table></figure>
-</li>
-<li><p>但cuckoo的log仍出現錯誤訊息</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">~/.cuckoo/<span class="built_in">log</span>$ tail -F cuckoo.log</div><div class="line"><span class="comment"># ...</span></div><div class="line">CuckooOperationalError: Error running tcpdump to sniff the network traffic during the analysis; </div><div class="line">stdout = <span class="string">''</span> and stderr = <span class="string">'tcpdump: ~/.cuckoo/storage/analyses/14/dump.pcap: Permission denied\n'</span>. </div><div class="line">Did you <span class="built_in">enable</span> the extra capabilities to allow running tcpdump as non-root user and <span class="built_in">disable</span> </div><div class="line">AppArmor properly (the latter only applies to Ubuntu-based distributions with AppArmor, </div><div class="line">see also https://cuckoo.sh/docs/faq/index.html<span class="comment">#permission-denied-for-tcpdump)?</span></div><div class="line"><span class="comment"># ...</span></div></pre></td></tr></table></figure>
+        <h2 id="Spark-SQL-DataFrame-API-Programming"><a href="#Spark-SQL-DataFrame-API-Programming" class="headerlink" title="Spark SQL DataFrame API Programming"></a>Spark SQL DataFrame API Programming</h2><ul>
+<li>此文章舉出多個常用的DataFrame API例子</li>
+<li>DataFrame常用API皆在org.apache.spark.sql的Dataset.scala和functions.scala內，可以透過觀看相關程式源碼來熟悉DataFrame<a id="more"></a>
 </li>
 </ul>
-<h3 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h3><ul>
-<li><p>將tcpdump的模式從enforce轉成complain模式</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ sudo aa-complain /usr/sbin/tcpdump</div><div class="line">Setting /usr/sbin/tcpdump to complain mode.</div><div class="line"></div><div class="line"><span class="comment"># 確認tcpdump的模式</span></div><div class="line">$ sudo grep tcpdump /sys/kernel/security/apparmor/profiles</div><div class="line">/usr/sbin/tcpdump (complain)</div></pre></td></tr></table></figure>
-</li>
-<li><p>就可以在對應的頁面看到Network Analysis</p>
-<img src="/2017/12/22/cuckoo_network_analysis_failure/network_analysis_success.png" width="700"></li>
-</ul>
-
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> org.apache.spark.sql.&#123;Row, SparkSession&#125;</div><div class="line"><span class="keyword">import</span> org.apache.spark.sql.types.&#123;StringType, StructField, StructType&#125;</div><div class="line"></div><div class="line"></div><div class="line">object DataFrameApiApp &#123;</div><div class="line">  <span class="function">def <span class="title">main</span><span class="params">(args: Array[String])</span>: Unit </span>= &#123;</div><div class="line">    val spark = SparkSession</div><div class="line">      .builder().master(<span class="string">"local[2]"</span>)</div><div class="line">      .appName(<span class="string">"DataFrameApiApp"</span>)</div><div class="line">      .getOrCreate()</div><div class="line"></div><div class="line">    <span class="keyword">import</span> spark.implicits._</div><div class="line"></div><div class="line">    val insuranceRdd = spark.sparkContext.textFile(<span class="string">"file/FL_insurance_sample.csv"</span>)</div><div class="line"></div><div class="line">    val rowRdd = insuranceRdd.map(_.split(<span class="string">","</span>))</div><div class="line">      .map((x =&gt; Row(x(<span class="number">0</span>), x(<span class="number">1</span>), x(<span class="number">2</span>), x(<span class="number">3</span>), x(<span class="number">4</span>), x(<span class="number">5</span>), x(<span class="number">6</span>), x(<span class="number">7</span>), x(<span class="number">8</span>), x(<span class="number">9</span>), x(<span class="number">10</span>), x(<span class="number">11</span>), x(<span class="number">12</span>), x(<span class="number">13</span>), x(<span class="number">14</span>), x(<span class="number">15</span>), x(<span class="number">16</span>), x(<span class="number">17</span>))))</div><div class="line"></div><div class="line">    val schemaString = <span class="string">"policyID statecode county eq_site_limit hu_site_limit fl_site_limit fr_site_limit tiv_2011"</span> +</div><div class="line">      <span class="string">" tiv_2012 eq_site_deductible hu_site_deductible fl_site_deductible fr_site_deductible point_latitude point_longitude"</span> +</div><div class="line">      <span class="string">" line construction point_granularity"</span></div><div class="line"></div><div class="line">    val fields = schemaString.split(<span class="string">" "</span>)</div><div class="line">      .map(fieldName =&gt; StructField(fieldName, StringType))</div><div class="line">    val schema = StructType(fields)</div><div class="line">    val insuranceDF = spark.createDataFrame(rowRdd, schema)</div><div class="line"></div><div class="line">    insuranceDF.schema.printTreeString()</div><div class="line">    <span class="comment">/*</span></div><div class="line"><span class="comment">    root</span></div><div class="line"><span class="comment">    |-- policyID: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- statecode: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- county: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- eq_site_limit: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- hu_site_limit: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- fl_site_limit: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- fr_site_limit: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- tiv_2011: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- tiv_2012: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- eq_site_deductible: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- hu_site_deductible: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- fl_site_deductible: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- fr_site_deductible: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- point_latitude: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- point_longitude: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- line: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- construction: string (nullable = true)</span></div><div class="line"><span class="comment">    |-- point_granularity: string (nullable = true)    </span></div><div class="line"><span class="comment">    */</span></div><div class="line"></div><div class="line">    <span class="comment">// Selects a set of SQL expressions</span></div><div class="line">    insuranceDF.select(<span class="string">"policyID"</span>, <span class="string">"county"</span>).show(<span class="number">3</span>)</div><div class="line">    <span class="comment">/*</span></div><div class="line"><span class="comment">    +--------+-----------+</span></div><div class="line"><span class="comment">    |policyID|     county|</span></div><div class="line"><span class="comment">    +--------+-----------+</span></div><div class="line"><span class="comment">    |  119736|CLAY COUNTY|</span></div><div class="line"><span class="comment">    |  448094|CLAY COUNTY|</span></div><div class="line"><span class="comment">    |  206893|CLAY COUNTY|</span></div><div class="line"><span class="comment">    +--------+-----------+</span></div><div class="line"><span class="comment">    only showing top 3 rows    </span></div><div class="line"><span class="comment">    */</span>    </div><div class="line"></div><div class="line">    <span class="comment">// Filters rows using the given SQL expression.</span></div><div class="line">    insuranceDF.filter(<span class="string">"point_granularity == 3"</span>).show(<span class="number">3</span>)</div><div class="line"></div><div class="line">    <span class="comment">// Uses build-in functions from org.apache.spark.sql.functions</span></div><div class="line">    val insuranceDF2 = insuranceDF.filter(<span class="string">"SUBSTR(county,0,1) = 'S'"</span>)</div><div class="line">    insuranceDF2.show(<span class="number">3</span>)</div><div class="line"></div><div class="line">    <span class="comment">// Get the DataSet ascending ordering used in sorting</span></div><div class="line">    insuranceDF.sort($<span class="string">"policyID"</span>.asc).show(<span class="number">3</span>)</div><div class="line"></div><div class="line">    <span class="comment">// Get the DataSet sorted by multiple specified column</span></div><div class="line">    insuranceDF.sort(<span class="string">"policyID"</span>, <span class="string">"county"</span>).show(<span class="number">3</span>)</div><div class="line"></div><div class="line">    <span class="comment">// Join with another `DataFrame`.</span></div><div class="line">    <span class="comment">// Default is inner join</span></div><div class="line">    insuranceDF.join(insuranceDF2, <span class="string">"policyID"</span>).show(<span class="number">3</span>)</div><div class="line"></div><div class="line">    spark.stop()</div><div class="line"></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
       
     </div>
     
@@ -398,7 +374,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Cuckoo/" rel="tag"># Cuckoo</a>
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
           
         </div>
       
@@ -411,8 +387,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/cuckoo-installation/" rel="next" title="Cuckoo Installation">
-                <i class="fa fa-chevron-left"></i> Cuckoo Installation
+              <a href="/cuckoo-network-analysis-failure/" rel="next" title="Cuckoo Network Analysis Failure">
+                <i class="fa fa-chevron-left"></i> Cuckoo Network Analysis Failure
               </a>
             
           </div>
@@ -420,10 +396,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/spark-sql-dataFrame-api-programming/" rel="prev" title="spark_sql_dataFrame_api_programming">
-                spark_sql_dataFrame_api_programming <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -575,7 +547,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Cuckoo-Network-Analysis-Failure"><span class="nav-number">1.</span> <span class="nav-text">Cuckoo Network Analysis Failure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Baisc-Info"><span class="nav-number">1.1.</span> <span class="nav-text">Baisc Info:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Failure-Description"><span class="nav-number">1.2.</span> <span class="nav-text">Failure Description</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Solution"><span class="nav-number">1.3.</span> <span class="nav-text">Solution</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-SQL-DataFrame-API-Programming"><span class="nav-number">1.</span> <span class="nav-text">Spark SQL DataFrame API Programming</span></a></li></ol></div>
             
 
           </div>
