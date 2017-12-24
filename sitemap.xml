@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://0x90e.github.io/spark-sql-thrift-server/</loc>
+    
+    <lastmod>2017-12-24T17:49:08.192Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0x90e.github.io/spark-sql-dataFrame-api-programming/</loc>
     
     <lastmod>2017-12-23T16:45:08.048Z</lastmod>
