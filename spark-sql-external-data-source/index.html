@@ -75,18 +75,18 @@
 
 
 
-<meta name="description" content="Spark Sql Built-in and UDF FunctionsSpark Sql中常用的函數分兩類，分別為Built-in函數與UDF函數，以下分別提出案例說明該如何使用">
+<meta name="description" content="Spark SQL External Data SourceSpark SQL Data Sources External Data Source APIWhy 多個不同數據源使用不同的方式進行讀寫操作，非常不方便 不同讀入與寫出的格式之間的轉換">
 <meta name="keywords" content="Spark">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spark Sql Built-in and UDF Functions">
-<meta property="og:url" content="https://0x90e.github.io/spark-sql-builtin-udf-functions/index.html">
+<meta property="og:title" content="Spark SQL External Data Source">
+<meta property="og:url" content="https://0x90e.github.io/spark-sql-external-data-source/index.html">
 <meta property="og:site_name" content="0x90e&#39;s Blog">
-<meta property="og:description" content="Spark Sql Built-in and UDF FunctionsSpark Sql中常用的函數分兩類，分別為Built-in函數與UDF函數，以下分別提出案例說明該如何使用">
+<meta property="og:description" content="Spark SQL External Data SourceSpark SQL Data Sources External Data Source APIWhy 多個不同數據源使用不同的方式進行讀寫操作，非常不方便 不同讀入與寫出的格式之間的轉換">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2017-12-23T16:44:07.090Z">
+<meta property="og:updated_time" content="2017-12-27T17:42:33.298Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spark Sql Built-in and UDF Functions">
-<meta name="twitter:description" content="Spark Sql Built-in and UDF FunctionsSpark Sql中常用的函數分兩類，分別為Built-in函數與UDF函數，以下分別提出案例說明該如何使用">
+<meta name="twitter:title" content="Spark SQL External Data Source">
+<meta name="twitter:description" content="Spark SQL External Data SourceSpark SQL Data Sources External Data Source APIWhy 多個不同數據源使用不同的方式進行讀寫操作，非常不方便 不同讀入與寫出的格式之間的轉換">
 
 
 
@@ -116,13 +116,13 @@
 
 
 
-  <link rel="canonical" href="https://0x90e.github.io/spark-sql-builtin-udf-functions/"/>
+  <link rel="canonical" href="https://0x90e.github.io/spark-sql-external-data-source/"/>
 
 
 
 
 
-  <title>Spark Sql Built-in and UDF Functions | 0x90e's Blog</title>
+  <title>Spark SQL External Data Source | 0x90e's Blog</title>
   
 
 
@@ -258,7 +258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-sql-builtin-udf-functions/">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-sql-external-data-source/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="0x90e">
@@ -275,7 +275,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">Spark Sql Built-in and UDF Functions</h2>
+          <h2 class="post-title" itemprop="name headline">Spark SQL External Data Source</h2>
         
 
         <div class="post-meta">
@@ -287,8 +287,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-24T00:43:15+08:00">
-                2017-12-24
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-28T01:21:46+08:00">
+                2017-12-28
               </time>
             
 
@@ -352,20 +352,82 @@
       
 
       
-        <h2 id="Spark-Sql-Built-in-and-UDF-Functions"><a href="#Spark-Sql-Built-in-and-UDF-Functions" class="headerlink" title="Spark Sql Built-in and UDF Functions"></a>Spark Sql Built-in and UDF Functions</h2><p>Spark Sql中常用的函數分兩類，分別為Built-in函數與UDF函數，以下分別提出案例說明該如何使用<br><a id="more"></a></p>
-<h3 id="Built-in-Functions"><a href="#Built-in-Functions" class="headerlink" title="Built-in Functions"></a>Built-in Functions</h3><ul>
-<li>大部分在functions.sacla<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> org.apache.spark.sql.SparkSession</div><div class="line"></div><div class="line">object SqlBuiltinFunctionsDemo &#123;</div><div class="line">  <span class="function">def <span class="title">main</span><span class="params">(args: Array[String])</span>: Unit </span>= &#123;</div><div class="line">    val spark = SparkSession</div><div class="line">      .builder().master(<span class="string">"local[2]"</span>)</div><div class="line">      .appName(<span class="string">"DataFrameApiApp"</span>)</div><div class="line">      .getOrCreate()</div><div class="line"></div><div class="line">    <span class="keyword">import</span> spark.implicits._</div><div class="line">    val logDF = spark.sparkContext.textFile(<span class="string">"file/pvuv.log"</span>)</div><div class="line">        .map(_.split(<span class="string">","</span>))</div><div class="line">        .map(x =&gt; Log(x(<span class="number">0</span>), x(<span class="number">1</span>).toInt))</div><div class="line">        .toDF()</div><div class="line">    <span class="comment">/*</span></div><div class="line"><span class="comment">    file/pvuv.log:</span></div><div class="line"><span class="comment">    tv1,1001</span></div><div class="line"><span class="comment">    tv2,1001</span></div><div class="line"><span class="comment">    tv3,1002</span></div><div class="line"><span class="comment">    tv1,1001</span></div><div class="line"><span class="comment">    tv1,1003</span></div><div class="line"><span class="comment">    tv2,1003</span></div><div class="line"><span class="comment">    tv3,1003</span></div><div class="line"><span class="comment">    tv1,1003</span></div><div class="line"><span class="comment">    */</span></div><div class="line"></div><div class="line">    <span class="keyword">import</span> org.apache.spark.sql.functions._</div><div class="line">    <span class="comment">// sum is a function from functions.scala, and it returns the sum of all values in the given column.</span></div><div class="line">    logDF.groupBy($<span class="string">"name"</span>).agg(sum(<span class="string">"times"</span>).as(<span class="string">"sum"</span>)).show()</div><div class="line">    <span class="comment">/*</span></div><div class="line"><span class="comment">    +----+-----+</span></div><div class="line"><span class="comment">    |name|count|</span></div><div class="line"><span class="comment">    +----+-----+</span></div><div class="line"><span class="comment">    | tv2|    2|</span></div><div class="line"><span class="comment">    | tv3|    2|</span></div><div class="line"><span class="comment">    | tv1|    4|</span></div><div class="line"><span class="comment">    +----+-----+</span></div><div class="line"><span class="comment">    */</span></div><div class="line"></div><div class="line">    spark.stop()</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">case</span> class <span class="title">Log</span><span class="params">(name: String, times: Int)</span></span></div><div class="line"><span class="function">&#125;</span></div></pre></td></tr></table></figure>
+        <h2 id="Spark-SQL-External-Data-Source"><a href="#Spark-SQL-External-Data-Source" class="headerlink" title="Spark SQL External Data Source"></a>Spark SQL External Data Source</h2><p><a href="http://spark.apache.org/docs/latest/sql-programming-guide.html#data-sources" title="Spark SQL Data Sources" target="_blank" rel="external">Spark SQL Data Sources</a></p>
+<h3 id="External-Data-Source-API"><a href="#External-Data-Source-API" class="headerlink" title="External Data Source API"></a>External Data Source API</h3><h4 id="Why"><a href="#Why" class="headerlink" title="Why"></a>Why</h4><ul>
+<li>多個不同數據源使用不同的方式進行讀寫操作，非常不方便</li>
+<li>不同讀入與寫出的格式之間的轉換<a id="more"></a>
 </li>
 </ul>
-<h3 id="UDF-Functions"><a href="#UDF-Functions" class="headerlink" title="UDF Functions"></a>UDF Functions</h3><ul>
-<li>UDF函數使用時，可以分為以下三個步驟:<ul>
-<li>定義函數</li>
-<li>註冊函數</li>
-<li>使用函數</li>
+<h4 id="What"><a href="#What" class="headerlink" title="What"></a>What</h4><ul>
+<li>為一個擴展的方式，集成多種外部數據源到Spark SQL</li>
+<li>將外部數據源轉換成DataFrame後，透過DataFrame進行數據的操作與寫出<ul>
+<li>Flow: External Data Source -&gt; External Data Source API -&gt; DataFrame</li>
+</ul>
+</li>
+<li>自動對外部數據源進行prune columns與push filters<ul>
+<li>Parquet: 忽略與操作無關的columns和blocks，減少讀入數據與減少IO</li>
+<li>JDBC/Parquet: 對查詢進行優化，以便進行位次下壓(push predicates down)</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> org.apache.spark.sql.SparkSession</div><div class="line"></div><div class="line">object SqlUdfFunctionsDemo &#123;</div><div class="line">  <span class="function">def <span class="title">main</span><span class="params">(args: Array[String])</span>: Unit </span>= &#123;</div><div class="line">    val spark = SparkSession</div><div class="line">      .builder().master(<span class="string">"local[2]"</span>)</div><div class="line">      .appName(<span class="string">"DataFrameApiApp"</span>)</div><div class="line">      .getOrCreate()</div><div class="line"></div><div class="line">    <span class="keyword">import</span> spark.implicits._</div><div class="line">    val hobbiesDF = spark.sparkContext.textFile(<span class="string">"file/hobbies.txt"</span>)</div><div class="line">        .map(_.split(<span class="string">":"</span>))</div><div class="line">        .map(x =&gt; hobbyInfo(x(<span class="number">0</span>), x(<span class="number">1</span>)))</div><div class="line">        .toDF()</div><div class="line">    <span class="comment">/*</span></div><div class="line"><span class="comment">    file/hobbies.txt:</span></div><div class="line"><span class="comment">    alice:jogging,coding,cooking</span></div><div class="line"><span class="comment">    lina:travel,dance</span></div><div class="line"><span class="comment">    */</span></div><div class="line"></div><div class="line">    <span class="comment">// Step1 and 2, define a UDF and register the UDF</span></div><div class="line">    spark.udf.register(<span class="string">"hobby_num"</span>, (str: String) =&gt; str.split(<span class="string">","</span>).length)</div><div class="line"></div><div class="line">    hobbiesDF.createOrReplaceTempView(<span class="string">"Hobbies"</span>)</div><div class="line">    <span class="comment">// Step 3, use the UDF</span></div><div class="line">    spark.sql(<span class="string">"select name, hobby_num(hobbies) as hobby_num from Hobbies"</span>).show()</div><div class="line"></div><div class="line">    spark.stop()</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">case</span> class <span class="title">hobbyInfo</span><span class="params">(name: String, hobbies: String)</span></span></div><div class="line"><span class="function">&#125;</span></div></pre></td></tr></table></figure>
+<h4 id="Supported"><a href="#Supported" class="headerlink" title="Supported"></a>Supported</h4><ul>
+<li>Spark 1.x: <ul>
+<li>Built-In Libraries: JSON, JDBC, Parquet, Hive, MySQL, PostgreSQL, HDFS, S3， H2</li>
+<li>External Libraries: AVRO, CSV, dBase, HBASE, Elasticsearch, Cassandra, Redshift</li>
+</ul>
+</li>
+<li>Spark 2.x:<ul>
+<li>將CSV集成至Built-in Libraries</li>
+</ul>
+</li>
+</ul>
+<h3 id="Benefit"><a href="#Benefit" class="headerlink" title="Benefit"></a>Benefit</h3><ul>
+<li>Library Developer:<ul>
+<li>不需要把自己的代碼合併到Spark codebase</li>
+<li>打包成Spark package使用即可<ul>
+<li><a href="https://spark-packages.org" title="External data source packages" target="_blank" rel="external">External data source packages</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Library User<ul>
+<li>引入對應的Package後，就可以快速且簡單的對外部數據源進行讀寫操作</li>
+</ul>
+</li>
+<li>透過Spark SQL提供的查詢最佳化，進行高效的數據存取</li>
+<li>提供接口來進行數據下壓最佳化，避免不需要的數據存取</li>
+</ul>
+<h4 id="Specific-Optimizations"><a href="#Specific-Optimizations" class="headerlink" title="Specific Optimizations:"></a>Specific Optimizations:</h4><ul>
+<li>Column pruning</li>
+<li>Pushing predicates to data source(filter pushdown)</li>
+<li>Partition pruning</li>
+</ul>
+<h3 id="External-Data-Source-API-Usage"><a href="#External-Data-Source-API-Usage" class="headerlink" title="External Data Source API Usage"></a>External Data Source API Usage</h3><h4 id="Two-Steps"><a href="#Two-Steps" class="headerlink" title="Two Steps:"></a>Two Steps:</h4><ul>
+<li>read.load:<ul>
+<li>讀取一個已經存在的外部數據源，並創建成DataFrame</li>
+<li>functions:<ul>
+<li>format(Data source name): 外部數據源的格式</li>
+<li>options: 外部數據源所需的特定參數，例如jdbc的帳號密碼</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>df.save: <ul>
+<li>將DataFrame儲存成指定的外部數據源</li>
+<li>functions/params:<ul>
+<li>format(Data sourc name): 外部數據源的儲存格式</li>
+<li>save mode: 當外部數據源已存在時的寫出模式，例如追加、複寫、拋出異常</li>
+<li>options: 外部數據源所需的特定參數</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><ul>
+<li><a href="https://github.com/databricks/spark-avro" title="Spark Avro Example" target="_blank" rel="external">Spark Avro Example</a></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">val spark = SparkSession</div><div class="line">    .builder().master(<span class="string">"local[2]"</span>)</div><div class="line">    .appName(<span class="string">"ExternalDataSourceApiApp"</span>)</div><div class="line">    .getOrCreate()</div><div class="line"></div><div class="line"><span class="comment">// com.databricks.spark.avro is data source name of avro. Set data source name based on type of external data source.</span></div><div class="line">val df = spark.read</div><div class="line">    .format(<span class="string">"com.databricks.spark.avro"</span>)</div><div class="line">    .load(<span class="string">"file/data.avro"</span>)</div><div class="line"></div><div class="line">df.filter(<span class="string">"number &gt; 18"</span>).write.format(<span class="string">"com.databricks.spark.avro"</span>).save(<span class="string">"/tmp/output"</span>)</div></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -395,8 +457,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/spark-sql-dataFrame-api-programming/" rel="next" title="Spark SQL DataFrame API Programming">
-                <i class="fa fa-chevron-left"></i> Spark SQL DataFrame API Programming
+              <a href="/spark-sql-thrift-server/" rel="next" title="Spark SQL Thrift Server">
+                <i class="fa fa-chevron-left"></i> Spark SQL Thrift Server
               </a>
             
           </div>
@@ -404,10 +466,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/spark-sql-thrift-server/" rel="prev" title="Spark SQL Thrift Server">
-                Spark SQL Thrift Server <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -559,7 +617,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-Sql-Built-in-and-UDF-Functions"><span class="nav-number">1.</span> <span class="nav-text">Spark Sql Built-in and UDF Functions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Built-in-Functions"><span class="nav-number">1.1.</span> <span class="nav-text">Built-in Functions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UDF-Functions"><span class="nav-number">1.2.</span> <span class="nav-text">UDF Functions</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-SQL-External-Data-Source"><span class="nav-number">1.</span> <span class="nav-text">Spark SQL External Data Source</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#External-Data-Source-API"><span class="nav-number">1.1.</span> <span class="nav-text">External Data Source API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Why"><span class="nav-number">1.1.1.</span> <span class="nav-text">Why</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#What"><span class="nav-number">1.1.2.</span> <span class="nav-text">What</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Supported"><span class="nav-number">1.1.3.</span> <span class="nav-text">Supported</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Benefit"><span class="nav-number">1.2.</span> <span class="nav-text">Benefit</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Specific-Optimizations"><span class="nav-number">1.2.1.</span> <span class="nav-text">Specific Optimizations:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#External-Data-Source-API-Usage"><span class="nav-number">1.3.</span> <span class="nav-text">External Data Source API Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Two-Steps"><span class="nav-number">1.3.1.</span> <span class="nav-text">Two Steps:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Example"><span class="nav-number">1.3.2.</span> <span class="nav-text">Example</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
