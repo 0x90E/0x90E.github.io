@@ -83,7 +83,7 @@
 <meta property="og:site_name" content="0x90e&#39;s Blog">
 <meta property="og:description" content="Spark SQL External Data SourceSpark SQL Data Sources External Data Source APIWhy 多個不同數據源使用不同的方式進行讀寫操作，非常不方便 不同讀入與寫出的格式之間的轉換">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2017-12-27T17:42:33.298Z">
+<meta property="og:updated_time" content="2018-01-04T16:43:12.081Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark SQL External Data Source">
 <meta name="twitter:description" content="Spark SQL External Data SourceSpark SQL Data Sources External Data Source APIWhy 多個不同數據源使用不同的方式進行讀寫操作，非常不方便 不同讀入與寫出的格式之間的轉換">
@@ -416,7 +416,11 @@
 <li>將DataFrame儲存成指定的外部數據源</li>
 <li>functions/params:<ul>
 <li>format(Data sourc name): 外部數據源的儲存格式</li>
-<li>save mode: 當外部數據源已存在時的寫出模式，例如追加、複寫、拋出異常</li>
+<li>save mode: 當外部數據源已存在時的寫出模式，例如追加、複寫、拋出異常<ul>
+<li><a href="http://spark.apache.org/docs/latest/sql-programming-guide.html#save-modes" target="_blank" rel="external">http://spark.apache.org/docs/latest/sql-programming-guide.html#save-modes</a></li>
+<li>離線場景中，較長使用overwrite模式，透過暫存區搭配overwrite模式來保證數據不丟失</li>
+</ul>
+</li>
 <li>options: 外部數據源所需的特定參數</li>
 </ul>
 </li>
@@ -427,6 +431,11 @@
 <li><a href="https://github.com/databricks/spark-avro" title="Spark Avro Example" target="_blank" rel="external">Spark Avro Example</a></li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">val spark = SparkSession</div><div class="line">    .builder().master(<span class="string">"local[2]"</span>)</div><div class="line">    .appName(<span class="string">"ExternalDataSourceApiApp"</span>)</div><div class="line">    .getOrCreate()</div><div class="line"></div><div class="line"><span class="comment">// com.databricks.spark.avro is data source name of avro. Set data source name based on type of external data source.</span></div><div class="line">val df = spark.read</div><div class="line">    .format(<span class="string">"com.databricks.spark.avro"</span>)</div><div class="line">    .load(<span class="string">"file/data.avro"</span>)</div><div class="line"></div><div class="line">df.filter(<span class="string">"number &gt; 18"</span>).write.format(<span class="string">"com.databricks.spark.avro"</span>).save(<span class="string">"/tmp/output"</span>)</div></pre></td></tr></table></figure>
+<h3 id="Run-SQL-on-files-directly"><a href="#Run-SQL-on-files-directly" class="headerlink" title="Run SQL on files directly"></a>Run SQL on files directly</h3><ul>
+<li><a href="http://spark.apache.org/docs/latest/sql-programming-guide.html#run-sql-on-files-directly" title="Run SQL on files directly" target="_blank" rel="external">Run SQL on files directly</a></li>
+<li>直接使用檔案路徑載入外部數據源，並使用SQL query語法查詢</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">val sqlDF = spark.sql(<span class="string">"SELECT * FROM parquet.`examples/src/main/resources/users.parquet`"</span>)</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -466,6 +475,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/spark-sql-configuration-and-performance-tuning/" rel="prev" title="Spark SQL Configuration and Performance Tuning">
+                Spark SQL Configuration and Performance Tuning <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -546,7 +559,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -617,7 +630,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-SQL-External-Data-Source"><span class="nav-number">1.</span> <span class="nav-text">Spark SQL External Data Source</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#External-Data-Source-API"><span class="nav-number">1.1.</span> <span class="nav-text">External Data Source API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Why"><span class="nav-number">1.1.1.</span> <span class="nav-text">Why</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#What"><span class="nav-number">1.1.2.</span> <span class="nav-text">What</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Supported"><span class="nav-number">1.1.3.</span> <span class="nav-text">Supported</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Benefit"><span class="nav-number">1.2.</span> <span class="nav-text">Benefit</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Specific-Optimizations"><span class="nav-number">1.2.1.</span> <span class="nav-text">Specific Optimizations:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#External-Data-Source-API-Usage"><span class="nav-number">1.3.</span> <span class="nav-text">External Data Source API Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Two-Steps"><span class="nav-number">1.3.1.</span> <span class="nav-text">Two Steps:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Example"><span class="nav-number">1.3.2.</span> <span class="nav-text">Example</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-SQL-External-Data-Source"><span class="nav-number">1.</span> <span class="nav-text">Spark SQL External Data Source</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#External-Data-Source-API"><span class="nav-number">1.1.</span> <span class="nav-text">External Data Source API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Why"><span class="nav-number">1.1.1.</span> <span class="nav-text">Why</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#What"><span class="nav-number">1.1.2.</span> <span class="nav-text">What</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Supported"><span class="nav-number">1.1.3.</span> <span class="nav-text">Supported</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Benefit"><span class="nav-number">1.2.</span> <span class="nav-text">Benefit</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Specific-Optimizations"><span class="nav-number">1.2.1.</span> <span class="nav-text">Specific Optimizations:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#External-Data-Source-API-Usage"><span class="nav-number">1.3.</span> <span class="nav-text">External Data Source API Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Two-Steps"><span class="nav-number">1.3.1.</span> <span class="nav-text">Two Steps:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Example"><span class="nav-number">1.3.2.</span> <span class="nav-text">Example</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-SQL-on-files-directly"><span class="nav-number">1.4.</span> <span class="nav-text">Run SQL on files directly</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -637,7 +650,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

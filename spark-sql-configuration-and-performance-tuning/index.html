@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Spark SQL Configuration and Performance TuningConfiguration Properties Spark SQL Performance Tuning 下面列出需要關注的屬性，以及其對應的Spark source code Spark source code: org.apache.spark.sql.internal.SQLConf.scala">
+<meta name="keywords" content="Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark SQL Configuration and Performance Tuning">
+<meta property="og:url" content="https://0x90e.github.io/spark-sql-configuration-and-performance-tuning/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Spark SQL Configuration and Performance TuningConfiguration Properties Spark SQL Performance Tuning 下面列出需要關注的屬性，以及其對應的Spark source code Spark source code: org.apache.spark.sql.internal.SQLConf.scala">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-01-04T16:56:51.789Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark SQL Configuration and Performance Tuning">
+<meta name="twitter:description" content="Spark SQL Configuration and Performance TuningConfiguration Properties Spark SQL Performance Tuning 下面列出需要關注的屬性，以及其對應的Spark source code Spark source code: org.apache.spark.sql.internal.SQLConf.scala">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/spark-sql-configuration-and-performance-tuning/"/>
+
+
+
+
+
+  <title>Spark SQL Configuration and Performance Tuning | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-sql-configuration-and-performance-tuning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Spark SQL Configuration and Performance Tuning</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-05T00:40:26+08:00">
+                2018-01-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Spark-SQL-Configuration-and-Performance-Tuning"><a href="#Spark-SQL-Configuration-and-Performance-Tuning" class="headerlink" title="Spark SQL Configuration and Performance Tuning"></a>Spark SQL Configuration and Performance Tuning</h2><h3 id="Configuration-Properties"><a href="#Configuration-Properties" class="headerlink" title="Configuration Properties"></a>Configuration Properties</h3><ul>
+<li><a href="http://spark.apache.org/docs/latest/sql-programming-guide.html#performance-tuning" title="Spark SQL Performance Tuning" target="_blank" rel="external">Spark SQL Performance Tuning</a></li>
+<li>下面列出需要關注的屬性，以及其對應的Spark source code<ul>
+<li>Spark source code: org.apache.spark.sql.internal.SQLConf.scala</li>
+<li>buildConf指出可以透過–conf傳入的屬性名稱，例如–conf spark.sql.sources.default</li>
+<li>createWithDefault指出屬性的預設值</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>  
+<ul>
+<li>DEFAULT_DATA_SOURCE_NAME<ul>
+<li>在Load或Save外部數據源時所使用的格式</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// This is used to set the default data source</div><div class="line">val DEFAULT_DATA_SOURCE_NAME = buildConf(&quot;spark.sql.sources.default&quot;)</div><div class="line">  .doc(&quot;The default data source to use in input/output.&quot;)</div><div class="line">  .stringConf</div><div class="line">  .createWithDefault(&quot;parquet&quot;)</div></pre></td></tr></table></figure>
+<ul>
+<li>COMPRESS_CACHED<ul>
+<li>Columnar存儲壓縮是否進行壓縮</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">val COMPRESS_CACHED = buildConf(&quot;spark.sql.inMemoryColumnarStorage.compressed&quot;)</div><div class="line">  .internal()</div><div class="line">  .doc(&quot;When set to true Spark SQL will automatically select a compression codec for each &quot; +</div><div class="line">    &quot;column based on statistics of the data.&quot;)</div><div class="line">  .booleanConf</div><div class="line">  .createWithDefault(true)</div></pre></td></tr></table></figure>
+<ul>
+<li>COLUMN_BATCH_SIZE<ul>
+<li>Columnar緩存的每個批次處理多少數據</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">val COLUMN_BATCH_SIZE = buildConf(&quot;spark.sql.inMemoryColumnarStorage.batchSize&quot;)</div><div class="line">  .internal()</div><div class="line">  .doc(&quot;Controls the size of batches for columnar caching.  Larger batch sizes can improve &quot; +</div><div class="line">    &quot;memory utilization and compression, but risk OOMs when caching data.&quot;)</div><div class="line">  .intConf</div><div class="line">  .createWithDefault(10000)</div></pre></td></tr></table></figure>
+<ul>
+<li>IN_MEMORY_PARTITION_PRUNING <ul>
+<li>Columnar table是否支持分區裁減(Partition pruning)</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">val IN_MEMORY_PARTITION_PRUNING =</div><div class="line">  buildConf(&quot;spark.sql.inMemoryColumnarStorage.partitionPruning&quot;)</div><div class="line">    .internal()</div><div class="line">    .doc(&quot;When true, enable partition pruning for in-memory columnar tables.&quot;)</div><div class="line">    .booleanConf</div><div class="line">    .createWithDefault(true)</div></pre></td></tr></table></figure>
+<ul>
+<li>PREFER_SORTMERGEJOIN <ul>
+<li>是否優先採用Sort merge join</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">val PREFER_SORTMERGEJOIN = buildConf(&quot;spark.sql.join.preferSortMergeJoin&quot;)</div><div class="line">  .internal()</div><div class="line">  .doc(&quot;When true, prefer sort merge join over shuffle hash join.&quot;)</div><div class="line">  .booleanConf</div><div class="line">  .createWithDefault(true)</div></pre></td></tr></table></figure>
+<ul>
+<li>AUTO_BROADCASTJOIN_THRESHOLD<ul>
+<li>Broadcast join的閾值</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">val AUTO_BROADCASTJOIN_THRESHOLD = buildConf(&quot;spark.sql.autoBroadcastJoinThreshold&quot;)</div><div class="line">  .doc(&quot;Configures the maximum size in bytes for a table that will be broadcast to all worker &quot; +</div><div class="line">    &quot;nodes when performing a join.  By setting this value to -1 broadcasting can be disabled. &quot; +</div><div class="line">    &quot;Note that currently statistics are only supported for Hive Metastore tables where the &quot; +</div><div class="line">    &quot;command &lt;code&gt;ANALYZE TABLE &amp;lt;tableName&amp;gt; COMPUTE STATISTICS noscan&lt;/code&gt; has been &quot; +</div><div class="line">    &quot;run, and file-based data source tables where the statistics are computed directly on &quot; +</div><div class="line">    &quot;the files of data.&quot;)</div><div class="line">  .longConf</div><div class="line">  .createWithDefault(10L * 1024 * 1024)</div></pre></td></tr></table></figure>
+<ul>
+<li>SHUFFLE_PARTITIONS<ul>
+<li>Join或Aggregation操作進行shuffle步驟時，預設的Partition數量</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">val SHUFFLE_PARTITIONS = buildConf(&quot;spark.sql.shuffle.partitions&quot;)</div><div class="line">  .doc(&quot;The default number of partitions to use when shuffling data for joins or aggregations.&quot;)</div><div class="line">  .intConf</div><div class="line">  .createWithDefault(200)</div></pre></td></tr></table></figure>
+<ul>
+<li>CASE_SENSITIVE<ul>
+<li>Query語句分析時是否區分大小寫</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">val CASE_SENSITIVE = buildConf(&quot;spark.sql.caseSensitive&quot;)</div><div class="line">  .internal()</div><div class="line">  .doc(&quot;Whether the query analyzer should be case sensitive or not. &quot; +</div><div class="line">    &quot;Default to case insensitive. It is highly discouraged to turn on case sensitive mode.&quot;)</div><div class="line">  .booleanConf</div><div class="line">  .createWithDefault(false)</div></pre></td></tr></table></figure>
+<ul>
+<li>PARQUET_SCHEMA_MERGING_ENABLED<ul>
+<li>當外部數據源為Parquet時，是否支持Schema合併</li>
+<li>建議關閉</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">val PARQUET_SCHEMA_MERGING_ENABLED = buildConf(&quot;spark.sql.parquet.mergeSchema&quot;)</div><div class="line">  .doc(&quot;When true, the Parquet data source merges schemas collected from all data files, &quot; +</div><div class="line">       &quot;otherwise the schema is picked from the summary file or a random data file &quot; +</div><div class="line">       &quot;if no summary file is available.&quot;)</div><div class="line">  .booleanConf</div><div class="line">  .createWithDefault(false)</div></pre></td></tr></table></figure>
+<ul>
+<li>PARQUET_COMPRESSION<ul>
+<li>寫出Parquet格式時所採用的Codec</li>
+<li>預設值snappy的壓縮比例較低(CPU耗費較小)，輸出的檔案較大(存儲空間較大)，會導致無法進行分片，並且對整體性能造成影響</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">val PARQUET_COMPRESSION = buildConf(&quot;spark.sql.parquet.compression.codec&quot;)</div><div class="line">  .doc(&quot;Sets the compression codec use when writing Parquet files. Acceptable values include: &quot; +</div><div class="line">    &quot;uncompressed, snappy, gzip, lzo.&quot;)</div><div class="line">  .stringConf</div><div class="line">  .transform(_.toLowerCase(Locale.ROOT))</div><div class="line">  .checkValues(Set(&quot;uncompressed&quot;, &quot;snappy&quot;, &quot;gzip&quot;, &quot;lzo&quot;))</div><div class="line">  .createWithDefault(&quot;snappy&quot;)</div></pre></td></tr></table></figure>
+<ul>
+<li>PARQUET_FILTER_PUSHDOWN_ENABLED<ul>
+<li>Parquet是否支持Pushdown</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">val PARQUET_FILTER_PUSHDOWN_ENABLED = buildConf(&quot;spark.sql.parquet.filterPushdown&quot;)</div><div class="line">  .doc(&quot;Enables Parquet filter push-down optimization when set to true.&quot;)</div><div class="line">  .booleanConf</div><div class="line">  .createWithDefault(true)</div></pre></td></tr></table></figure>
+<ul>
+<li>ORC_FILTER_PUSHDOWN_ENABLED<ul>
+<li>ORC是否支持Pushdown</li>
+<li>預設值要特別注意</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">val ORC_FILTER_PUSHDOWN_ENABLED = buildConf(&quot;spark.sql.orc.filterPushdown&quot;)</div><div class="line">  .doc(&quot;When true, enable filter pushdown for ORC files.&quot;)</div><div class="line">  .booleanConf</div><div class="line">  .createWithDefault(false)</div></pre></td></tr></table></figure>
+<ul>
+<li>HIVE_METASTORE_PARTITION<ul>
+<li>Ｍetastore是否支持分區裁減(Partition pruning)</li>
+<li>Ｍetastore儲存在MySQL當中，一個分區就是一個紀錄，如果分區很多會導致Metadata查詢效率極低</li>
+<li>若為True，會將分區Pushdown到Hive的Metastore(MySQL)中，將沒有被匹配到Partition可以提早被過濾，提升查詢效率，否則需要將所有Partition查完</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">val HIVE_METASTORE_PARTITION_PRUNING =</div><div class="line">  buildConf(&quot;spark.sql.hive.metastorePartitionPruning&quot;)</div><div class="line">    .doc(&quot;When true, some predicates will be pushed down into the Hive metastore so that &quot; +</div><div class="line">         &quot;unmatching partitions can be eliminated earlier. This only affects Hive tables &quot; +</div><div class="line">         &quot;not converted to filesource relations (see HiveUtils.CONVERT_METASTORE_PARQUET and &quot; +</div><div class="line">         &quot;HiveUtils.CONVERT_METASTORE_ORC for more information).&quot;)</div><div class="line">    .booleanConf</div><div class="line">    .createWithDefault(true)</div></pre></td></tr></table></figure>
+<ul>
+<li>COLUMN_NAME_OF_CORRUPT_RECORD<ul>
+<li>JSON或CSV當字段解析失敗時，會放入的Column</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">val COLUMN_NAME_OF_CORRUPT_RECORD = buildConf(&quot;spark.sql.columnNameOfCorruptRecord&quot;)</div><div class="line">  .doc(&quot;The name of internal column for storing raw/un-parsed JSON and CSV records that fail &quot; +</div><div class="line">    &quot;to parse.&quot;)</div><div class="line">  .stringConf</div><div class="line">  .createWithDefault(&quot;_corrupt_record&quot;)</div></pre></td></tr></table></figure>
+<ul>
+<li>THRIFTSERVER_UI_SESSION_LIMIT<ul>
+<li>thriftserver UI上最多保留多少Session</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">val THRIFTSERVER_UI_SESSION_LIMIT = buildConf(&quot;spark.sql.thriftserver.ui.retainedSessions&quot;)</div><div class="line">  .doc(&quot;The number of SQL client sessions kept in the JDBC/ODBC web UI history.&quot;)</div><div class="line">  .intConf</div><div class="line">  .createWithDefault(200)</div></pre></td></tr></table></figure>
+<ul>
+<li>CONVERT_CTAS<ul>
+<li>是否支持Hive中的CTAS</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">val CONVERT_CTAS = buildConf(&quot;spark.sql.hive.convertCTAS&quot;)</div><div class="line">  .internal()</div><div class="line">  .doc(&quot;When true, a table created by a Hive CTAS statement (no USING clause) &quot; +</div><div class="line">    &quot;without specifying any storage property will be converted to a data source table, &quot; +</div><div class="line">    &quot;using the data source set by spark.sql.sources.default.&quot;)</div><div class="line">  .booleanConf</div><div class="line">  .createWithDefault(false)</div></pre></td></tr></table></figure>
+<ul>
+<li>CROSS_JOINS_ENABLED<ul>
+<li>是否支持Cross join(迪卡爾積)</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">val CROSS_JOINS_ENABLED = buildConf(&quot;spark.sql.crossJoin.enabled&quot;)</div><div class="line">  .doc(&quot;When false, we will throw an error if a query contains a cartesian product without &quot; +</div><div class="line">      &quot;explicit CROSS JOIN syntax.&quot;)</div><div class="line">  .booleanConf</div><div class="line">  .createWithDefault(false)</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/spark-sql-external-data-source/" rel="next" title="Spark SQL External Data Source">
+                <i class="fa fa-chevron-left"></i> Spark SQL External Data Source
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-SQL-Configuration-and-Performance-Tuning"><span class="nav-number">1.</span> <span class="nav-text">Spark SQL Configuration and Performance Tuning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Configuration-Properties"><span class="nav-number">1.1.</span> <span class="nav-text">Configuration Properties</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
