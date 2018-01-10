@@ -83,7 +83,7 @@
 <meta property="og:site_name" content="0x90e&#39;s Blog">
 <meta property="og:description" content="Hadoop Pseudo-Distributed Setup偽分布式模式(Pseudo-Distributed Mode) 在單個集群上運行Hadoop 所有的Hadoop daemon皆運行在不同的Java process 在單機模式上增加了程式調適功能，並允許檢查以下狀態: 記憶體使用情況 HDFS的輸出/輸入 與其他daemon的交互情況，如namenode，datanode，second">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2017-10-09T17:50:19.000Z">
+<meta property="og:updated_time" content="2018-01-10T16:42:03.591Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hadoop Pseudo-Distributed Setup">
 <meta name="twitter:description" content="Hadoop Pseudo-Distributed Setup偽分布式模式(Pseudo-Distributed Mode) 在單個集群上運行Hadoop 所有的Hadoop daemon皆運行在不同的Java process 在單機模式上增加了程式調適功能，並允許檢查以下狀態: 記憶體使用情況 HDFS的輸出/輸入 與其他daemon的交互情況，如namenode，datanode，second">
@@ -372,11 +372,11 @@
 <h4 id="設置Hadoop目錄"><a href="#設置Hadoop目錄" class="headerlink" title="設置Hadoop目錄"></a>設置Hadoop目錄</h4><ul>
 <li>Hadoop壓縮包來源可以是:<ul>
 <li>透過Hadoop source code自行編譯</li>
-<li><a href="http://hadoop.apache.org/releases.html" title="Hadoop releases" target="_blank" rel="external">Hadoop官網下載</a><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 ~]<span class="comment"># cd /opt/software/</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># ls</span></div><div class="line">hadoop-2.8.1.tar.gz  <span class="comment">## 已下載的hadoop 2.8.1</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># tar -xzvf hadoop-2.8.1.tar.gz</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># ls</span></div><div class="line">hadoop-2.8.1</div><div class="line">hadoop-2.8.1.tar.gz</div></pre></td></tr></table></figure>
-</li>
+<li><a href="http://hadoop.apache.org/releases.html" title="Hadoop releases" target="_blank" rel="external">Hadoop官網下載</a></li>
 </ul>
 </li>
 </ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 ~]<span class="comment"># cd /opt/software/</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># ls</span></div><div class="line">hadoop-2.8.1.tar.gz  <span class="comment">## 已下載的hadoop 2.8.1</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># tar -xzvf hadoop-2.8.1.tar.gz</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># ls</span></div><div class="line">hadoop-2.8.1</div><div class="line">hadoop-2.8.1.tar.gz</div></pre></td></tr></table></figure>
 <h4 id="建立Hadoop目錄軟連結"><a href="#建立Hadoop目錄軟連結" class="headerlink" title="建立Hadoop目錄軟連結"></a>建立Hadoop目錄軟連結</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 software]<span class="comment"># ln -s hadoop-2.8.1 hadoop</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># chown hadoop:hadoop hadoop-2.8.1</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># chown -R hadoop:hadoop hadoop-2.8.1/*</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># chown hadoop:hadoop hadoop</span></div><div class="line">[root@hadoop-01 software]<span class="comment"># cd hadoop</span></div><div class="line">[root@hadoop-01 hadoop]<span class="comment"># ll</span></div><div class="line">total 156</div><div class="line">drwxr-xr-x. 2 hadoop hadoop  4096 Aug 21 02:13 bin</div><div class="line">drwxr-xr-x. 3 hadoop hadoop  4096 Aug 21 02:13 etc</div><div class="line">drwxr-xr-x. 2 hadoop hadoop  4096 Aug 21 02:13 include</div><div class="line">drwxr-xr-x. 3 hadoop hadoop  4096 Aug 21 02:13 lib</div><div class="line">drwxr-xr-x. 2 hadoop hadoop  4096 Aug 21 02:13 libexec</div><div class="line">-rw-r--r--. 1 hadoop hadoop 99253 Aug 21 02:13 LICENSE.txt</div><div class="line">drwxrwxr-x. 2 hadoop hadoop  4096 Aug 21 22:50 logs</div><div class="line">-rw-r--r--. 1 hadoop hadoop 15915 Aug 21 02:13 NOTICE.txt</div><div class="line">-rw-r--r--. 1 hadoop hadoop  1366 Aug 21 02:13 README.txt</div><div class="line">drwxr-xr-x. 2 hadoop hadoop  4096 Aug 21 02:13 sbin</div><div class="line">drwxr-xr-x. 3 hadoop hadoop  4096 Aug 21 02:13 share</div></pre></td></tr></table></figure>
 <h4 id="設置環境變量"><a href="#設置環境變量" class="headerlink" title="設置環境變量"></a>設置環境變量</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 hadoop]<span class="comment"># vi /etc/profile</span></div><div class="line"><span class="built_in">export</span> HADOOP_HOME=/opt/software/hadoop</div><div class="line"><span class="built_in">export</span> PATH=<span class="variable">$HADOOP_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/sbin:<span class="variable">$PATH</span></div><div class="line">[root@hadoop-01 hadoop]<span class="comment"># source /etc/profile</span></div></pre></td></tr></table></figure>
 <h4 id="確認ssh-service狀態"><a href="#確認ssh-service狀態" class="headerlink" title="確認ssh service狀態"></a>確認ssh service狀態</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@hadoop-01 hadoop]<span class="comment"># service sshd status</span></div><div class="line">openssh-daemon (pid  2086) is running...</div><div class="line"><span class="comment">## 若非上述這種狀態，需進行排查</span></div></pre></td></tr></table></figure>
@@ -506,7 +506,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -528,7 +528,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
