@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://0x90e.github.io/nginx-installion/</loc>
+    <loc>https://0x90e.github.io/setup-elk-nvironment/</loc>
     
-    <lastmod>2018-01-21T17:32:39.158Z</lastmod>
+    <lastmod>2018-01-21T17:46:26.454Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://0x90e.github.io/elasticsearch-installion/</loc>
     
-    <lastmod>2018-01-10T16:48:04.120Z</lastmod>
+    <lastmod>2018-01-21T17:46:06.493Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0x90e.github.io/nginx-installion/</loc>
+    
+    <lastmod>2018-01-21T17:41:27.608Z</lastmod>
     
   </url>
   

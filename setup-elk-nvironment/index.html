@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="ElasticSearch,ELK,Logstash,Kibana," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Setup ELK(ElasticSearch、Logstash、Kibana) Environment 此文章描述如何建立ELK運行環境，以及如何啟動與使用。 ElasticSearch的安裝可以參考此篇文章  Basic Info OS: CentOS 7.3 Nginx Version: 1.8.0 ElasticSearch Version: 5.5.0 Logstash Version:">
+<meta name="keywords" content="ElasticSearch,ELK,Logstash,Kibana">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Setup ELK(ElasticSearch、Logstash、Kibana) Environment">
+<meta property="og:url" content="https://0x90e.github.io/setup-elk-nvironment/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Setup ELK(ElasticSearch、Logstash、Kibana) Environment 此文章描述如何建立ELK運行環境，以及如何啟動與使用。 ElasticSearch的安裝可以參考此篇文章  Basic Info OS: CentOS 7.3 Nginx Version: 1.8.0 ElasticSearch Version: 5.5.0 Logstash Version:">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0x90e.github.io/2018/01/22/setup_elk_nvironment/kibana_init.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/01/22/setup_elk_nvironment/kibana_set_pattern.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/01/22/setup_elk_nvironment/kibana_set_pattern_result.png">
+<meta property="og:updated_time" content="2018-01-21T17:46:26.454Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Setup ELK(ElasticSearch、Logstash、Kibana) Environment">
+<meta name="twitter:description" content="Setup ELK(ElasticSearch、Logstash、Kibana) Environment 此文章描述如何建立ELK運行環境，以及如何啟動與使用。 ElasticSearch的安裝可以參考此篇文章  Basic Info OS: CentOS 7.3 Nginx Version: 1.8.0 ElasticSearch Version: 5.5.0 Logstash Version:">
+<meta name="twitter:image" content="https://0x90e.github.io/2018/01/22/setup_elk_nvironment/kibana_init.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/setup-elk-nvironment/"/>
+
+
+
+
+
+  <title>Setup ELK(ElasticSearch、Logstash、Kibana) Environment | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/setup-elk-nvironment/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Setup ELK(ElasticSearch、Logstash、Kibana) Environment</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-22T01:35:39+08:00">
+                2018-01-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Setup-ELK-ElasticSearch、Logstash、Kibana-Environment"><a href="#Setup-ELK-ElasticSearch、Logstash、Kibana-Environment" class="headerlink" title="Setup ELK(ElasticSearch、Logstash、Kibana) Environment"></a>Setup ELK(ElasticSearch、Logstash、Kibana) Environment</h2><ul>
+<li>此文章描述如何建立ELK運行環境，以及如何啟動與使用。</li>
+<li>ElasticSearch的安裝可以參考<a href="https://0x90e.github.io/elasticsearch-installion" title="ElasticSearch Installion">此篇文章</a></li>
+</ul>
+<h3 id="Basic-Info"><a href="#Basic-Info" class="headerlink" title="Basic Info"></a>Basic Info</h3><ul>
+<li>OS: CentOS 7.3</li>
+<li>Nginx Version: 1.8.0</li>
+<li>ElasticSearch Version: 5.5.0</li>
+<li>Logstash Version: 5.5.0</li>
+<li>Kibana Version: 5.5.0</li>
+</ul>
+<a id="more"></a>
+<h3 id="Logstash-Installion"><a href="#Logstash-Installion" class="headerlink" title="Logstash Installion"></a>Logstash Installion</h3><h4 id="About-Logstash-Version"><a href="#About-Logstash-Version" class="headerlink" title="About Logstash Version"></a>About Logstash Version</h4><ul>
+<li><a href="https://www.elastic.co/downloads/logstash" title="The last version downloads" target="_blank" rel="external">The last version downloads</a></li>
+<li>Artifacts: <a href="https://artifacts.elastic.co/downloads/logstash/logstash-[version" target="_blank" rel="external">https://artifacts.elastic.co/downloads/logstash/logstash-[version</a> name].tar.gz<ul>
+<li>[version name]是Logstash的版本號</li>
+<li>例如5.5.0下載位置: <a href="https://artifacts.elastic.co/downloads/logstash/logstash-5.5.0.tar.gz" target="_blank" rel="external">https://artifacts.elastic.co/downloads/logstash/logstash-5.5.0.tar.gz</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="Install-Logstash"><a href="#Install-Logstash" class="headerlink" title="Install Logstash"></a>Install Logstash</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># cd /opt/software</span></div><div class="line">[root@localhost software]<span class="comment"># wget https://artifacts.elastic.co/downloads/logstash/logstash-5.5.0.tar.gz</span></div><div class="line">[root@localhost software]<span class="comment"># tar -zxvf logstash-5.5.0.tar.gz</span></div><div class="line">[root@localhost software]<span class="comment"># chown -R datacenter:datacenter logstash-5.5.0</span></div><div class="line"></div><div class="line">[root@localhost software]<span class="comment"># vim /etc/profile</span></div><div class="line"><span class="built_in">export</span> LOGSTASH_HOME=<span class="string">"/opt/software/logstash-5.5.0"</span></div><div class="line"><span class="built_in">export</span> PATH=<span class="string">"<span class="variable">$LOGSTASH_HOME</span>/bin:<span class="variable">$PATH</span>"</span></div><div class="line">[root@localhost software]<span class="comment"># source /etc/profile</span></div><div class="line"></div><div class="line">[root@localhost software]<span class="comment"># cd logstash-5.5.0</span></div><div class="line">[root@localhost logstash-5.5.0]<span class="comment"># ll</span></div><div class="line">total 180</div><div class="line">drwxr-xr-x 2 datacenter datacenter    205 Jan 11 00:25 bin</div><div class="line">-rw-r--r-- 1 datacenter datacenter 111573 Jun 30  2017 CHANGELOG.md</div><div class="line">drwxr-xr-x 2 datacenter datacenter     93 Jan 11 00:25 config</div><div class="line">-rw-r--r-- 1 datacenter datacenter   2249 Jun 30  2017 CONTRIBUTORS</div><div class="line">drwxr-xr-x 2 datacenter datacenter      6 Jun 30  2017 data</div><div class="line">-rw-r--r-- 1 datacenter datacenter   3874 Jun 30  2017 Gemfile</div><div class="line">-rw-r--r-- 1 datacenter datacenter  21427 Jun 30  2017 Gemfile.jruby-1.9.lock</div><div class="line">drwxr-xr-x 5 datacenter datacenter     65 Jan 11 00:25 lib</div><div class="line">-rw-r--r-- 1 datacenter datacenter    589 Jun 30  2017 LICENSE</div><div class="line">drwxr-xr-x 4 datacenter datacenter     84 Jan 11 00:25 logstash-core</div><div class="line">drwxr-xr-x 3 datacenter datacenter     57 Jan 11 00:25 logstash-core-plugin-api</div><div class="line">drwxr-xr-x 3 datacenter datacenter     40 Jan 11 00:25 modules</div><div class="line">-rw-r--r-- 1 datacenter datacenter  29345 Jun 30  2017 NOTICE.TXT</div><div class="line">drwxr-xr-x 3 datacenter datacenter     30 Jan 11 00:25 tools</div><div class="line">drwxr-xr-x 4 datacenter datacenter     33 Jan 11 00:25 vendor</div></pre></td></tr></table></figure>
+<h4 id="Configure-Logstash"><a href="#Configure-Logstash" class="headerlink" title="Configure Logstash"></a>Configure Logstash</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">## 新增config/logstash-nginx-access-log.conf</span></div><div class="line">[root@localhost logstash-5.5.0]<span class="comment"># vim config/logstash-nginx-access-log.conf</span></div><div class="line">    file &#123;</div><div class="line">        path =&gt; [<span class="string">"/usr/local/nginx/logs/access.log"</span>]</div><div class="line">        <span class="built_in">type</span> =&gt; <span class="string">"nginx_access"</span></div><div class="line">        start_position =&gt; <span class="string">"beginning"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">filter &#123;</div><div class="line">  grok &#123;</div><div class="line">    match =&gt; &#123;</div><div class="line">      <span class="string">"message"</span> =&gt; <span class="string">'%&#123;IPORHOST:remote_ip&#125; - %&#123;DATA:user_name&#125; \[%&#123;HTTPDATE:time&#125;\] "%&#123;WORD:request_action&#125; %&#123;DATA:request&#125; HTTP/%&#123;NUMBER:http_version&#125;" %&#123;NUMBER:response&#125; %&#123;NUMBER:bytes&#125; "%&#123;DATA:referrer&#125;" "%&#123;DATA:agent&#125;"'</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  date &#123;</div><div class="line">    match =&gt; [ <span class="string">"time"</span>, <span class="string">"dd/MMM/YYYY:HH:mm:ss Z"</span> ]</div><div class="line">    locale =&gt; en</div><div class="line">  &#125;&#125;</div><div class="line"></div><div class="line">output &#123;</div><div class="line">  elasticsearch &#123;</div><div class="line">        hosts =&gt; [<span class="string">"10.103.67.84:9200"</span>]</div><div class="line">        index =&gt; <span class="string">"logstash-nginx-access-log"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Kibana-Installation"><a href="#Kibana-Installation" class="headerlink" title="Kibana Installation"></a>Kibana Installation</h3><h4 id="About-Logstash-Version-1"><a href="#About-Logstash-Version-1" class="headerlink" title="About Logstash Version"></a>About Logstash Version</h4><ul>
+<li><a href="https://www.elastic.co/downloads/kibana" title="The last version downloads" target="_blank" rel="external">The last version downloads</a></li>
+<li>Artifacts: <a href="https://artifacts.elastic.co/downloads/kibana/kibana-[version" target="_blank" rel="external">https://artifacts.elastic.co/downloads/kibana/kibana-[version</a> name].tar.gz<ul>
+<li>[version name]是Logstash的版本號</li>
+<li>例如5.5.0下載位置: <a href="https://artifacts.elastic.co/downloads/kibana/kibana-5.5.0-linux-x86_64.tar.gz" target="_blank" rel="external">https://artifacts.elastic.co/downloads/kibana/kibana-5.5.0-linux-x86_64.tar.gz</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="Install-Kibana"><a href="#Install-Kibana" class="headerlink" title="Install Kibana"></a>Install Kibana</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># cd /opt/software</span></div><div class="line">[root@localhost software]<span class="comment"># wget https://artifacts.elastic.co/downloads/kibana/kibana-5.5.0-linux-x86_64.tar.gz</span></div><div class="line">[root@localhost software]<span class="comment"># tar -zxvf kibana-5.5.0-linux-x86_64.tar.gz</span></div><div class="line">[root@localhost software]<span class="comment"># chown -R datacenter:datacenter kibana-5.5.0-linux-x86_64</span></div><div class="line">[root@localhost software]<span class="comment"># vim /etc/profile</span></div><div class="line"><span class="built_in">export</span> KIBANA_HOME=<span class="string">"/opt/software/kibana-5.5.0-linux-x86_64"</span></div><div class="line"><span class="built_in">export</span> PATH=<span class="string">"<span class="variable">$KIBANA_HOME</span>/bin::<span class="variable">$PATH</span>"</span></div><div class="line">[root@localhost software]<span class="comment"># source /etc/profile</span></div><div class="line"></div><div class="line">[root@localhost software]<span class="comment"># cd kibana-5.5.0-linux-x86_64/</span></div><div class="line">[root@localhost kibana-5.5.0-linux-x86_64]<span class="comment"># ll</span></div><div class="line">total 836</div><div class="line">drwxr-xr-x   2 datacenter datacenter     41 Jun 30  2017 bin</div><div class="line">drwxrwxr-x   2 datacenter datacenter     24 Jun 30  2017 config</div><div class="line">drwxrwxr-x   2 datacenter datacenter      6 Jun 30  2017 data</div><div class="line">-rw-rw-r--   1 datacenter datacenter    562 Jun 30  2017 LICENSE.txt</div><div class="line">drwxrwxr-x   6 datacenter datacenter    108 Jun 30  2017 node</div><div class="line">drwxrwxr-x 620 datacenter datacenter  20480 Jun 30  2017 node_modules</div><div class="line">-rw-rw-r--   1 datacenter datacenter 800210 Jun 30  2017 NOTICE.txt</div><div class="line">drwxrwxr-x   3 datacenter datacenter     45 Jun 30  2017 optimize</div><div class="line">-rw-rw-r--   1 datacenter datacenter    721 Jun 30  2017 package.json</div><div class="line">drwxrwxr-x   2 datacenter datacenter      6 Jun 30  2017 plugins</div><div class="line">-rw-rw-r--   1 datacenter datacenter   4909 Jun 30  2017 README.txt</div><div class="line">drwxr-xr-x  11 datacenter datacenter    139 Jun 30  2017 src</div><div class="line">drwxrwxr-x   5 datacenter datacenter     52 Jun 30  2017 ui_framework</div><div class="line">drwxr-xr-x   2 datacenter datacenter    309 Jun 30  2017 webpackShims</div></pre></td></tr></table></figure>
+<h4 id="Configure-Kibana"><a href="#Configure-Kibana" class="headerlink" title="Configure Kibana"></a>Configure Kibana</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@localhost kibana-5.5.0-linux-x86_64]<span class="comment"># vim config/kibana.yml</span></div><div class="line"><span class="comment"># Specifies the address to which the Kibana server will bind. IP addresses and host names are both valid values.</span></div><div class="line"><span class="comment"># The default is 'localhost', which usually means remote machines will not be able to connect.</span></div><div class="line"><span class="comment"># To allow connections from remote users, set this parameter to a non-loopback address.</span></div><div class="line">server.host: <span class="string">"10.103.67.84"</span></div><div class="line"></div><div class="line"><span class="comment"># The URL of the Elasticsearch instance to use for all your queries.</span></div><div class="line">elasticsearch.url: <span class="string">"http://10.103.67.84:9200"</span></div></pre></td></tr></table></figure>
+<h3 id="Start-ELK-Process"><a href="#Start-ELK-Process" class="headerlink" title="Start ELK Process"></a>Start ELK Process</h3><h4 id="Set-Nginx-Log-Format-and-Start-Nginx"><a href="#Set-Nginx-Log-Format-and-Start-Nginx" class="headerlink" title="Set Nginx Log Format and Start Nginx"></a>Set Nginx Log Format and Start Nginx</h4><ul>
+<li>使用Nginx作為Logstash的輸入，Nginx環境安裝可以參考<a href="https://0x90e.github.io/nginx-installion/" title="Nginx Installion">此篇文章</a></li>
+<li>將Nginx輸出Log的格式指定爲Logstash可以接受的格式<ul>
+<li>對應logstash-nginx-access-log.conf中的match</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># vim $NGINX_HOME/conf/nginx.conf</span></div><div class="line"><span class="comment">## 就下列注釋的設定開啓</span></div><div class="line">    log_format  main  <span class="string">'$remote_addr - $remote_user [$time_local] "$request" '</span></div><div class="line">                      <span class="string">'$status $body_bytes_sent "$http_referer" '</span></div><div class="line">                      <span class="string">'"$http_user_agent" "$http_x_forwarded_for"'</span>;</div><div class="line"></div><div class="line">    access_log  logs/access.log  main;</div><div class="line"></div><div class="line"><span class="comment">## 使用root啓動Nginx</span></div><div class="line">[root@localhost ~]<span class="comment"># nginx</span></div><div class="line"><span class="comment">## 使用瀏覽器訪問 http://[IP]</span></div><div class="line">[root@localhost ~]<span class="comment"># tail -F $NGINX_HOME/logs/access.log</span></div><div class="line">10.50.129.66 - - [11/Jan/2018:01:31:14 -0800] <span class="string">"GET / HTTP/1.0"</span> 304 0 <span class="string">"-"</span> <span class="string">"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36"</span> <span class="string">"10.103.67.80"</span></div><div class="line">10.50.129.66 - - [11/Jan/2018:01:32:27 -0800] <span class="string">"GET / HTTP/1.0"</span> 304 0 <span class="string">"-"</span> <span class="string">"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36"</span> <span class="string">"10.103.67.80"</span></div></pre></td></tr></table></figure>
+<h4 id="Start-ElasticSearch"><a href="#Start-ElasticSearch" class="headerlink" title="Start ElasticSearch"></a>Start ElasticSearch</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">## 使用一般user啓動ElasticSearch</span></div><div class="line">[datacenter@localhost ~]$ elasticsearch</div><div class="line"><span class="comment">## ...</span></div><div class="line">[2018-01-11T00:43:54,299][INFO ][o.e.n.Node               ] [es_001_168] initialized</div><div class="line">[2018-01-11T00:43:54,300][INFO ][o.e.n.Node               ] [es_001_168] starting ...</div><div class="line">[2018-01-11T00:43:54,605][INFO ][o.e.t.TransportService   ] [es_001_168] publish_address &#123;10.103.67.84:9300&#125;, bound_addresses &#123;10.103.67.84:9300&#125;</div><div class="line">[2018-01-11T00:43:54,621][INFO ][o.e.b.BootstrapChecks    ] [es_001_168] bound or publishing to a non-loopback or non-link-local address, enforcing bootstrap checks</div><div class="line">[2018-01-11T00:43:57,669][INFO ][o.e.c.s.ClusterService   ] [es_001_168] new_master &#123;es_001_168&#125;&#123;1_CXoUhGTIOrcYEoFg-3lA&#125;&#123;CLazd0x-STKi4gEktJLmvA&#125;&#123;10.103.67.84&#125;&#123;10.103.67.84:9300&#125;, reason: zen-disco-elected-as-master ([0] nodes joined)</div><div class="line">[2018-01-11T00:43:57,733][INFO ][o.e.h.n.Netty4HttpServerTransport] [es_001_168] publish_address &#123;10.103.67.84:9200&#125;, bound_addresses &#123;10.103.67.84:9200&#125;</div><div class="line">[2018-01-11T00:43:57,733][INFO ][o.e.n.Node               ] [es_001_168] started</div><div class="line">[2018-01-11T00:43:57,740][INFO ][o.e.g.GatewayService     ] [es_001_168] recovered [0] indices into cluster_state</div><div class="line">[2018-01-11T00:45:19,924][INFO ][o.e.c.m.MetaDataCreateIndexService] [es_001_168] [logstash-nginx-access-log] creating index, cause [auto(bulk api)], templates [logstash], shards [5]/[1], mappings [_default_]</div><div class="line">[2018-01-11T00:45:20,174][INFO ][o.e.c.m.MetaDataMappingService] [es_001_168] [logstash-nginx-access-log/x6oK1CEwTRu2SM5jNSBjdg] create_mapping [nginx_access]</div></pre></td></tr></table></figure>
+<h4 id="Start-Logstash"><a href="#Start-Logstash" class="headerlink" title="Start Logstash"></a>Start Logstash</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">## 使用一般user啓動Logstash</span></div><div class="line">[datacenter@localhost ~]$ logstash -f <span class="variable">$LOGSTASH_HOME</span>/config/logstash-nginx-access-log.conf</div><div class="line">ERROR StatusLogger No log4j2 configuration file found. Using default configuration: logging only errors to the console.</div><div class="line">Sending Logstash<span class="string">'s logs to /opt/software/logstash-5.5.0/logs which is now configured via log4j2.properties</span></div><div class="line"><span class="string">[2018-01-11T00:52:41,667][INFO ][logstash.outputs.elasticsearch] Elasticsearch pool URLs updated &#123;:changes=&gt;&#123;:removed=&gt;[], :added=&gt;[http://10.103.67.84:9200/]&#125;&#125;</span></div><div class="line"><span class="string">[2018-01-11T00:52:41,673][INFO ][logstash.outputs.elasticsearch] Running health check to see if an Elasticsearch connection is working &#123;:healthcheck_url=&gt;http://10.103.67.84:9200/, :path=&gt;"/"&#125;</span></div><div class="line"><span class="string">[2018-01-11T00:52:41,806][WARN ][logstash.outputs.elasticsearch] Restored connection to ES instance &#123;:url=&gt;#&lt;Java::JavaNet::URI:0x178f59c9&gt;&#125;</span></div><div class="line"><span class="string">[2018-01-11T00:52:41,807][INFO ][logstash.outputs.elasticsearch] Using mapping template from &#123;:path=&gt;nil&#125;</span></div><div class="line"><span class="string">[2018-01-11T00:52:41,888][INFO ][logstash.outputs.elasticsearch] Attempting to install template &#123;:manage_template=&gt;&#123;"template"=&gt;"logstash-*", "version"=&gt;50001, "settings"=&gt;&#123;"index.refresh_interval"=&gt;"5s"&#125;, "mappings"=&gt;&#123;"_default_"=&gt;&#123;"_all"=&gt;&#123;"enabled"=&gt;true, "norms"=&gt;false&#125;, "dynamic_templates"=&gt;[&#123;"message_field"=&gt;&#123;"path_match"=&gt;"message", "match_mapping_type"=&gt;"string", "mapping"=&gt;&#123;"type"=&gt;"text", "norms"=&gt;false&#125;&#125;&#125;, &#123;"string_fields"=&gt;&#123;"match"=&gt;"*", "match_mapping_type"=&gt;"string", "mapping"=&gt;&#123;"type"=&gt;"text", "norms"=&gt;false, "fields"=&gt;&#123;"keyword"=&gt;&#123;"type"=&gt;"keyword", "ignore_above"=&gt;256&#125;&#125;&#125;&#125;&#125;], "properties"=&gt;&#123;"@timestamp"=&gt;&#123;"type"=&gt;"date", "include_in_all"=&gt;false&#125;, "@version"=&gt;&#123;"type"=&gt;"keyword", "include_in_all"=&gt;false&#125;, "geoip"=&gt;&#123;"dynamic"=&gt;true, "properties"=&gt;&#123;"ip"=&gt;&#123;"type"=&gt;"ip"&#125;, "location"=&gt;&#123;"type"=&gt;"geo_point"&#125;, "latitude"=&gt;&#123;"type"=&gt;"half_float"&#125;, "longitude"=&gt;&#123;"type"=&gt;"half_float"&#125;&#125;&#125;&#125;&#125;&#125;&#125;&#125;</span></div><div class="line"><span class="string">[2018-01-11T00:52:41,899][INFO ][logstash.outputs.elasticsearch] New Elasticsearch output &#123;:class=&gt;"LogStash::Outputs::ElasticSearch", :hosts=&gt;[#&lt;Java::JavaNet::URI:0x205413cf&gt;]&#125;</span></div><div class="line"><span class="string">[2018-01-11T00:52:41,967][INFO ][logstash.pipeline        ] Starting pipeline &#123;"id"=&gt;"main", "pipeline.workers"=&gt;4, "pipeline.batch.size"=&gt;125, "pipeline.batch.delay"=&gt;5, "pipeline.max_inflight"=&gt;500&#125;</span></div><div class="line"><span class="string">[2018-01-11T00:52:42,174][INFO ][logstash.pipeline        ] Pipeline main started</span></div><div class="line"><span class="string">[2018-01-11T00:52:42,241][INFO ][logstash.agent           ] Successfully started Logstash API endpoint &#123;:port=&gt;9600&#125;</span></div></pre></td></tr></table></figure>
+<h4 id="Start-Kibana"><a href="#Start-Kibana" class="headerlink" title="Start Kibana"></a>Start Kibana</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[datacenter@localhost ~]$ kibana</div><div class="line">  <span class="built_in">log</span>   [09:02:44.070] [info][status][plugin:kibana@5.5.0] Status changed from uninitialized to green - Ready</div><div class="line">  <span class="built_in">log</span>   [09:02:44.126] [info][status][plugin:elasticsearch@5.5.0] Status changed from uninitialized to yellow - Waiting <span class="keyword">for</span> Elasticsearch</div><div class="line">  <span class="built_in">log</span>   [09:02:44.144] [info][status][plugin:console@5.5.0] Status changed from uninitialized to green - Ready</div><div class="line">  <span class="built_in">log</span>   [09:02:44.158] [info][status][plugin:metrics@5.5.0] Status changed from uninitialized to green - Ready</div><div class="line">  <span class="built_in">log</span>   [09:02:44.354] [info][status][plugin:timelion@5.5.0] Status changed from uninitialized to green - Ready</div><div class="line">  <span class="built_in">log</span>   [09:02:44.358] [info][listening] Server running at http://10.103.67.84:5601</div><div class="line">  <span class="built_in">log</span>   [09:02:44.359] [info][status][ui settings] Status changed from uninitialized to yellow - Elasticsearch plugin is yellow</div><div class="line">  <span class="built_in">log</span>   [09:02:49.400] [info][status][plugin:elasticsearch@5.5.0] Status changed from yellow to yellow - No existing Kibana index found</div><div class="line">  <span class="built_in">log</span>   [09:02:49.870] [info][status][plugin:elasticsearch@5.5.0] Status changed from yellow to green - Kibana index ready</div><div class="line">  <span class="built_in">log</span>   [09:02:49.872] [info][status][ui settings] Status changed from yellow to green - Ready</div></pre></td></tr></table></figure>
+<h4 id="Kibana-Web-UI"><a href="#Kibana-Web-UI" class="headerlink" title="Kibana Web UI"></a>Kibana Web UI</h4><ul>
+<li>Kibana initialization web</li>
+</ul>
+<img src="/2018/01/22/setup_elk_nvironment/kibana_init.png" width="700">
+<ul>
+<li><p>Kibana set pattern web</p>
+<img src="/2018/01/22/setup_elk_nvironment/kibana_set_pattern.png" width="700">
+</li>
+<li><p>Kibana index pattern web</p>
+<img src="/2018/01/22/setup_elk_nvironment/kibana_set_pattern_result.png" width="700"></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ElasticSearch/" rel="tag"># ElasticSearch</a>
+          
+            <a href="/tags/ELK/" rel="tag"># ELK</a>
+          
+            <a href="/tags/Logstash/" rel="tag"># Logstash</a>
+          
+            <a href="/tags/Kibana/" rel="tag"># Kibana</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/nginx-installion/" rel="next" title="Nginx Installion">
+                <i class="fa fa-chevron-left"></i> Nginx Installion
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Setup-ELK-ElasticSearch、Logstash、Kibana-Environment"><span class="nav-number">1.</span> <span class="nav-text">Setup ELK(ElasticSearch、Logstash、Kibana) Environment</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-Info"><span class="nav-number">1.1.</span> <span class="nav-text">Basic Info</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logstash-Installion"><span class="nav-number">1.2.</span> <span class="nav-text">Logstash Installion</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#About-Logstash-Version"><span class="nav-number">1.2.1.</span> <span class="nav-text">About Logstash Version</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Install-Logstash"><span class="nav-number">1.2.2.</span> <span class="nav-text">Install Logstash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Configure-Logstash"><span class="nav-number">1.2.3.</span> <span class="nav-text">Configure Logstash</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kibana-Installation"><span class="nav-number">1.3.</span> <span class="nav-text">Kibana Installation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#About-Logstash-Version-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">About Logstash Version</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Install-Kibana"><span class="nav-number">1.3.2.</span> <span class="nav-text">Install Kibana</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Configure-Kibana"><span class="nav-number">1.3.3.</span> <span class="nav-text">Configure Kibana</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Start-ELK-Process"><span class="nav-number">1.4.</span> <span class="nav-text">Start ELK Process</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Set-Nginx-Log-Format-and-Start-Nginx"><span class="nav-number">1.4.1.</span> <span class="nav-text">Set Nginx Log Format and Start Nginx</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Start-ElasticSearch"><span class="nav-number">1.4.2.</span> <span class="nav-text">Start ElasticSearch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Start-Logstash"><span class="nav-number">1.4.3.</span> <span class="nav-text">Start Logstash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Start-Kibana"><span class="nav-number">1.4.4.</span> <span class="nav-text">Start Kibana</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Kibana-Web-UI"><span class="nav-number">1.4.5.</span> <span class="nav-text">Kibana Web UI</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
