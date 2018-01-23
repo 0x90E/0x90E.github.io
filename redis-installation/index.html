@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Redis," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="http://blog.csdn.net/ludonqin/article/details/47211109 Redis InstallationBasic Info OS: CentOS: 7.3 Redis Version: 4.0.6">
+<meta name="keywords" content="Redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis Installation">
+<meta property="og:url" content="https://0x90e.github.io/redis-installation/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="http://blog.csdn.net/ludonqin/article/details/47211109 Redis InstallationBasic Info OS: CentOS: 7.3 Redis Version: 4.0.6">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-01-23T17:02:25.325Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis Installation">
+<meta name="twitter:description" content="http://blog.csdn.net/ludonqin/article/details/47211109 Redis InstallationBasic Info OS: CentOS: 7.3 Redis Version: 4.0.6">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/redis-installation/"/>
+
+
+
+
+
+  <title>Redis Installation | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/redis-installation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Redis Installation</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-23T23:45:54+08:00">
+                2018-01-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Misc/" itemprop="url" rel="index">
+                    <span itemprop="name">Misc</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="http://blog.csdn.net/ludonqin/article/details/47211109" target="_blank" rel="external">http://blog.csdn.net/ludonqin/article/details/47211109</a></p>
+<h2 id="Redis-Installation"><a href="#Redis-Installation" class="headerlink" title="Redis Installation"></a>Redis Installation</h2><h3 id="Basic-Info"><a href="#Basic-Info" class="headerlink" title="Basic Info"></a>Basic Info</h3><ul>
+<li>OS: CentOS: 7.3</li>
+<li>Redis Version: 4.0.6</li>
+</ul>
+<a id="more"></a>
+<h3 id="Install-Redis"><a href="#Install-Redis" class="headerlink" title="Install Redis"></a>Install Redis</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># cd /opt/software</span></div><div class="line"><span class="comment">## You can also can download Redis on https://redis.io/</span></div><div class="line">[root@localhost software]<span class="comment"># wget http://download.redis.io/redis-stable.tar.gz</span></div><div class="line">[root@localhost software]<span class="comment"># tar -zxvf redis-stable.tar.gz</span></div><div class="line">[root@localhost software]<span class="comment"># cd redis-stable/</span></div><div class="line">[root@localhost redis-stable]<span class="comment"># ll</span></div><div class="line">total 280</div><div class="line">-rw-r--r--  1 root root 142334 Dec  4 09:01 00-RELEASENOTES</div><div class="line">-rw-r--r--  1 root root     53 Dec  4 09:01 BUGS</div><div class="line">-rw-r--r--  1 root root   1815 Dec  4 09:01 CONTRIBUTING</div><div class="line">-rw-r--r--  1 root root   1487 Dec  4 09:01 COPYING</div><div class="line">drwxr-xr-x  6 root root    124 Dec  4 09:01 deps</div><div class="line">-rw-r--r--  1 root root     11 Dec  4 09:01 INSTALL</div><div class="line">-rw-r--r--  1 root root    151 Dec  4 09:01 Makefile</div><div class="line">-rw-r--r--  1 root root   4223 Dec  4 09:01 MANIFESTO</div><div class="line">-rw-r--r--  1 root root  20543 Dec  4 09:01 README.md</div><div class="line">-rw-r--r--  1 root root  57764 Dec  4 09:01 redis.conf</div><div class="line">-rwxr-xr-x  1 root root    271 Dec  4 09:01 runtest</div><div class="line">-rwxr-xr-x  1 root root    280 Dec  4 09:01 runtest-cluster</div><div class="line">-rwxr-xr-x  1 root root    281 Dec  4 09:01 runtest-sentinel</div><div class="line">-rw-r--r--  1 root root   7606 Dec  4 09:01 sentinel.conf</div><div class="line">drwxr-xr-x  3 root root   4096 Dec  4 09:01 src</div><div class="line">drwxr-xr-x 10 root root    167 Dec  4 09:01 tests</div><div class="line">drwxr-xr-x  8 root root   4096 Dec  4 09:01 utils</div><div class="line"></div><div class="line">[root@localhost redis-stable]<span class="comment"># make</span></div><div class="line"><span class="comment">## ...</span></div><div class="line">    LINK redis-server</div><div class="line">    INSTALL redis-sentinel</div><div class="line">    CC redis-cli.o</div><div class="line">    LINK redis-cli</div><div class="line">    CC redis-benchmark.o</div><div class="line">    LINK redis-benchmark</div><div class="line">    INSTALL redis-check-rdb</div><div class="line">    INSTALL redis-check-aof</div><div class="line"></div><div class="line">Hint: Its a good idea to run make <span class="built_in">test</span> ;)</div><div class="line"></div><div class="line">make[1]: Leaving directory /opt/software/redis-stable/src</div><div class="line"></div><div class="line">[root@localhost redis-stable]<span class="comment"># make install</span></div><div class="line"><span class="built_in">cd</span> src &amp;&amp; make install</div><div class="line">make[1]: Entering directory /opt/software/redis-stable/src</div><div class="line">    CC Makefile.dep</div><div class="line">make[1]: Leaving directory /opt/software/redis-stable/src</div><div class="line">make[1]: Entering directory /opt/software/redis-stable/src</div><div class="line"></div><div class="line">Hint: Its a good idea to run make <span class="built_in">test</span> ;)</div><div class="line"></div><div class="line">    INSTALL install</div><div class="line">    INSTALL install</div><div class="line">    INSTALL install</div><div class="line">    INSTALL install</div><div class="line">    INSTALL install</div><div class="line">make[1]: Leaving directory /opt/software/redis-stable/src</div><div class="line"></div><div class="line"><span class="comment">## 執行安裝後，/usr/local/bin會有Redis執行所需的二進制檔案</span></div><div class="line">[root@localhost redis-stable]<span class="comment"># ll /usr/local/bin | grep redis</span></div><div class="line">total 22108</div><div class="line">-rwxr-xr-x 1 root root 2450856 Jan 22 22:48 redis-benchmark</div><div class="line">-rwxr-xr-x 1 root root 5752656 Jan 22 22:48 redis-check-aof</div><div class="line">-rwxr-xr-x 1 root root 5752656 Jan 22 22:48 redis-check-rdb</div><div class="line">-rwxr-xr-x 1 root root 2616056 Jan 22 22:48 redis-cli</div><div class="line">lrwxrwxrwx 1 root root      12 Jan 22 22:48 redis-sentinel -&gt; redis-server</div><div class="line">-rwxr-xr-x 1 root root 5752656 Jan 22 22:48 redis-server</div></pre></td></tr></table></figure>
+<h4 id="Binary-File-Description"><a href="#Binary-File-Description" class="headerlink" title="Binary File Description"></a>Binary File Description</h4><ul>
+<li>redis-server：Redis服務端啟動程式</li>
+<li>redis-cli：Redis客戶端操作工具</li>
+<li>redis-benchmark：Redis性能測試工具</li>
+<li>redis-check-aof：數據修復工具</li>
+<li>redis-check-dump：檢查導出工具</li>
+</ul>
+<h3 id="Configure-Redis"><a href="#Configure-Redis" class="headerlink" title="Configure Redis"></a>Configure Redis</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">[root@localhost redis-stable]<span class="comment"># cd ..</span></div><div class="line"><span class="comment">## 創建Redis執行時所需的資料夾</span></div><div class="line">[root@localhost software]<span class="comment"># mkdir redis</span></div><div class="line">[root@localhost software]<span class="comment"># cd redis</span></div><div class="line">[root@localhost redis]<span class="comment"># mkdir data log run conf</span></div><div class="line"></div><div class="line"><span class="comment">## 配置Redis執行時的conf文件</span></div><div class="line">[root@localhost redis]<span class="comment"># cp ../redis-stable/redis.conf ./conf/redis_6379.conf</span></div><div class="line">[root@localhost redis]<span class="comment"># vim conf/redis_6379.conf</span></div><div class="line"><span class="comment">## ...</span></div><div class="line"><span class="comment"># Creating a pid file is best effort: if Redis is not able to create it</span></div><div class="line"><span class="comment"># nothing bad happens, the server will start and run normally.</span></div><div class="line">pidfile /opt/software/redis/run/redis_6379.pid</div><div class="line"></div><div class="line"><span class="comment">## ...</span></div><div class="line"></div><div class="line"><span class="comment"># The working directory.</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># The DB will be written inside this directory, with the filename specified</span></div><div class="line"><span class="comment"># above using the 'dbfilename' configuration directive.</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># The Append Only File will also be created inside this directory.</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># Note that you must specify a directory here, not a file name.</span></div><div class="line">dir /opt/software/redis/data</div><div class="line"></div><div class="line"><span class="comment">## ...</span></div><div class="line"><span class="comment"># Specify the log file name. Also the empty string can be used to force</span></div><div class="line"><span class="comment"># Redis to log on the standard output. Note that if you use standard</span></div><div class="line"><span class="comment"># output for logging but daemonize, logs will be sent to /dev/null</span></div><div class="line">logfile /opt/software/redis/<span class="built_in">log</span>/redis.log</div><div class="line"></div><div class="line"><span class="comment">## ...</span></div><div class="line"><span class="comment"># By default Redis does not run as a daemon. Use 'yes' if you need it.</span></div><div class="line"><span class="comment"># Note that Redis will write a pid file in /var/run/redis.pid when daemonized.</span></div><div class="line">daemonize yes</div></pre></td></tr></table></figure>
+<h3 id="Set-Redis-as-Service"><a href="#Set-Redis-as-Service" class="headerlink" title="Set Redis as Service"></a>Set Redis as Service</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">[root@localhost redis]<span class="comment"># cd ../redis-stable/</span></div><div class="line">[root@localhost redis-stable]<span class="comment"># cp ./utils/redis_init_script /etc/init.d/redis</span></div><div class="line">[root@localhost redis-stable]<span class="comment"># cd /etc/init.d</span></div><div class="line">[root@localhost init.d]<span class="comment"># vim redis</span></div><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"><span class="comment"># Add this for solving the error message "service redis does not support chkconfig"</span></div><div class="line"><span class="comment"># chkconfig:   2345 90 10</span></div><div class="line"><span class="comment"># description:  Redis is a persistent key-value database</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># Simple Redis init.d script conceived to work on Linux systems</span></div><div class="line"><span class="comment"># as it does use of the /proc filesystem.</span></div><div class="line"></div><div class="line">REDISPORT=6379</div><div class="line">EXEC=/usr/<span class="built_in">local</span>/bin/redis-server</div><div class="line">CLIEXEC=/usr/<span class="built_in">local</span>/bin/redis-cli</div><div class="line"></div><div class="line"><span class="comment">## 對應先前設定Redis Configuration路徑</span></div><div class="line">PIDFILE=/opt/software/redis/run/redis_<span class="variable">$&#123;REDISPORT&#125;</span>.pid</div><div class="line">CONF=<span class="string">"/opt/software/redis/conf/redis_<span class="variable">$&#123;REDISPORT&#125;</span>.conf"</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">## Test the settings is okay or not</span></div><div class="line">[root@localhost init.d]<span class="comment"># service redis start</span></div><div class="line">Starting Redis server...</div></pre></td></tr></table></figure>
+<h3 id="Set-Redis-as-Auto-start-Services-on-Boot"><a href="#Set-Redis-as-Auto-start-Services-on-Boot" class="headerlink" title="Set Redis as Auto-start Services on Boot"></a>Set Redis as Auto-start Services on Boot</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">## if occur error message "service redis does not support chkconfig", add the chkconfig description in file named redis</span></div><div class="line">[root@localhost init.d]<span class="comment"># chkconfig redis on</span></div><div class="line"></div><div class="line"><span class="comment">## Reboot system for testing the auto-start settings</span></div><div class="line"><span class="comment">## Use ps command to check Redis service running state</span></div><div class="line">[datacenter@localhost ~]$ ps -aux | grep redis</div><div class="line">root        998  0.1  0.1 145248  7548 ?        Ssl  01:44   0:00 /usr/<span class="built_in">local</span>/bin/redis-server 127.0.0.1:6379</div><div class="line">datacen+   2759  0.0  0.0 112652  1004 pts/1    S+   01:46   0:00 grep --color=auto redis</div></pre></td></tr></table></figure>
+<h3 id="Use-Redis-Client"><a href="#Use-Redis-Client" class="headerlink" title="Use Redis Client"></a>Use Redis Client</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[datacenter@localhost ~]$ redis-cli </div><div class="line">127.0.0.1:6379&gt; <span class="built_in">help</span></div><div class="line">redis-cli 4.0.6</div><div class="line">To get <span class="built_in">help</span> about Redis commands <span class="built_in">type</span>:</div><div class="line">      <span class="string">"help @&lt;group&gt;"</span> to get a list of commands <span class="keyword">in</span> &lt;group&gt;</div><div class="line">      <span class="string">"help &lt;command&gt;"</span> <span class="keyword">for</span> <span class="built_in">help</span> on &lt;<span class="built_in">command</span>&gt;</div><div class="line">      <span class="string">"help &lt;tab&gt;"</span> to get a list of possible <span class="built_in">help</span> topics</div><div class="line">      <span class="string">"quit"</span> to <span class="built_in">exit</span></div><div class="line"></div><div class="line">To <span class="built_in">set</span> redis-cli preferences:</div><div class="line">      <span class="string">":set hints"</span> <span class="built_in">enable</span> online hints</div><div class="line">      <span class="string">":set nohints"</span> <span class="built_in">disable</span> online hints</div><div class="line">Set your preferences <span class="keyword">in</span> ~/.redisclirc</div><div class="line">127.0.0.1:6379&gt;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Redis/" rel="tag"># Redis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/setup-elk-nvironment/" rel="next" title="Setup ELK(ElasticSearch、Logstash、Kibana) Environment">
+                <i class="fa fa-chevron-left"></i> Setup ELK(ElasticSearch、Logstash、Kibana) Environment
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-Installation"><span class="nav-number">1.</span> <span class="nav-text">Redis Installation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-Info"><span class="nav-number">1.1.</span> <span class="nav-text">Basic Info</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Install-Redis"><span class="nav-number">1.2.</span> <span class="nav-text">Install Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Binary-File-Description"><span class="nav-number">1.2.1.</span> <span class="nav-text">Binary File Description</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Configure-Redis"><span class="nav-number">1.3.</span> <span class="nav-text">Configure Redis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set-Redis-as-Service"><span class="nav-number">1.4.</span> <span class="nav-text">Set Redis as Service</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set-Redis-as-Auto-start-Services-on-Boot"><span class="nav-number">1.5.</span> <span class="nav-text">Set Redis as Auto-start Services on Boot</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Use-Redis-Client"><span class="nav-number">1.6.</span> <span class="nav-text">Use Redis Client</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

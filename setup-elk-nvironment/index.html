@@ -86,7 +86,7 @@
 <meta property="og:image" content="https://0x90e.github.io/2018/01/22/setup_elk_nvironment/kibana_init.png">
 <meta property="og:image" content="https://0x90e.github.io/2018/01/22/setup_elk_nvironment/kibana_set_pattern.png">
 <meta property="og:image" content="https://0x90e.github.io/2018/01/22/setup_elk_nvironment/kibana_set_pattern_result.png">
-<meta property="og:updated_time" content="2018-01-21T17:46:26.454Z">
+<meta property="og:updated_time" content="2018-01-23T15:47:30.698Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Setup ELK(ElasticSearch、Logstash、Kibana) Environment">
 <meta name="twitter:description" content="Setup ELK(ElasticSearch、Logstash、Kibana) Environment 此文章描述如何建立ELK運行環境，以及如何啟動與使用。 ElasticSearch的安裝可以參考此篇文章  Basic Info OS: CentOS 7.3 Nginx Version: 1.8.0 ElasticSearch Version: 5.5.0 Logstash Version:">
@@ -358,7 +358,7 @@
       
         <h2 id="Setup-ELK-ElasticSearch、Logstash、Kibana-Environment"><a href="#Setup-ELK-ElasticSearch、Logstash、Kibana-Environment" class="headerlink" title="Setup ELK(ElasticSearch、Logstash、Kibana) Environment"></a>Setup ELK(ElasticSearch、Logstash、Kibana) Environment</h2><ul>
 <li>此文章描述如何建立ELK運行環境，以及如何啟動與使用。</li>
-<li>ElasticSearch的安裝可以參考<a href="https://0x90e.github.io/elasticsearch-installion" title="ElasticSearch Installion">此篇文章</a></li>
+<li>ElasticSearch的安裝可以參考<a href="https://0x90e.github.io/elasticsearch-Installation" title="ElasticSearch Installation">此篇文章</a></li>
 </ul>
 <h3 id="Basic-Info"><a href="#Basic-Info" class="headerlink" title="Basic Info"></a>Basic Info</h3><ul>
 <li>OS: CentOS 7.3</li>
@@ -368,7 +368,7 @@
 <li>Kibana Version: 5.5.0</li>
 </ul>
 <a id="more"></a>
-<h3 id="Logstash-Installion"><a href="#Logstash-Installion" class="headerlink" title="Logstash Installion"></a>Logstash Installion</h3><h4 id="About-Logstash-Version"><a href="#About-Logstash-Version" class="headerlink" title="About Logstash Version"></a>About Logstash Version</h4><ul>
+<h3 id="Logstash-Installation"><a href="#Logstash-Installation" class="headerlink" title="Logstash Installation"></a>Logstash Installation</h3><h4 id="About-Logstash-Version"><a href="#About-Logstash-Version" class="headerlink" title="About Logstash Version"></a>About Logstash Version</h4><ul>
 <li><a href="https://www.elastic.co/downloads/logstash" title="The last version downloads" target="_blank" rel="external">The last version downloads</a></li>
 <li>Artifacts: <a href="https://artifacts.elastic.co/downloads/logstash/logstash-[version" target="_blank" rel="external">https://artifacts.elastic.co/downloads/logstash/logstash-[version</a> name].tar.gz<ul>
 <li>[version name]是Logstash的版本號</li>
@@ -389,7 +389,7 @@
 <h4 id="Install-Kibana"><a href="#Install-Kibana" class="headerlink" title="Install Kibana"></a>Install Kibana</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># cd /opt/software</span></div><div class="line">[root@localhost software]<span class="comment"># wget https://artifacts.elastic.co/downloads/kibana/kibana-5.5.0-linux-x86_64.tar.gz</span></div><div class="line">[root@localhost software]<span class="comment"># tar -zxvf kibana-5.5.0-linux-x86_64.tar.gz</span></div><div class="line">[root@localhost software]<span class="comment"># chown -R datacenter:datacenter kibana-5.5.0-linux-x86_64</span></div><div class="line">[root@localhost software]<span class="comment"># vim /etc/profile</span></div><div class="line"><span class="built_in">export</span> KIBANA_HOME=<span class="string">"/opt/software/kibana-5.5.0-linux-x86_64"</span></div><div class="line"><span class="built_in">export</span> PATH=<span class="string">"<span class="variable">$KIBANA_HOME</span>/bin::<span class="variable">$PATH</span>"</span></div><div class="line">[root@localhost software]<span class="comment"># source /etc/profile</span></div><div class="line"></div><div class="line">[root@localhost software]<span class="comment"># cd kibana-5.5.0-linux-x86_64/</span></div><div class="line">[root@localhost kibana-5.5.0-linux-x86_64]<span class="comment"># ll</span></div><div class="line">total 836</div><div class="line">drwxr-xr-x   2 datacenter datacenter     41 Jun 30  2017 bin</div><div class="line">drwxrwxr-x   2 datacenter datacenter     24 Jun 30  2017 config</div><div class="line">drwxrwxr-x   2 datacenter datacenter      6 Jun 30  2017 data</div><div class="line">-rw-rw-r--   1 datacenter datacenter    562 Jun 30  2017 LICENSE.txt</div><div class="line">drwxrwxr-x   6 datacenter datacenter    108 Jun 30  2017 node</div><div class="line">drwxrwxr-x 620 datacenter datacenter  20480 Jun 30  2017 node_modules</div><div class="line">-rw-rw-r--   1 datacenter datacenter 800210 Jun 30  2017 NOTICE.txt</div><div class="line">drwxrwxr-x   3 datacenter datacenter     45 Jun 30  2017 optimize</div><div class="line">-rw-rw-r--   1 datacenter datacenter    721 Jun 30  2017 package.json</div><div class="line">drwxrwxr-x   2 datacenter datacenter      6 Jun 30  2017 plugins</div><div class="line">-rw-rw-r--   1 datacenter datacenter   4909 Jun 30  2017 README.txt</div><div class="line">drwxr-xr-x  11 datacenter datacenter    139 Jun 30  2017 src</div><div class="line">drwxrwxr-x   5 datacenter datacenter     52 Jun 30  2017 ui_framework</div><div class="line">drwxr-xr-x   2 datacenter datacenter    309 Jun 30  2017 webpackShims</div></pre></td></tr></table></figure>
 <h4 id="Configure-Kibana"><a href="#Configure-Kibana" class="headerlink" title="Configure Kibana"></a>Configure Kibana</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@localhost kibana-5.5.0-linux-x86_64]<span class="comment"># vim config/kibana.yml</span></div><div class="line"><span class="comment"># Specifies the address to which the Kibana server will bind. IP addresses and host names are both valid values.</span></div><div class="line"><span class="comment"># The default is 'localhost', which usually means remote machines will not be able to connect.</span></div><div class="line"><span class="comment"># To allow connections from remote users, set this parameter to a non-loopback address.</span></div><div class="line">server.host: <span class="string">"10.103.67.84"</span></div><div class="line"></div><div class="line"><span class="comment"># The URL of the Elasticsearch instance to use for all your queries.</span></div><div class="line">elasticsearch.url: <span class="string">"http://10.103.67.84:9200"</span></div></pre></td></tr></table></figure>
 <h3 id="Start-ELK-Process"><a href="#Start-ELK-Process" class="headerlink" title="Start ELK Process"></a>Start ELK Process</h3><h4 id="Set-Nginx-Log-Format-and-Start-Nginx"><a href="#Set-Nginx-Log-Format-and-Start-Nginx" class="headerlink" title="Set Nginx Log Format and Start Nginx"></a>Set Nginx Log Format and Start Nginx</h4><ul>
-<li>使用Nginx作為Logstash的輸入，Nginx環境安裝可以參考<a href="https://0x90e.github.io/nginx-installion/" title="Nginx Installion">此篇文章</a></li>
+<li>使用Nginx作為Logstash的輸入，Nginx環境安裝可以參考<a href="https://0x90e.github.io/nginx-Installation/" title="Nginx Installation">此篇文章</a></li>
 <li>將Nginx輸出Log的格式指定爲Logstash可以接受的格式<ul>
 <li>對應logstash-nginx-access-log.conf中的match</li>
 </ul>
@@ -446,8 +446,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/nginx-installion/" rel="next" title="Nginx Installion">
-                <i class="fa fa-chevron-left"></i> Nginx Installion
+              <a href="/nginx-installation/" rel="next" title="Nginx Installation">
+                <i class="fa fa-chevron-left"></i> Nginx Installation
               </a>
             
           </div>
@@ -455,6 +455,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/redis-installation/" rel="prev" title="Redis Installation">
+                Redis Installation <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -535,7 +539,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -557,7 +561,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -606,7 +610,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Setup-ELK-ElasticSearch、Logstash、Kibana-Environment"><span class="nav-number">1.</span> <span class="nav-text">Setup ELK(ElasticSearch、Logstash、Kibana) Environment</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-Info"><span class="nav-number">1.1.</span> <span class="nav-text">Basic Info</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logstash-Installion"><span class="nav-number">1.2.</span> <span class="nav-text">Logstash Installion</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#About-Logstash-Version"><span class="nav-number">1.2.1.</span> <span class="nav-text">About Logstash Version</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Install-Logstash"><span class="nav-number">1.2.2.</span> <span class="nav-text">Install Logstash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Configure-Logstash"><span class="nav-number">1.2.3.</span> <span class="nav-text">Configure Logstash</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kibana-Installation"><span class="nav-number">1.3.</span> <span class="nav-text">Kibana Installation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#About-Logstash-Version-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">About Logstash Version</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Install-Kibana"><span class="nav-number">1.3.2.</span> <span class="nav-text">Install Kibana</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Configure-Kibana"><span class="nav-number">1.3.3.</span> <span class="nav-text">Configure Kibana</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Start-ELK-Process"><span class="nav-number">1.4.</span> <span class="nav-text">Start ELK Process</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Set-Nginx-Log-Format-and-Start-Nginx"><span class="nav-number">1.4.1.</span> <span class="nav-text">Set Nginx Log Format and Start Nginx</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Start-ElasticSearch"><span class="nav-number">1.4.2.</span> <span class="nav-text">Start ElasticSearch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Start-Logstash"><span class="nav-number">1.4.3.</span> <span class="nav-text">Start Logstash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Start-Kibana"><span class="nav-number">1.4.4.</span> <span class="nav-text">Start Kibana</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Kibana-Web-UI"><span class="nav-number">1.4.5.</span> <span class="nav-text">Kibana Web UI</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Setup-ELK-ElasticSearch、Logstash、Kibana-Environment"><span class="nav-number">1.</span> <span class="nav-text">Setup ELK(ElasticSearch、Logstash、Kibana) Environment</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-Info"><span class="nav-number">1.1.</span> <span class="nav-text">Basic Info</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logstash-Installation"><span class="nav-number">1.2.</span> <span class="nav-text">Logstash Installation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#About-Logstash-Version"><span class="nav-number">1.2.1.</span> <span class="nav-text">About Logstash Version</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Install-Logstash"><span class="nav-number">1.2.2.</span> <span class="nav-text">Install Logstash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Configure-Logstash"><span class="nav-number">1.2.3.</span> <span class="nav-text">Configure Logstash</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kibana-Installation"><span class="nav-number">1.3.</span> <span class="nav-text">Kibana Installation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#About-Logstash-Version-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">About Logstash Version</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Install-Kibana"><span class="nav-number">1.3.2.</span> <span class="nav-text">Install Kibana</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Configure-Kibana"><span class="nav-number">1.3.3.</span> <span class="nav-text">Configure Kibana</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Start-ELK-Process"><span class="nav-number">1.4.</span> <span class="nav-text">Start ELK Process</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Set-Nginx-Log-Format-and-Start-Nginx"><span class="nav-number">1.4.1.</span> <span class="nav-text">Set Nginx Log Format and Start Nginx</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Start-ElasticSearch"><span class="nav-number">1.4.2.</span> <span class="nav-text">Start ElasticSearch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Start-Logstash"><span class="nav-number">1.4.3.</span> <span class="nav-text">Start Logstash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Start-Kibana"><span class="nav-number">1.4.4.</span> <span class="nav-text">Start Kibana</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Kibana-Web-UI"><span class="nav-number">1.4.5.</span> <span class="nav-text">Kibana Web UI</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

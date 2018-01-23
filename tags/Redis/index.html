@@ -64,7 +64,7 @@
 
 
 
-  <meta name="keywords" content="Hadoop,HDFS," />
+  <meta name="keywords" content="Hadoop,Hive,HDFS,Spark,Map Reduce,Big Data,Security" />
 
 
 
@@ -75,21 +75,13 @@
 
 
 
-<meta name="description" content="HDFS文件讀寫流程文件寫入流程">
-<meta name="keywords" content="Hadoop,HDFS">
-<meta property="og:type" content="article">
-<meta property="og:title" content="HDFS文件讀寫流程">
-<meta property="og:url" content="https://0x90e.github.io/hdfs-read-write-procedure/index.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="0x90e&#39;s Blog">
+<meta property="og:url" content="https://0x90e.github.io/tags/Redis/index.html">
 <meta property="og:site_name" content="0x90e&#39;s Blog">
-<meta property="og:description" content="HDFS文件讀寫流程文件寫入流程">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://0x90e.github.io/2017/08/28/hdfs-read-write-procedure/HDFS_file_write_procedure.svg">
-<meta property="og:image" content="https://0x90e.github.io/2017/08/28/hdfs-read-write-procedure/HDFS_file_read_procedure.svg">
-<meta property="og:updated_time" content="2017-10-09T17:50:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HDFS文件讀寫流程">
-<meta name="twitter:description" content="HDFS文件讀寫流程文件寫入流程">
-<meta name="twitter:image" content="https://0x90e.github.io/2017/08/28/hdfs-read-write-procedure/HDFS_file_write_procedure.svg">
+<meta name="twitter:title" content="0x90e&#39;s Blog">
 
 
 
@@ -119,13 +111,13 @@
 
 
 
-  <link rel="canonical" href="https://0x90e.github.io/hdfs-read-write-procedure/"/>
+  <link rel="canonical" href="https://0x90e.github.io/tags/Redis/"/>
 
 
 
 
 
-  <title>HDFS文件讀寫流程 | 0x90e's Blog</title>
+  <title>Tag: Redis | 0x90e's Blog</title>
   
 
 
@@ -153,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -247,198 +239,54 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block tag">
 
-  
+    <div id="posts" class="posts-collapse">
+      <div class="collection-title">
+        <h2>Redis<small>Tag</small>
+        </h2>
+      </div>
 
-  
-  
-  
+      
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/hdfs-read-write-procedure/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="0x90e">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="0x90e's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h3 class="post-title">
         
+            <a class="post-title-link" href="/redis-installation/" itemprop="url">
+              
+                <span itemprop="name">Redis Installation</span>
+              
+            </a>
         
-          <h2 class="post-title" itemprop="name headline">HDFS文件讀寫流程</h2>
-        
+      </h3>
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-28T12:20:51+08:00">
-                2017-08-28
-              </time>
-            
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2018-01-23T23:45:54+08:00"
+              content="2018-01-23" >
+          01-23
+        </time>
+      </div>
 
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Big-data/" itemprop="url" rel="index">
-                    <span itemprop="name">Big data</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-            <span class="post-meta-divider">|</span>
-            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
-            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
-            </span>
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h2 id="HDFS文件讀寫流程"><a href="#HDFS文件讀寫流程" class="headerlink" title="HDFS文件讀寫流程"></a>HDFS文件讀寫流程</h2><h3 id="文件寫入流程"><a href="#文件寫入流程" class="headerlink" title="文件寫入流程"></a>文件寫入流程</h3><img src="/2017/08/28/hdfs-read-write-procedure/HDFS_file_write_procedure.svg" width="800">
-<a id="more"></a>
-<ol>
-<li>HDFS Client調用DistributedFileSystem的create()創建一个文件，DistributedFileSystem內部通過RPC呼叫NameNode。</li>
-<li>NameNode對請求文件進行檢查:<br> 2.1 文件是否存在<br> 2.2 檢查Client權限是否合法</li>
-<li>通過檢查後，NameNode會創建不包含任何Block訊息的新文件，進行紀錄佔位。</li>
-<li>詳細描述如下:<br> 4.1 DistributedFileSystem會返回FSDataOutputStream，供客戶端寫入數據。<br> 4.2 FSDataOutputStream包裝了FSOutputStream，可對NameNode與DataNodes進行溝通。<br> 4.3 DFSOutputStream將文件分割成許多的小數據包，並寫入DataQueue。DataQueue由DataStreamer負責讀取。<br> 4.4 DataStreamer通知NameNode分配DataNode儲存Block及副本。</li>
-<li>根據副本放置策略，NameNode進行DataNode分配，並返回DataNode列表</li>
-<li>詳細描述如下:<br> 6.1 DataStreamer將分配好的DataNode會組成一個Pipeline。假設副本係數為3，所以在Pipeline中會有3個DataNode。<br> 6.2 DataStreamer將Block流式傳送到Pipeline中的第一個DataNode，第一個DataNode將數據往下傳遞給第二個DataNode，第二個DataNode再傳給第三個DataNode</li>
-<li>DFSOutputStream維護ackqueue，ackqueue儲存等待DataNode確認的Block，只有當Pipeline內所有的DataNode皆返回寫入成功時，才會從ackqueue刪除，並開始寫入下一個Block。</li>
-<li>當目標文件所有的Block寫入完畢，Client通知NameNode寫入操作完畢。</li>
-</ol>
-<h3 id="文件存取流程"><a href="#文件存取流程" class="headerlink" title="文件存取流程"></a>文件存取流程</h3><img src="/2017/08/28/hdfs-read-write-procedure/HDFS_file_read_procedure.svg" width="800">
-<ol>
-<li>HDFS Client調用FileSystem對象的靜態方法open()，打開一個目標文件的路徑。FileSystem對象(DistributedFileSystem對象)內部通過RPC呼叫NameNode。</li>
-<li>NameNode返回Block列表，該列表視檔案大小情況，包含目標文件部分或全部的Block訊息，對於每個Block，NameNode返回該Block副本的DataNode位址，且DataNode地址會根據與Client的距離來排序。</li>
-<li>詳細描述如下:<br> 3.1 DistributedFileSystem返回一个FSDataInputStream對象供Client讀取數據。<br> 3.2 FSDataOutputStream包裝了FSOutputStream，可對NameNode與DataNodes進行溝通。<br> 3.3 使用FSDataInputStream的輸入流調用read()，輸入流會跟據Client與DataNode的距離，挑選DataNode來讀取Block，若Client本身就是DataNode，則從本地獲取數據。<br> 3.4 讀取完當前Block後，關閉與當前DataNode的連結，並讀取Block列表中下個Block訊息與尋找最佳DataNode。<br> 3.5 若Block列表讀取完畢，但文件讀取還沒結束，則Client需再次向NameNode獲取下一批Block列表。直到目標文件所有的Blocks讀取完畢。<br> 3.6 每當讀取完一個Block都會進行checksum校驗，若讀取DataNode時出現錯誤，則Client會通知NameNode，避免下一次錯誤再次發生。而Client則從下一個Block副本的DataNode中讀取數據。</li>
-<li>調用FSDataInputStream的close()，通知NameNode讀取操作完畢。</li>
-</ol>
-
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
-          
-            <a href="/tags/HDFS/" rel="tag"># HDFS</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/hdfs-basics/" rel="next" title="HDFS Basics">
-                <i class="fa fa-chevron-left"></i> HDFS Basics
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/yarn-basics/" rel="prev" title="YARN Basics">
-                YARN Basics <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
-
-    <div class="post-spread">
       
     </div>
+
   </div>
+  
+  
+  
+
+  
 
 
           </div>
@@ -446,10 +294,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -470,17 +314,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -560,22 +395,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS文件讀寫流程"><span class="nav-number">1.</span> <span class="nav-text">HDFS文件讀寫流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件寫入流程"><span class="nav-number">1.1.</span> <span class="nav-text">文件寫入流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件存取流程"><span class="nav-number">1.2.</span> <span class="nav-text">文件存取流程</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -724,10 +543,6 @@
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
-
-
 
   
 

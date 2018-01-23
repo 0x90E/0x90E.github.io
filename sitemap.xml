@@ -2,23 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://0x90e.github.io/redis-installation/</loc>
+    
+    <lastmod>2018-01-23T17:02:25.325Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0x90e.github.io/nginx-installation/</loc>
+    
+    <lastmod>2018-01-23T16:06:42.057Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0x90e.github.io/elasticsearch-installation/</loc>
+    
+    <lastmod>2018-01-23T15:48:15.499Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0x90e.github.io/setup-elk-nvironment/</loc>
     
-    <lastmod>2018-01-21T17:46:26.454Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://0x90e.github.io/elasticsearch-installion/</loc>
-    
-    <lastmod>2018-01-21T17:46:06.493Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://0x90e.github.io/nginx-installion/</loc>
-    
-    <lastmod>2018-01-21T17:41:27.608Z</lastmod>
+    <lastmod>2018-01-23T15:47:30.698Z</lastmod>
     
   </url>
   
