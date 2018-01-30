@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://0x90e.github.io/spark-core-persist/</loc>
+    
+    <lastmod>2018-01-30T17:49:35.500Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0x90e.github.io/spark-core-basic/</loc>
     
-    <lastmod>2018-01-28T14:08:43.542Z</lastmod>
+    <lastmod>2018-01-30T17:33:21.482Z</lastmod>
     
   </url>
   

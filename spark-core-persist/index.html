@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Spark RDD Persist Persist/Cache是Spark中一個重要的特性，其操作是將DataSet持久化至記憶體中。  當進行RDD持久化時，每個Node會儲存RDD中的每個Partition至記憶體中，並在其他Action執行時將RDD從記憶體中取出。">
+<meta name="keywords" content="Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark RDD Persist">
+<meta property="og:url" content="https://0x90e.github.io/spark-core-persist/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Spark RDD Persist Persist/Cache是Spark中一個重要的特性，其操作是將DataSet持久化至記憶體中。  當進行RDD持久化時，每個Node會儲存RDD中的每個Partition至記憶體中，並在其他Action執行時將RDD從記憶體中取出。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0x90e.github.io/2018/01/31/spark-core-persist/spark_persis_action_job.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/01/31/spark-core-persist/spark_persis_action_details.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/01/31/spark-core-persist/spark_presis_cache_page.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/01/31/spark-core-persist/spark_presis_cache_details.png">
+<meta property="og:updated_time" content="2018-01-30T17:49:35.500Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark RDD Persist">
+<meta name="twitter:description" content="Spark RDD Persist Persist/Cache是Spark中一個重要的特性，其操作是將DataSet持久化至記憶體中。  當進行RDD持久化時，每個Node會儲存RDD中的每個Partition至記憶體中，並在其他Action執行時將RDD從記憶體中取出。">
+<meta name="twitter:image" content="https://0x90e.github.io/2018/01/31/spark-core-persist/spark_persis_action_job.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/spark-core-persist/"/>
+
+
+
+
+
+  <title>Spark RDD Persist | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-core-persist/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Spark RDD Persist</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-31T01:28:48+08:00">
+                2018-01-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Spark-RDD-Persist"><a href="#Spark-RDD-Persist" class="headerlink" title="Spark RDD Persist"></a>Spark RDD Persist</h2><ul>
+<li><a href="http://spark.apache.org/docs/latest/rdd-programming-guide.html#rdd-persistence" title="Persist/Cache" target="_blank" rel="external">Persist/Cache</a>是Spark中一個重要的特性，其操作是將DataSet持久化至記憶體中。 </li>
+<li>當進行RDD持久化時，每個Node會儲存RDD中的每個Partition至記憶體中，並在其他Action執行時將RDD從記憶體中取出。</li>
+</ul>
+<a id="more"></a>
+<h3 id="Use-Spark-shell-to-demo"><a href="#Use-Spark-shell-to-demo" class="headerlink" title="Use Spark-shell to demo"></a>Use Spark-shell to demo</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">## 此處先展示之後要用到的本地檔案，該檔案有3行數據</span></div><div class="line">[hadoop@testmain ~]$ cat testFile </div><div class="line">Hello	world	first</div><div class="line">How	we	roll</div><div class="line"></div><div class="line"><span class="comment">## 啟動Spark-shell</span></div><div class="line">[hadoop@testmain bin]$ ./spark-shell --master <span class="built_in">local</span>[2] --jars /opt/software/hive/lib/mysql-connector-java-5.1.44-bin.jar</div><div class="line"><span class="comment">## ...</span></div><div class="line">Using Scala version 2.11.8 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_144)</div><div class="line">Type <span class="keyword">in</span> expressions to have them evaluated.</div><div class="line">Type :<span class="built_in">help</span> <span class="keyword">for</span> more information.</div><div class="line"></div><div class="line"><span class="comment">## 讀入上述本地檔案，並得到一個RDD物件</span></div><div class="line">scala&gt; val lines = sc.textFile(<span class="string">"file:///home/hadoop/testFile"</span>)</div><div class="line">lines: org.apache.spark.rdd.RDD[String] = file:///home/hadoop/testFile MapPartitionsRDD[5] at textFile at &lt;console&gt;:24</div><div class="line"></div><div class="line">scala&gt; lines.count</div><div class="line">res2: Long = 3</div></pre></td></tr></table></figure>
+<img src="/2018/01/31/spark-core-persist/spark_persis_action_job.png" width="700">
+<img src="/2018/01/31/spark-core-persist/spark_persis_action_details.png" width="700">
+<p>上面兩張圖分別表示執行lines.count後，Spark jobs頁面以及Stage details頁面<br>下面說明第二張圖Stage details頁面的兩個欄位:</p>
+<ul>
+<li>最上方的Input Size / Records: 47.0 B / 3<ul>
+<li>47.0 表示讀入的Byte數，Records表示讀入的數據行數。此處的Byte數和行數皆與原始檔案相同</li>
+</ul>
+</li>
+<li>最下方的Tasks (2) <ul>
+<li>表示Partition數量，Task與Partition數量相同</li>
+<li>若此處欄位之間的Record數量相差很多，則表示發生數據傾斜，需要特別注意以及進行調整</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">scala&gt; lines.cache</div><div class="line">res3: lines.type = file:///home/hadoop/testFile MapPartitionsRDD[5] at textFile at &lt;console&gt;:24</div><div class="line"></div><div class="line"><span class="comment">## 此處仍然是從本地端讀入數據來建立RDD</span></div><div class="line"><span class="comment">## 此處的Action觸發後，才會進行Persist</span></div><div class="line">scala&gt; lines.count</div><div class="line">res4: Long = 3</div><div class="line"></div><div class="line"><span class="comment">## 此處才是從Cache中讀取數據來建立RDD</span></div><div class="line">scala&gt; lines.count</div><div class="line">res5: Long = 3  </div><div class="line"></div><div class="line"><span class="comment">## unpersis</span></div><div class="line">scala&gt; lines.unpersist()</div><div class="line">res6: lines.type = file:///home/hadoop/testFile MapPartitionsRDD[5] at textFile at &lt;console&gt;:24</div></pre></td></tr></table></figure>
+<h2 id=""><a href="#" class="headerlink" title=""></a><img src="/2018/01/31/spark-core-persist/spark_presis_cache_page.png" width="700"></h2><p>此張圖是在lines.cache後，Spark stages頁面，當中的訊息解讀如下</p>
+<ul>
+<li>Cache size(Size in Memory + Size on Disk)默認比原始數據來源大</li>
+<li>Storage Level默認為MEMORY_ONLY</li>
+</ul>
+<h2 id="-1"><a href="#-1" class="headerlink" title=""></a><img src="/2018/01/31/spark-core-persist/spark_presis_cache_details.png" width="700"></h2><p>上述圖片為第三次執行lines.count所對應的Stage details頁面，當中的訊息解讀如下:</p>
+<ul>
+<li>Input Size與Cache size相同</li>
+</ul>
+<p>進行Persist與Unpersist需要注意的事項:</p>
+<ul>
+<li>persist()或cache()是lazy操作，碰到action才會進行實際處理<ul>
+<li>與Spark SQL相反，Spark SQL的Cache是Eager操作</li>
+</ul>
+</li>
+<li>第一次執行Action時，會先從原始位置建立RDD，然後進行Persist；並在第二次執行Action時，才會從Cache中將RDD取出</li>
+<li>unpersist()為Eager操作</li>
+<li>在某些場景下會讓Action操作更快的執行完成，實際情況需要根據場景進行測試</li>
+<li>對於存在迭代過程的演算法，或者交互式的場景下有著關鍵性的幫助</li>
+<li>Cache是支持容錯機制的，若有任一個Partition遺失了，將會自動從源頭開始重新計算來建立Partition</li>
+<li>cache()是調用persist()，並使用MEMORY_ONLY作為默認storage level<ul>
+<li>相關程式碼位於org.apache.spark.rdd RDD.scala</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * Persist this RDD with the default storage level (`MEMORY_ONLY`).</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="function">def <span class="title">persist</span><span class="params">()</span>: <span class="keyword">this</span>.type </span>= persist(StorageLevel.MEMORY_ONLY)</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * Persist this RDD with the default storage level (`MEMORY_ONLY`).</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="function">def <span class="title">cache</span><span class="params">()</span>: <span class="keyword">this</span>.type </span>= persist()</div></pre></td></tr></table></figure>
+<h3 id="Storage-Level"><a href="#Storage-Level" class="headerlink" title="Storage Level"></a>Storage Level</h3><p>根據資源情況，使用不同的Storage level進行RDD持久化，較常用的Storage level為:</p>
+<ul>
+<li>MEMORY_ONLY:<ul>
+<li>將RDD當作deserialized Java物件存放在JVM中，如果RDD無法完整儲存在記憶體中，則無法進行持久化，在下次使用該RDD時，會透過重新計算來獲取RDD</li>
+<li>此為預設值</li>
+<li>deserialized是指將一個partition作為一個Byte Array儲存</li>
+</ul>
+</li>
+<li>MEMORY_AND_DISK<ul>
+<li>將RDD當作deserialized Java物件存放在JVM中，若記憶體中無法存放所有的Partition，則放入Disk中</li>
+</ul>
+</li>
+<li>MEMORY_ONLY_SER<ul>
+<li>將RDD當作serialized Java物件存放在JVM中，serialized物件較deserialized物件更為節省記憶體空間，但會提高CPU使用率</li>
+<li>建議使用<a href="http://spark.apache.org/docs/latest/tuning.html#data-serialization" title="Data Serialization" target="_blank" rel="external">高效的序列化演算法</a>，例如Kyro</li>
+</ul>
+</li>
+</ul>
+<h5 id="Which-Storage-Level-to-Choose"><a href="#Which-Storage-Level-to-Choose" class="headerlink" title="Which Storage Level to Choose?"></a>Which Storage Level to Choose?</h5><p>Storage Level的選擇主要是在CPU與Memory中做權衡，可以根據<a href="http://spark.apache.org/docs/latest/rdd-programming-guide.html#which-storage-level-to-choose" title="Which Storage Level to Choose" target="_blank" rel="external">下列條件來進行挑選</a>:</p>
+<ol>
+<li>如果RDD如果可以使用MEMORY_ONLY完美處理，那麼就使用MEMORY_ONLY</li>
+<li>如果無法使用MEMORY_ONLY，可以使用MEMORY_ONLY_SER，挑選一個快速的序列化演算法，壓縮記憶體所需佔用空間，並額外付出可接受的CPU使用率</li>
+<li>不要將RDD拆分至Disk中，除非計算該DateSet的成本是昂貴的，或者是一個龐大的DataSet，不然一般來說重新計算Partition的速度是快於從Disk中讀取的速度</li>
+<li>如果想要達到fast fault recovery，可以使用replicated storage level<ul>
+<li>雖然所有的storage level都提供full fault recovery來重新計算損失的數據，但是有提供replicated的storage level，可以讓task無需等待重新計算partition的時間</li>
+<li>replicated需要額外佔用記憶體空間</li>
+</ul>
+</li>
+</ol>
+<h3 id="Removing-Data"><a href="#Removing-Data" class="headerlink" title="Removing Data"></a>Removing Data</h3><ul>
+<li><a href="http://spark.apache.org/docs/latest/rdd-programming-guide.html#removing-data" title="Removing Data" target="_blank" rel="external">Spark將自動監控cache使用率</a>，並根據LRU(Least-recently-used)挑選犧牲的Partition進行刪除。</li>
+<li>建議使用RDD.unpersist()來進行手動刪除</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/spark-core-basic/" rel="next" title="Spark Core Basic">
+                <i class="fa fa-chevron-left"></i> Spark Core Basic
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-RDD-Persist"><span class="nav-number">1.</span> <span class="nav-text">Spark RDD Persist</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Use-Spark-shell-to-demo"><span class="nav-number">1.1.</span> <span class="nav-text">Use Spark-shell to demo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">2.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#-1"><span class="nav-number">3.</span> <span class="nav-text"></span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Storage-Level"><span class="nav-number">3.1.</span> <span class="nav-text">Storage Level</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Which-Storage-Level-to-Choose"><span class="nav-number">3.1.0.1.</span> <span class="nav-text">Which Storage Level to Choose?</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Removing-Data"><span class="nav-number">3.2.</span> <span class="nav-text">Removing Data</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
