@@ -254,6 +254,160 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-core-rdd-lineage-checkpoint/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/spark-core-rdd-lineage-checkpoint/" itemprop="url">Spark RDD Lineage and Checkpoint</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-08T00:39:09+08:00">
+                2018-02-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="Spark-RDD-Lineage-and-Checkpoint"><a href="#Spark-RDD-Lineage-and-Checkpoint" class="headerlink" title="Spark RDD Lineage and Checkpoint"></a>Spark RDD Lineage and Checkpoint</h2><h3 id="Lineage"><a href="#Lineage" class="headerlink" title="Lineage"></a>Lineage</h3><ul>
+<li>一串序列的RDD transformation組成的Compute chain，在這條Chain的RDD之間的關係依賴圖稱為Lineage</li>
+<li>若Chain中的某個RDD的某個Partition遺失了，則可以根據Lineage得知Parent RDD後，重新計算遺失的Partition即可，而不需要從資料來源整個Chain重新計算</li>
+<li>可達成RDD的容錯機制</li>
+</ul>
+<h3 id="Checkpoint"><a href="#Checkpoint" class="headerlink" title="Checkpoint:"></a>Checkpoint:</h3><ul>
+<li>當Compute chain太長時，可以使用Checkpoint來達成RDD落地以及容錯</li>
+<li>Checkpoint將某個RDD保存到某個文件中，並將其Parent RDD移除，換句話說，設為一個新的Chain起點</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/spark-core-rdd-lineage-checkpoint/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-core-persist/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1595,152 +1749,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-sql-builtin-udf-functions/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="0x90e">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="0x90e's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/spark-sql-builtin-udf-functions/" itemprop="url">Spark SQL Built-in and UDF Functions</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-24T00:43:15+08:00">
-                2017-12-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Big-data/" itemprop="url" rel="index">
-                    <span itemprop="name">Big data</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="Spark-Sql-Built-in-and-UDF-Functions"><a href="#Spark-Sql-Built-in-and-UDF-Functions" class="headerlink" title="Spark Sql Built-in and UDF Functions"></a>Spark Sql Built-in and UDF Functions</h2><p>Spark Sql中常用的函數分兩類，分別為Built-in函數與UDF函數，以下分別提出案例說明該如何使用<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/spark-sql-builtin-udf-functions/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1795,7 +1803,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

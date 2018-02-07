@@ -75,18 +75,18 @@
 
 
 
-<meta name="description" content="Spark SQL DataFrame OperationsCode1234567891011121314151617181920212223242526272829303132import org.apache.spark.sql.SparkSessionobject DataFrameDemo &amp;#123;  def main(args: Array[String]): Unit = &amp;#12">
+<meta name="description" content="Spark RDD Lineage and CheckpointLineage 一串序列的RDD transformation組成的Compute chain，在這條Chain的RDD之間的關係依賴圖稱為Lineage 若Chain中的某個RDD的某個Partition遺失了，則可以根據Lineage得知Parent RDD後，重新計算遺失的Partition即可，而不需要從資料來源整個Chai">
 <meta name="keywords" content="Spark">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spark SQL DataFrame Operations">
-<meta property="og:url" content="https://0x90e.github.io/spark-sql-dataFrame-operations/index.html">
+<meta property="og:title" content="Spark RDD Lineage and Checkpoint">
+<meta property="og:url" content="https://0x90e.github.io/spark-core-rdd-lineage-checkpoint/index.html">
 <meta property="og:site_name" content="0x90e&#39;s Blog">
-<meta property="og:description" content="Spark SQL DataFrame OperationsCode1234567891011121314151617181920212223242526272829303132import org.apache.spark.sql.SparkSessionobject DataFrameDemo &amp;#123;  def main(args: Array[String]): Unit = &amp;#12">
+<meta property="og:description" content="Spark RDD Lineage and CheckpointLineage 一串序列的RDD transformation組成的Compute chain，在這條Chain的RDD之間的關係依賴圖稱為Lineage 若Chain中的某個RDD的某個Partition遺失了，則可以根據Lineage得知Parent RDD後，重新計算遺失的Partition即可，而不需要從資料來源整個Chai">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-01-31T15:49:46.668Z">
+<meta property="og:updated_time" content="2018-02-07T16:48:26.265Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spark SQL DataFrame Operations">
-<meta name="twitter:description" content="Spark SQL DataFrame OperationsCode1234567891011121314151617181920212223242526272829303132import org.apache.spark.sql.SparkSessionobject DataFrameDemo &amp;#123;  def main(args: Array[String]): Unit = &amp;#12">
+<meta name="twitter:title" content="Spark RDD Lineage and Checkpoint">
+<meta name="twitter:description" content="Spark RDD Lineage and CheckpointLineage 一串序列的RDD transformation組成的Compute chain，在這條Chain的RDD之間的關係依賴圖稱為Lineage 若Chain中的某個RDD的某個Partition遺失了，則可以根據Lineage得知Parent RDD後，重新計算遺失的Partition即可，而不需要從資料來源整個Chai">
 
 
 
@@ -116,13 +116,13 @@
 
 
 
-  <link rel="canonical" href="https://0x90e.github.io/spark-sql-dataFrame-operations/"/>
+  <link rel="canonical" href="https://0x90e.github.io/spark-core-rdd-lineage-checkpoint/"/>
 
 
 
 
 
-  <title>Spark SQL DataFrame Operations | 0x90e's Blog</title>
+  <title>Spark RDD Lineage and Checkpoint | 0x90e's Blog</title>
   
 
 
@@ -258,7 +258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-sql-dataFrame-operations/">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-core-rdd-lineage-checkpoint/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="0x90e">
@@ -275,7 +275,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">Spark SQL DataFrame Operations</h2>
+          <h2 class="post-title" itemprop="name headline">Spark RDD Lineage and Checkpoint</h2>
         
 
         <div class="post-meta">
@@ -287,8 +287,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-08T02:01:12+08:00">
-                2017-12-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-08T00:39:09+08:00">
+                2018-02-08
               </time>
             
 
@@ -352,47 +352,18 @@
       
 
       
-        <h2 id="Spark-SQL-DataFrame-Operations"><a href="#Spark-SQL-DataFrame-Operations" class="headerlink" title="Spark SQL DataFrame Operations"></a>Spark SQL DataFrame Operations</h2><h3 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> org.apache.spark.sql.<span class="type">SparkSession</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">DataFrameDemo</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</div><div class="line"></div><div class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span></div><div class="line">      .builder().master(<span class="string">"local[2]"</span>)</div><div class="line">      .appName(<span class="string">"DataFrameDemo"</span>)</div><div class="line">      .getOrCreate()</div><div class="line"></div><div class="line">    <span class="keyword">val</span> df = spark.read.format(<span class="string">"json"</span>).load(<span class="string">"file/people.json"</span>)</div><div class="line">    println(<span class="string">"Displays the content of the DataFrame to stdout"</span>)</div><div class="line">    df.show()</div><div class="line"></div><div class="line">    println(<span class="string">"Print the schema in a tree format"</span>)</div><div class="line">    df.printSchema()</div><div class="line"></div><div class="line">    println(<span class="string">"Select only the name column"</span>)</div><div class="line">    df.select(<span class="string">"name"</span>).show()</div><div class="line"></div><div class="line">    <span class="comment">// This import is needed to use the $-notation</span></div><div class="line">    <span class="keyword">import</span> spark.implicits._</div><div class="line"></div><div class="line">    println(<span class="string">"Select everybody, but increment the age by 1"</span>)</div><div class="line">    df.select($<span class="string">"name"</span>, $<span class="string">"age"</span> + <span class="number">1</span>).show()</div><div class="line"></div><div class="line">    println(<span class="string">"Select people older than 21"</span>)</div><div class="line">    df.filter($<span class="string">"age"</span> &gt; <span class="number">21</span>).show()</div><div class="line"></div><div class="line">    spark.stop()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <h2 id="Spark-RDD-Lineage-and-Checkpoint"><a href="#Spark-RDD-Lineage-and-Checkpoint" class="headerlink" title="Spark RDD Lineage and Checkpoint"></a>Spark RDD Lineage and Checkpoint</h2><h3 id="Lineage"><a href="#Lineage" class="headerlink" title="Lineage"></a>Lineage</h3><ul>
+<li>一串序列的RDD transformation組成的Compute chain，在這條Chain的RDD之間的關係依賴圖稱為Lineage</li>
+<li>若Chain中的某個RDD的某個Partition遺失了，則可以根據Lineage得知Parent RDD後，重新計算遺失的Partition即可，而不需要從資料來源整個Chain重新計算</li>
+<li>可達成RDD的容錯機制</li>
+</ul>
+<h3 id="Checkpoint"><a href="#Checkpoint" class="headerlink" title="Checkpoint:"></a>Checkpoint:</h3><ul>
+<li>當Compute chain太長時，可以使用Checkpoint來達成RDD落地以及容錯</li>
+<li>Checkpoint將某個RDD保存到某個文件中，並將其Parent RDD移除，換句話說，設為一個新的Chain起點</li>
+</ul>
 <a id="more"></a>
-<h3 id="Explanation"><a href="#Explanation" class="headerlink" title="Explanation"></a>Explanation</h3><h4 id="來源檔案內容"><a href="#來源檔案內容" class="headerlink" title="來源檔案內容"></a>來源檔案內容</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[hadoop@hadoop-01 file]<span class="comment"># cat people.json </span></div><div class="line">&#123;<span class="string">"name"</span>:<span class="string">"Michael"</span>&#125;</div><div class="line">&#123;<span class="string">"name"</span>:<span class="string">"Andy"</span>, <span class="string">"age"</span>:30&#125;</div><div class="line">&#123;<span class="string">"name"</span>:<span class="string">"Justin"</span>, <span class="string">"age"</span>:19&#125;</div></pre></td></tr></table></figure>
-<h4 id="對應輸出"><a href="#對應輸出" class="headerlink" title="對應輸出"></a>對應輸出</h4><ul>
-<li>df.show()<ul>
-<li>顯示當前DataFrame內的紀錄</li>
-<li>根據DataFrame源碼顯示，show()只會顯示前20條紀錄</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Displays the content of the DataFrame to stdout</div><div class="line">+----+-------+</div><div class="line">| age|   name|</div><div class="line">+----+-------+</div><div class="line">|null|Michael|</div><div class="line">|  30|   Andy|</div><div class="line">|  19| Justin|</div><div class="line">+----+-------+</div></pre></td></tr></table></figure>
-<ul>
-<li>df.printSchema()<ul>
-<li>透過樹狀結構將DataFrame中的schema列印出來</li>
-<li>DataFrame會自行對json格式內的紀錄進行類型推導，譬如age的類型為long</li>
-</ul>
-</li>
-<li>df.select(“name”).show()<ul>
-<li>顯示特定column name的紀錄</li>
-<li>指定的column name入參為String類型</li>
-<li>API source: select(col: String, cols: String*): DataFrame</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Print the schema <span class="keyword">in</span> a tree format</div><div class="line">root</div><div class="line"> |-- age: long (nullable = <span class="literal">true</span>)</div><div class="line"> |-- name: string (nullable = <span class="literal">true</span>)</div><div class="line"></div><div class="line">Select only the name column</div><div class="line">+-------+</div><div class="line">|   name|</div><div class="line">+-------+</div><div class="line">|Michael|</div><div class="line">|   Andy|</div><div class="line">| Justin|</div><div class="line">+-------+</div></pre></td></tr></table></figure>
-<ul>
-<li>import spark.implicits._<ul>
-<li>引用隱式轉換，確保column類型可以正常使用</li>
-</ul>
-</li>
-<li>df.select($”name”, $”age” + 1).show()<ul>
-<li>入參為column類型</li>
-<li>API source: select(cols: Column*): DataFrame </li>
-</ul>
-</li>
-<li>df.filter($”age” &gt; 21).show()<ul>
-<li>透過columnt輸入過濾條件</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Select everybody, but increment the age by 1</div><div class="line">+-------+---------+</div><div class="line">|   name|(age + 1)|</div><div class="line">+-------+---------+</div><div class="line">|Michael|     null|</div><div class="line">|   Andy|       31|</div><div class="line">| Justin|       20|</div><div class="line">+-------+---------+</div><div class="line"></div><div class="line">Select people older than 21</div><div class="line">+---+----+</div><div class="line">|age|name|</div><div class="line">+---+----+</div><div class="line">| 30|Andy|</div><div class="line">+---+----+</div></pre></td></tr></table></figure>
+<h3 id="Lineage-and-Checkpoint-Code"><a href="#Lineage-and-Checkpoint-Code" class="headerlink" title="Lineage and Checkpoint Code"></a>Lineage and Checkpoint Code</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="meta">scala&gt;</span> val rdd1 = sc.parallelize(0 to 9)</div><div class="line">rdd1: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[0] at parallelize at &lt;console&gt;:24</div><div class="line"></div><div class="line"><span class="meta">scala&gt;</span> val rdd2 = rdd1.filter(x =&gt; x &gt; 5)</div><div class="line">rdd2: org.apache.spark.rdd.RDD[Int] = MapPartitionsRDD[1] at filter at &lt;console&gt;:26</div><div class="line"></div><div class="line"><span class="meta">scala&gt;</span> val rdd3 = rdd2.map(x =&gt; (x, x))</div><div class="line">rdd3: org.apache.spark.rdd.RDD[(Int, Int)] = MapPartitionsRDD[2] at map at &lt;console&gt;:28</div><div class="line"></div><div class="line"><span class="meta">#</span># 使用toDebugString列出RDD的Lineage</div><div class="line"><span class="meta">scala&gt;</span> rdd2.toDebugString</div><div class="line">res4: String =</div><div class="line">(2) MapPartitionsRDD[1] at filter at &lt;console&gt;:26 []</div><div class="line"> |  ParallelCollectionRDD[0] at parallelize at &lt;console&gt;:24 []</div><div class="line"></div><div class="line"><span class="meta">scala&gt;</span> rdd3.toDebugString</div><div class="line">res5: String =</div><div class="line">(2) MapPartitionsRDD[2] at map at &lt;console&gt;:28 []</div><div class="line"> |  MapPartitionsRDD[1] at filter at &lt;console&gt;:26 []</div><div class="line"> |  ParallelCollectionRDD[0] at parallelize at &lt;console&gt;:24 []</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">#</span># 對rdd3使用checkpoint</div><div class="line"><span class="meta">scala&gt;</span> sc.setCheckpointDir("file:///home/hadoop/checkpoint")</div><div class="line"><span class="meta">scala&gt;</span> rdd3.checkpoint</div><div class="line"></div><div class="line"><span class="meta">#</span># checkpoint是lazy操作，所以要碰到action之後才會執行</div><div class="line"><span class="meta">scala&gt;</span> rdd3.count()</div><div class="line">res11: Long = 4   </div><div class="line"></div><div class="line"><span class="meta">#</span># 在checkpoint後，rdd3為一個chain的起點</div><div class="line"><span class="meta">scala&gt;</span> rdd3.toDebugString</div><div class="line">res8: String =</div><div class="line">(2) MapPartitionsRDD[2] at map at &lt;console&gt;:28 []</div><div class="line"> |  ReliableCheckpointRDD[3] at count at &lt;console&gt;:31 []</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span># 在執行action後，會在對應的路徑下看到落地的文件</div><div class="line">[hadoop@testmain checkpoint]$ ls</div><div class="line">f5546cf9-81bf-4bbc-a00b-cf5b87c384d5</div><div class="line">[hadoop@testmain checkpoint]$ ls f5546cf9-81bf-4bbc-a00b-cf5b87c384d5/</div><div class="line">rdd-2</div><div class="line">[hadoop@testmain checkpoint]$ ls f5546cf9-81bf-4bbc-a00b-cf5b87c384d5/rdd-2/</div><div class="line">part-00000  part-00001</div></pre></td></tr></table></figure>
       
     </div>
     
@@ -422,8 +393,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/spark-sql-dataset-dataframe/" rel="next" title="Spark SQL DataSet and DataFrame">
-                <i class="fa fa-chevron-left"></i> Spark SQL DataSet and DataFrame
+              <a href="/spark-core-persist/" rel="next" title="Spark RDD Persist">
+                <i class="fa fa-chevron-left"></i> Spark RDD Persist
               </a>
             
           </div>
@@ -431,10 +402,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/spark-sql-dataframe-rdd/" rel="prev" title="Spark SQL DataFrame RDD">
-                Spark SQL DataFrame RDD <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -586,7 +553,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-SQL-DataFrame-Operations"><span class="nav-number">1.</span> <span class="nav-text">Spark SQL DataFrame Operations</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Code"><span class="nav-number">1.1.</span> <span class="nav-text">Code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Explanation"><span class="nav-number">1.2.</span> <span class="nav-text">Explanation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#來源檔案內容"><span class="nav-number">1.2.1.</span> <span class="nav-text">來源檔案內容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#對應輸出"><span class="nav-number">1.2.2.</span> <span class="nav-text">對應輸出</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-RDD-Lineage-and-Checkpoint"><span class="nav-number">1.</span> <span class="nav-text">Spark RDD Lineage and Checkpoint</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Lineage"><span class="nav-number">1.1.</span> <span class="nav-text">Lineage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Checkpoint"><span class="nav-number">1.2.</span> <span class="nav-text">Checkpoint:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lineage-and-Checkpoint-Code"><span class="nav-number">1.3.</span> <span class="nav-text">Lineage and Checkpoint Code</span></a></li></ol></li></ol></div>
             
 
           </div>
