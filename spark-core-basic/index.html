@@ -84,7 +84,7 @@
 <meta property="og:description" content="Spark Core BasicCluster Overview">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://0x90e.github.io/2018/01/28/spark_core_basic/spark_workflow.svg">
-<meta property="og:updated_time" content="2018-01-30T17:33:21.482Z">
+<meta property="og:updated_time" content="2018-02-12T16:00:31.227Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark Core Basic">
 <meta name="twitter:description" content="Spark Core BasicCluster Overview">
@@ -402,6 +402,11 @@
 <li>Task<ul>
 <li>發送至一個Executor上運行的一個工作單元</li>
 <li>為一個Thread</li>
+<li>每個Executor上由若干個Core組成，每個Executor的每個Core一次只能執行一個Task<ul>
+<li>Core是虛擬的，可以認為是一個Executor中的Thread</li>
+</ul>
+</li>
+<li>Task被執行的併發度 = Executor數量 * 每個Executor Core的數量</li>
 </ul>
 </li>
 <li>Job<ul>
@@ -556,7 +561,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

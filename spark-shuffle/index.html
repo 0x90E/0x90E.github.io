@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Spark ShuffleSpark Shuffle Introduction 將某中具有相同特徵(key)的數據匯聚到同一個計算節點上進行計算的過程稱之為Shuffle 一定存在Wide dependencies 一個Action將被切割成2個Stage Shuffle會產生一系列的Map task去組織數據, 以及一系列Reduece task去聚合數據 可能產生Shuffle的算子">
+<meta name="keywords" content="Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark Shuffle">
+<meta property="og:url" content="https://0x90e.github.io/spark-shuffle/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Spark ShuffleSpark Shuffle Introduction 將某中具有相同特徵(key)的數據匯聚到同一個計算節點上進行計算的過程稱之為Shuffle 一定存在Wide dependencies 一個Action將被切割成2個Stage Shuffle會產生一系列的Map task去組織數據, 以及一系列Reduece task去聚合數據 可能產生Shuffle的算子">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0x90e.github.io/2018/02/22/spark_shuffle/spark_hash_shuffle.svg">
+<meta property="og:image" content="https://0x90e.github.io/2018/02/22/spark_shuffle/spark_hash_shuffle_consolidate.svg">
+<meta property="og:image" content="https://0x90e.github.io/2018/02/22/spark_shuffle/spark_sort_shuffle.svg">
+<meta property="og:image" content="https://0x90e.github.io/2018/02/22/spark_shuffle/spark_sort_suffle_default.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/02/22/spark_shuffle/spark_sort_suffle_set_output_partition.png">
+<meta property="og:updated_time" content="2018-02-22T16:23:56.842Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark Shuffle">
+<meta name="twitter:description" content="Spark ShuffleSpark Shuffle Introduction 將某中具有相同特徵(key)的數據匯聚到同一個計算節點上進行計算的過程稱之為Shuffle 一定存在Wide dependencies 一個Action將被切割成2個Stage Shuffle會產生一系列的Map task去組織數據, 以及一系列Reduece task去聚合數據 可能產生Shuffle的算子">
+<meta name="twitter:image" content="https://0x90e.github.io/2018/02/22/spark_shuffle/spark_hash_shuffle.svg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/spark-shuffle/"/>
+
+
+
+
+
+  <title>Spark Shuffle | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-shuffle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Spark Shuffle</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-22T23:30:02+08:00">
+                2018-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Spark-Shuffle"><a href="#Spark-Shuffle" class="headerlink" title="Spark Shuffle"></a>Spark Shuffle</h2><h3 id="Spark-Shuffle-Introduction"><a href="#Spark-Shuffle-Introduction" class="headerlink" title="Spark Shuffle Introduction"></a>Spark Shuffle Introduction</h3><ul>
+<li>將某中具有相同特徵(key)的數據匯聚到同一個計算節點上進行計算的過程稱之為Shuffle</li>
+<li>一定存在Wide dependencies</li>
+<li>一個Action將被切割成2個Stage</li>
+<li>Shuffle會產生一系列的Map task去組織數據, 以及一系列Reduece task去聚合數據</li>
+<li>可能產生Shuffle的算子<ul>
+<li>KeyBy transformations </li>
+<li>Join with inputs not co-partitioned</li>
+<li>Repartition</li>
+<li>Coalesce(Maybe)</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<h3 id="Performance-Impact"><a href="#Performance-Impact" class="headerlink" title="Performance Impact"></a>Performance Impact</h3><ul>
+<li>數據的存儲</li>
+<li>序列化與反序列化</li>
+<li>數據壓縮</li>
+<li>Disk/Network IO</li>
+<li>跨節點/跨行程數據傳輸</li>
+</ul>
+<h3 id="Spark-Shuffle-Manager"><a href="#Spark-Shuffle-Manager" class="headerlink" title="Spark Shuffle Manager"></a>Spark Shuffle Manager</h3><ul>
+<li>Spark在進行Shuffle時，會根據shuffleManager的instance的不同，使用不同的Shuffle方法</li>
+<li>在Spark1.2之前，預設使用Hash shuffle，Spark1.2以後，預設使用Sort shuffle</li>
+<li>可以在conf中的spark.shuffle.manager指定要使用的Shuffle方法</li>
+<li><a href="https://issues.apache.org/jira/browse/SPARK-14667" title="Remove HashShuffleManager" target="_blank" rel="external">高版本中已經沒有Hash shuffle</a> </li>
+<li>相關程式碼在org.apache.spark.shuffle.sort的SortShuffleManager.scala中<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Let the user specify short names for shuffle managers</span></div><div class="line">val shortShuffleMgrNames = Map(</div><div class="line">  <span class="string">"sort"</span> -&gt; classOf[org.apache.spark.shuffle.sort.SortShuffleManager].getName,</div><div class="line">  <span class="string">"tungsten-sort"</span> -&gt; classOf[org.apache.spark.shuffle.sort.SortShuffleManager].getName)</div><div class="line"></div><div class="line">val shuffleMgrName = conf.get(<span class="string">"spark.shuffle.manager"</span>, <span class="string">"sort"</span>)</div><div class="line">val shuffleMgrClass =</div><div class="line">  shortShuffleMgrNames.getOrElse(shuffleMgrName.toLowerCase(Locale.ROOT), shuffleMgrName)</div><div class="line">val shuffleManager = instantiateClass[ShuffleManager](shuffleMgrClass)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Hash-Shuffle"><a href="#Hash-Shuffle" class="headerlink" title="Hash Shuffle"></a>Hash Shuffle</h3><img src="/2018/02/22/spark_shuffle/spark_hash_shuffle.svg" width="1000">
+<ul>
+<li>基礎條件<ul>
+<li>在1個Excutor有2個Core</li>
+<li>共有4個Map Task</li>
+<li>共有2個Reduce Task</li>
+</ul>
+</li>
+<li>Hash Shuffle執行步驟<ol>
+<li>因為只有2個core，所以任一挑2個Map Task開始執行</li>
+<li>Shuffle Write Phase<ul>
+<li>Map Task將相同key的Data寫入Bucket中(對應①)</li>
+<li>每當Bucket滿了，作為一個批次寫入Disk文件中，Disk文件稱為FileSegment，不斷追加後，同一個key所有的Data都會寫到Disk文件中(對應②)</li>
+</ul>
+</li>
+<li>Shuffle Read Phase<ul>
+<li>Reduce Task將符合目標key的Data拉回來進行處理，每次拉取與自己Buffer相同大小的Data，並且透過記憶體中的一個Map進行聚合操作(aggregation)，週而復始的直到所有Data拉取結束，並得到最終結果(對應③)</li>
+</ul>
+</li>
+<li>執行另外2個Map Task，並重複Step2跟3</li>
+</ol>
+</li>
+<li>每個Map Task下所需的Bucket與File數量等於Reduce Task數量<ul>
+<li>這不難理解，因為最後這些分片是要被Reduce Task所拉取的，所以與Reduce Task數量一一對應</li>
+</ul>
+</li>
+<li>Bucket大小可以透過spark.shuffle.file.buffer調整，預設為32K，一般會調整為128K</li>
+</ul>
+<h4 id="Disadvantages"><a href="#Disadvantages" class="headerlink" title="Disadvantages"></a>Disadvantages</h4><ul>
+<li>若有M個Map Task，R個Reduce Task，C個Core</li>
+<li>總共存在M*R個FileSegment<ul>
+<li>本案例中是4*2=8個FileSegment</li>
+<li>若M與R都到了一定量級，則會產生大量的FileSegment，並且進行大量的Disk IO，進而影響性能</li>
+</ul>
+</li>
+<li>同時存在M*C個Bucket<ul>
+<li>本案例中是2*2=4個Bucket</li>
+<li>若將Bucket設為128KB，則需要M<em>C</em>128KB的記憶體空間</li>
+<li>同樣的，若M與R的數量上升，同時所需的記憶體空間也會到無法接受的大小</li>
+</ul>
+</li>
+</ul>
+<h3 id="Hash-Shuffle-with-ConsolidateFile"><a href="#Hash-Shuffle-with-ConsolidateFile" class="headerlink" title="Hash Shuffle with ConsolidateFile"></a>Hash Shuffle with ConsolidateFile</h3><img src="/2018/02/22/spark_shuffle/spark_hash_shuffle_consolidate.svg" width="1000">
+<p>將Spark.suffle.consolidateFiles參數設為True，可以打開consolidate機制</p>
+<ul>
+<li>Consolidate Hash Shuffle執行步驟<ol>
+<li>因為只有2個core，所以任一挑2個Map Task開始執行</li>
+<li>Shuffle Write Phase<ul>
+<li>Map Task將相同key的Data寫入Bucket中(對應①)</li>
+<li>每當Bucket滿了，創建一個稱為ShuffleFileGroup的Disk文件，並將Data寫入ShuffleFileGroup，不斷追加後，同一個key所有的Data都會寫到Disk文件中(對應②)</li>
+</ul>
+</li>
+<li>Shuffle Read Phase<ul>
+<li>Reduce Task將符合目標key的Data拉回來進行處理，每次拉取與自己Buffer相同大小的Data，並且透過記憶體中的一個Map進行聚合操作(aggregation)，週而復始的直到所有Data拉取結束，並得到最終結果(對應③)</li>
+</ul>
+</li>
+<li>執行另外2個Map Task，並重複Step2跟3，與一般的Hash Shuffle不同的是，每個Map Task不會自行建立自己的Disk文件，而是寫入第一批Map Task所創建的ShuffleFileGroup中</li>
+</ol>
+</li>
+</ul>
+<h4 id="Advantages"><a href="#Advantages" class="headerlink" title="Advantages"></a>Advantages</h4><ul>
+<li>Consolidate機制允許不同的Task復用同一批Disk文件，這樣可以有效將多個Task的Disk文件進行一定程度上的合併，從而大幅度減少Disk文件的數量，進而提升Shuffle write性能</li>
+<li>ShuffleFileGroup數量為C*R<ul>
+<li>本案例中是2*2=4個ShuffleFileGroup</li>
+</ul>
+</li>
+<li>如果是使用Spark 1.3，建議開啟consolidateFiles，並且將Bucket放大至128K</li>
+</ul>
+<h3 id="Sort-Suffle"><a href="#Sort-Suffle" class="headerlink" title="Sort Suffle"></a>Sort Suffle</h3><img src="/2018/02/22/spark_shuffle/spark_sort_shuffle.svg" width="1000">
+<ul>
+<li><a href="https://issues.apache.org/jira/browse/SPARK-2045" title="Sort-based shuffle implementation" target="_blank" rel="external">Sort-based shuffle implementation</a></li>
+<li>Sort Suffle執行步驟<ol>
+<li>Shuffle Write Phase<ul>
+<li> Map Task先將數據寫入記憶體資料結構中，根據不同的Shuffle算子，可能選用不同的資料結構(對應①②③)<ul>
+<li>如果是ReduceByKey此類聚合的Shuffle算子，則會使用Map資料結構，一邊透過Map進行聚合，一邊寫入記憶體</li>
+<li>如果是Join此類普通的Shuffle算子，則會選用Array資料結構，直接寫入記憶體</li>
+</ul>
+</li>
+<li>每寫一條數據到記憶體的資料結構時，都會判斷是否到達某個臨界閥值，如果達到，就將記憶體中的所有數據寫入到Disk的Data File中(對應④)<ul>
+<li>在寫入Data File之前會根據Key對記憶體內的資料結構進行排序</li>
+<li>根據排序結果，分批將數據寫入Data File，默認Batch數量為1萬條數據。換句話說，排列好的數據，會以每批1萬條的形式分批寫入Data File</li>
+<li>使用Java的緩衝輸出流BufferedOutputStream來實作Data File寫入操作</li>
+</ul>
+</li>
+<li>一個Map Task將所有記憶體中的資料結構過程中，會發生多次Disk溢寫操作，也就是會產生多個臨時文件，最後會將所有的臨時文件都進行合併，稱之為Merge操作(對應⑤)</li>
+</ul>
+</li>
+<li>Shuffle Read Phase<ul>
+<li>每個Map Task對應一個Merge後的Data File和Index File，Index File標示了每個Reduce Task在Data File中，所需要拉取數據的Start offset與End offset(對應⑥)</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h4 id="Advantages-1"><a href="#Advantages-1" class="headerlink" title="Advantages"></a>Advantages</h4><ul>
+<li>數據會先緩衝在記憶體內的資料結構中，當Cache滿了之後再一次寫入Data File中，有效減少Disk IO次數，提升性能</li>
+</ul>
+<h4 id="Spark-Shell-Demo"><a href="#Spark-Shell-Demo" class="headerlink" title="Spark Shell Demo"></a>Spark Shell Demo</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">[hadoop@testmain bin]$ ./spark-shell --master <span class="built_in">local</span>[3] --conf spark.huffle.manager=sort --conf spark.local.dir=/home/hadoop/suffle_output --jars /opt/software/hive/lib/mysql-connector-java-5.1.44-bin.jar</div><div class="line">SLF4J: Class path contains multiple SLF4J bindings.</div><div class="line"><span class="comment">## ...</span></div><div class="line">Using Scala version 2.11.8 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_144)</div><div class="line">Type <span class="keyword">in</span> expressions to have them evaluated.</div><div class="line">Type :<span class="built_in">help</span> <span class="keyword">for</span> more information.</div><div class="line"></div><div class="line">scala&gt; val lines = sc.textFile(<span class="string">"file:////home/hadoop/testFile"</span>) </div><div class="line">lines: org.apache.spark.rdd.RDD[String] = file:////home/hadoop/testFile MapPartitionsRDD[1] at textFile at &lt;console&gt;:24</div><div class="line"></div><div class="line">scala&gt; val words = lines.flatMap(_.split(<span class="string">"\t"</span>))</div><div class="line">words: org.apache.spark.rdd.RDD[String] = MapPartitionsRDD[2] at flatMap at &lt;console&gt;:26</div><div class="line"></div><div class="line">scala&gt; val pairs = words.map((_,1))</div><div class="line">pairs: org.apache.spark.rdd.RDD[(String, Int)] = MapPartitionsRDD[3] at map at &lt;console&gt;:28</div><div class="line"></div><div class="line">scala&gt; val wordcount = pairs.reduceByKey(_+_) </div><div class="line">wordcount: org.apache.spark.rdd.RDD[(String, Int)] = ShuffledRDD[4] at reduceByKey at &lt;console&gt;:30</div><div class="line"></div><div class="line">scala&gt; wordcount.collect</div><div class="line">res0: Array[(String, Int)] = Array((Hello,1), (we,1), (<span class="string">""</span>,1), (first,1), (How,1), (world,1), (roll,1))</div></pre></td></tr></table></figure>
+<img src="/2018/02/22/spark_shuffle/spark_sort_suffle_default.png" width="1000">
+<ul>
+<li>由DAG可得知此Job分割成2個Stage，即對應上述所說的Shuffle write/read stage，</li>
+<li>Stage0與Stage1分別各有2個Task，分別對應上述的Map task與Reduce Task，</li>
+<li>Map task數量是由sc.textFile(…)的第二個參數minPartitions決定，預設為2(Partition數與Map Task數相對應)</li>
+<li>Reduce Task數量沒有指定，故由reduceByKey(…)的內部機制計算得出，此處為2<ul>
+<li>可以透過spark.default.parallelism參數設定，或是指定textFile的第二個參數來設定</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">## 進入到spark.local.dir參數所指定的路徑</span></div><div class="line">[hadoop@testmain ~]$ <span class="built_in">cd</span> /home/hadoop/suffle_output</div><div class="line">[hadoop@testmain suffle_output]$ ls</div><div class="line">blockmgr-9883d706-3c6c-4b96-9093-010fa120649c  spark-c90041c3-9032-44e0-91fe-41637951b75a</div><div class="line"><span class="comment">## 在blockmgr開頭的資夾內，可以看到對應的Data與Index文件</span></div><div class="line">[hadoop@testmain suffle_output]$ <span class="built_in">cd</span> blockmgr-9883d706-3c6c-4b96-9093-010fa120649c</div><div class="line">[hadoop@testmain blockmgr-9883d706-3c6c-4b96-9093-010fa120649c]$ tree</div><div class="line">.</div><div class="line">|____11</div><div class="line">|____0e</div><div class="line">|____30</div><div class="line">| |____shuffle_0_0_0.index</div><div class="line">|____0d</div><div class="line">|____13</div><div class="line">|____15</div><div class="line">| |____shuffle_0_1_0.data</div><div class="line">|____0c</div><div class="line">| |____shuffle_0_0_0.data</div><div class="line">|____0f</div><div class="line">| |____shuffle_0_1_0.index</div></pre></td></tr></table></figure>
+<ul>
+<li>根據上述描述，Sort suffle會產生Data與Index file</li>
+<li>此處分別產生2個Data與Index file，對應2個Map Task</li>
+<li>shuffle_x_y_z:<ul>
+<li>x: shuffle的次數</li>
+<li>y: 第幾次map產生的</li>
+<li>z: 第幾次reduce產生的</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">``` bash</div><div class="line">scala&gt; val lines = sc.textFile(&quot;file:////home/hadoop/testFile&quot;) </div><div class="line">lines: org.apache.spark.rdd.RDD[String] = file:////home/hadoop/testFile MapPartitionsRDD[6] at textFile at &lt;console&gt;:24</div><div class="line"></div><div class="line">scala&gt; val words = lines.flatMap(_.split(&quot;\t&quot;))</div><div class="line">words: org.apache.spark.rdd.RDD[String] = MapPartitionsRDD[7] at flatMap at &lt;console&gt;:26</div><div class="line"></div><div class="line">scala&gt; val pairs = words.map((_,1))</div><div class="line">pairs: org.apache.spark.rdd.RDD[(String, Int)] = MapPartitionsRDD[8] at map at &lt;console&gt;:28</div><div class="line"></div><div class="line">## 設定Reduce task數量為5</div><div class="line">scala&gt; val wordcount = pairs.reduceByKey(_+_, 5) </div><div class="line">wordcount: org.apache.spark.rdd.RDD[(String, Int)] = ShuffledRDD[9] at reduceByKey at &lt;console&gt;:30</div><div class="line"></div><div class="line">scala&gt; wordcount.collect</div><div class="line">res1: Array[(String, Int)] = Array((Hello,1), (we,1), (&quot;&quot;,1), (roll,1), (first,1), (How,1), (world,1))</div></pre></td></tr></table></figure>
+<img src="/2018/02/22/spark_shuffle/spark_sort_suffle_set_output_partition.png" width="1000">
+<ul>
+<li>Stage0與Stage1分別對應2個Map task與5個Reduce Task，</li>
+<li>Map task數量是由sc.textFile(…)的第二個參數minPartitions決定，預設為2(Partition數與Map Task數相對應)</li>
+<li>Reduce Task數量由reduceByKey(…)的第二個參數設定</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">[hadoop@testmain blockmgr-2bce7fb7-2a45-45ba-8fb9-96be7976e8f4]$ tree</div><div class="line">.</div><div class="line">|____11</div><div class="line">|____0e</div><div class="line">|____30</div><div class="line">| |____shuffle_0_0_0.index</div><div class="line">|____0d</div><div class="line">|____36</div><div class="line">|____0a</div><div class="line">| |____shuffle_1_1_0.data</div><div class="line">|____09</div><div class="line">|____0b</div><div class="line">|____32</div><div class="line">| |____shuffle_1_1_0.index</div><div class="line">|____13</div><div class="line">|____15</div><div class="line">| |____shuffle_0_1_0.data</div><div class="line">|____0c</div><div class="line">| |____shuffle_0_0_0.data</div><div class="line">|____0f</div><div class="line">| |____shuffle_0_1_0.index</div><div class="line">| |____shuffle_1_0_0.index</div><div class="line">|____2b</div><div class="line">| |____shuffle_1_0_0.data</div></pre></td></tr></table></figure>
+<ul>
+<li>此處為累積第二次的Shuffle，所以對應的Data與Index文件為shuffle<em>1</em> 開頭</li>
+<li>此處分別產生2個Data與Index file，對應2個Map Task</li>
+</ul>
+<h3 id="Sort-Suffle-Bypass-Mechanism"><a href="#Sort-Suffle-Bypass-Mechanism" class="headerlink" title="Sort Suffle Bypass Mechanism"></a>Sort Suffle Bypass Mechanism</h3><ul>
+<li>Bypass的觸發條件如下<ul>
+<li>Shuffle map task數量小於spark.shuffle.sort.bypassMergeThreshold參數的值</li>
+<li>不是聚合類的Shuffle算子</li>
+</ul>
+</li>
+</ul>
+<h4 id="Advantages-2"><a href="#Advantages-2" class="headerlink" title="Advantages"></a>Advantages</h4><ul>
+<li>在Shuffle write過程中，不會對數據進行排序操作，節省此部分的性能開銷</li>
+</ul>
+<h3 id="Spark-Shuffle-Tuning"><a href="#Spark-Shuffle-Tuning" class="headerlink" title="Spark Shuffle Tuning"></a>Spark Shuffle Tuning</h3><ul>
+<li>spark.shuffle.file.buffer<ul>
+<li>默認值: 32KB</li>
+<li>建議值: 128KB</li>
+<li>此參數用於設置Shuffle write task的Buffer大小，每次寫入Disk File前，會先將數據寫入此Buffer，待Buffer滿了之後，再寫入Disk File</li>
+<li>可以Shuffle wirte過程中溢寫Disk文件的次數，進而減少Disk I/O次數</li>
+</ul>
+</li>
+<li>spark.reducer.maxSizeInFlight<ul>
+<li>默認值: 48m</li>
+<li>建議值: 96m</li>
+<li>此參數用於設置Shuffle read task的Buffer大小，此Buffer決定每次能夠拉取多少數據</li>
+<li>減少拉取數據的次數，進而減少網路傳輸的次數</li>
+</ul>
+</li>
+<li>spark.shuffle.io.maxRetries<ul>
+<li>默認值: 3</li>
+<li>建議值: 60</li>
+<li>當Shuffle read task從Shuffle write task拉取屬於自己的數據時，可能因為JVM的GC或者網路異常導致拉取數據失敗，會自動進行重試，此參數代表最大重試次數</li>
+<li>對於超大數據量(數十億至上百億)的Shuffle，調優此參數可以大幅提升穩定性</li>
+</ul>
+</li>
+<li>spark.shuffle.io.retryWait<ul>
+<li>默認值: 5s</li>
+<li>建議值: 60s</li>
+<li>每次重試拉取數據的間隔時常</li>
+</ul>
+</li>
+</ul>
+<h3 id="Referance"><a href="#Referance" class="headerlink" title="Referance"></a>Referance</h3><ul>
+<li><a href="https://tech.meituan.com/spark-tuning-pro.html&quot;Spark性能优化指南——高级篇&quot;" target="_blank" rel="external">Spark性能优化指南——高级篇</a> </li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/spark-core-rdd-lineage-checkpoint/" rel="next" title="Spark RDD Lineage and Checkpoint">
+                <i class="fa fa-chevron-left"></i> Spark RDD Lineage and Checkpoint
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-Shuffle"><span class="nav-number">1.</span> <span class="nav-text">Spark Shuffle</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spark-Shuffle-Introduction"><span class="nav-number">1.1.</span> <span class="nav-text">Spark Shuffle Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Performance-Impact"><span class="nav-number">1.2.</span> <span class="nav-text">Performance Impact</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spark-Shuffle-Manager"><span class="nav-number">1.3.</span> <span class="nav-text">Spark Shuffle Manager</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash-Shuffle"><span class="nav-number">1.4.</span> <span class="nav-text">Hash Shuffle</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Disadvantages"><span class="nav-number">1.4.1.</span> <span class="nav-text">Disadvantages</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash-Shuffle-with-ConsolidateFile"><span class="nav-number">1.5.</span> <span class="nav-text">Hash Shuffle with ConsolidateFile</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Advantages"><span class="nav-number">1.5.1.</span> <span class="nav-text">Advantages</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sort-Suffle"><span class="nav-number">1.6.</span> <span class="nav-text">Sort Suffle</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Advantages-1"><span class="nav-number">1.6.1.</span> <span class="nav-text">Advantages</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Spark-Shell-Demo"><span class="nav-number">1.6.2.</span> <span class="nav-text">Spark Shell Demo</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sort-Suffle-Bypass-Mechanism"><span class="nav-number">1.7.</span> <span class="nav-text">Sort Suffle Bypass Mechanism</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Advantages-2"><span class="nav-number">1.7.1.</span> <span class="nav-text">Advantages</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spark-Shuffle-Tuning"><span class="nav-number">1.8.</span> <span class="nav-text">Spark Shuffle Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Referance"><span class="nav-number">1.9.</span> <span class="nav-text">Referance</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
