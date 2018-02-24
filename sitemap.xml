@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://0x90e.github.io/spark-rdd-dependence/</loc>
+    
+    <lastmod>2018-02-24T16:11:13.507Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0x90e.github.io/spark-shuffle/</loc>
     
     <lastmod>2018-02-22T16:23:56.842Z</lastmod>

@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Spark RDD DependenceDependenciesNarrow Dependencies 任何一個Parent RDD的Partition至多被Child RDD的某個Partition使用一次 有些可能沒用被使用   透過流水線(pipelining possible)的方式進行傳遞 不存在shuffle 如果某個Partition遺失了，可以快速使用Parent RDD對應的Pa">
+<meta name="keywords" content="Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark RDD Dependence">
+<meta property="og:url" content="https://0x90e.github.io/spark-rdd-dependence/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Spark RDD DependenceDependenciesNarrow Dependencies 任何一個Parent RDD的Partition至多被Child RDD的某個Partition使用一次 有些可能沒用被使用   透過流水線(pipelining possible)的方式進行傳遞 不存在shuffle 如果某個Partition遺失了，可以快速使用Parent RDD對應的Pa">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0x90e.github.io/2018/02/24/spark-rdd-dependence/spark_rdd_dependence.svg">
+<meta property="og:image" content="https://0x90e.github.io/2018/02/24/spark-rdd-dependence/word_count_with_shuffle.svg">
+<meta property="og:image" content="https://0x90e.github.io/2018/02/24/spark-rdd-dependence/wordcount_DAG.png">
+<meta property="og:updated_time" content="2018-02-24T16:11:13.507Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark RDD Dependence">
+<meta name="twitter:description" content="Spark RDD DependenceDependenciesNarrow Dependencies 任何一個Parent RDD的Partition至多被Child RDD的某個Partition使用一次 有些可能沒用被使用   透過流水線(pipelining possible)的方式進行傳遞 不存在shuffle 如果某個Partition遺失了，可以快速使用Parent RDD對應的Pa">
+<meta name="twitter:image" content="https://0x90e.github.io/2018/02/24/spark-rdd-dependence/spark_rdd_dependence.svg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/spark-rdd-dependence/"/>
+
+
+
+
+
+  <title>Spark RDD Dependence | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-rdd-dependence/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Spark RDD Dependence</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-24T23:35:37+08:00">
+                2018-02-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Spark-RDD-Dependence"><a href="#Spark-RDD-Dependence" class="headerlink" title="Spark RDD Dependence"></a>Spark RDD Dependence</h2><h3 id="Dependencies"><a href="#Dependencies" class="headerlink" title="Dependencies"></a>Dependencies</h3><h4 id="Narrow-Dependencies"><a href="#Narrow-Dependencies" class="headerlink" title="Narrow Dependencies"></a>Narrow Dependencies</h4><ul>
+<li>任何一個Parent RDD的Partition至多被Child RDD的某個Partition使用一次<ul>
+<li>有些可能沒用被使用</li>
+</ul>
+</li>
+<li>透過流水線(pipelining possible)的方式進行傳遞</li>
+<li>不存在shuffle</li>
+<li>如果某個Partition遺失了，可以快速使用Parent RDD對應的Patition計算出來，容錯與計算速度都很快</li>
+</ul>
+<a id="more"></a>
+<h4 id="Wide-Dependencies"><a href="#Wide-Dependencies" class="headerlink" title="Wide Dependencies:"></a>Wide Dependencies:</h4><ul>
+<li>任何一個Parent RDD的Partition會被Child RDD的partition使用多次<ul>
+<li>有些可能沒用被使用</li>
+</ul>
+</li>
+<li>會產生Shuffle<ul>
+<li>一遇到Shuffle，就會將Job分割成2個Stage</li>
+</ul>
+</li>
+<li>Shuffle可能造成部分或者全部的Data需要進行網路傳輸</li>
+<li>因為會產生Shuffle，所以可能有數據傾斜的情況</li>
+<li>若Partition遺失了，則需要計算所有相關父RDD的資料，相較於Narrow dependencies，其容錯速度較低</li>
+</ul>
+<h4 id="Dependencies-and-Lineage-Concept"><a href="#Dependencies-and-Lineage-Concept" class="headerlink" title="Dependencies and Lineage Concept"></a>Dependencies and Lineage Concept</h4><img src="/2018/02/24/spark-rdd-dependence/spark_rdd_dependence.svg" width="700">
+<ul>
+<li>Dependencies Concept<ol>
+<li>RDD0到RDD1之間是Narrow dependencies，例如進行map操作</li>
+<li>RDD1到RDD2和RDD3之間是Wide dependencies，例如進行reduceByKey操作</li>
+</ol>
+</li>
+<li>Lineage Concept<ol>
+<li>對RDD1進行cache操作，因此在計算RDD2與RDD3時，可以直接從記憶體中直接拿取RDD1的資訊</li>
+<li>若RDD1中的Partition3丟失了，則在計算RDD2與RDD3時，會自動到RDD0中的Partition3進行重新計算得到RDD1的Partition3，而RDD1中其他的Partition不受影響</li>
+</ol>
+</li>
+</ul>
+<h4 id="Transformations"><a href="#Transformations" class="headerlink" title="Transformations"></a>Transformations</h4><ul>
+<li>可能產生Narrow dependencies的Transformations<ul>
+<li>map</li>
+<li>mapValues</li>
+<li>flatMap</li>
+<li>filter</li>
+<li>mapPartitions</li>
+<li>mapPartitionsWithIndex</li>
+</ul>
+</li>
+<li>可能產生Wide dependencies的Transformations(可能造成Shuffle)<ul>
+<li>cogroup</li>
+<li>groupWith</li>
+<li>join</li>
+<li>leftOuterJoin</li>
+<li>rightOuterJoin</li>
+<li>groupByKey</li>
+<li>reduceByKey</li>
+<li>combineByKey</li>
+<li>distinct</li>
+<li>intersection</li>
+<li>repartition</li>
+<li>coalesce</li>
+</ul>
+</li>
+</ul>
+<h4 id="Dependency-Objects"><a href="#Dependency-Objects" class="headerlink" title="Dependency Objects"></a>Dependency Objects</h4><p>RDD在使用dependencies方法時，會回傳一個由List表示的Dependency object，而不同類型的RDD會回傳不同的Dependency object<br>Dependency object可以根據dependency分成兩類:</p>
+<ul>
+<li>Narrow dependency objects<ul>
+<li>OneToOneDependency</li>
+<li>PruneDependency</li>
+<li>RangeDependency</li>
+</ul>
+</li>
+<li>Wide dependency objects<ul>
+<li>ShuffleDependency</li>
+</ul>
+</li>
+<li>相關程式位置為org.apache.spark.rdd的RDD.scala</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * Get the list of dependencies of this RDD, taking into account whether the</span></div><div class="line"><span class="comment"> * RDD is checkpointed or not.</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="keyword">final</span> def dependencies: Seq[Dependency[_]] = &#123;</div><div class="line">  checkpointRDD.map(r =&gt; List(<span class="keyword">new</span> OneToOneDependency(r))).getOrElse &#123;</div><div class="line">    <span class="keyword">if</span> (dependencies_ == <span class="keyword">null</span>) &#123;</div><div class="line">      dependencies_ = getDependencies</div><div class="line">    &#125;</div><div class="line">    dependencies_</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Wordcount-Demo"><a href="#Wordcount-Demo" class="headerlink" title="Wordcount Demo"></a>Wordcount Demo</h3><p>這裡使用Spark wordcount例子，圖形化說明在每個步驟的RDD及其Patitions的狀態，以及RDD之間的Dependency關係<br>Sacla程式如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">val lines = sc.textFile(<span class="string">"file:////home/hadoop/testFile"</span>) </div><div class="line">val words = lines.flatMap(_.split(<span class="string">"\t"</span>))</div><div class="line">val pairs = words.map((_,<span class="number">1</span>))</div><div class="line">val wordcount = pairs.reduceByKey(_+_, <span class="number">2</span>) </div><div class="line">wordcount.collect</div></pre></td></tr></table></figure></p>
+<img src="/2018/02/24/spark-rdd-dependence/word_count_with_shuffle.svg" width="1000">
+<ul>
+<li>上圖描述wordcount整個流程的執行過程，並分別用使用Scala中的變量對應每個步驟的過程</li>
+<li>當中flatMap與map皆為Narrow dependence</li>
+<li>reduceByKey為Wide dependence，故產生了Shuffle，並將Job切割成2個Stage</li>
+</ul>
+<h3 id="Spark-Shell-Demo"><a href="#Spark-Shell-Demo" class="headerlink" title="Spark Shell Demo"></a>Spark Shell Demo</h3><p>下面使用Spark shell執行wordcount<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[hadoop<span class="meta">@testmain</span> bin]$ ./spark-shell --master local[<span class="number">2</span>] --jars /opt/software/hive/lib/mysql-connector-java-<span class="number">5.1</span>.44-bin.jar</div><div class="line">## ...</div><div class="line">scala&gt; val lines = sc.textFile(<span class="string">"file:////home/hadoop/testFile"</span>) </div><div class="line">lines: org.apache.spark.rdd.RDD[String] = file:<span class="comment">////home/hadoop/testFile MapPartitionsRDD[1] at textFile at &lt;console&gt;:24</span></div><div class="line"></div><div class="line">scala&gt; val words = lines.flatMap(_.split(<span class="string">"\t"</span>))</div><div class="line">words: org.apache.spark.rdd.RDD[String] = MapPartitionsRDD[<span class="number">2</span>] at flatMap at &lt;console&gt;:<span class="number">26</span></div><div class="line"></div><div class="line">scala&gt; val pairs = words.map((_,<span class="number">1</span>))</div><div class="line">pairs: org.apache.spark.rdd.RDD[(String, Int)] = MapPartitionsRDD[<span class="number">3</span>] at map at &lt;console&gt;:<span class="number">28</span></div><div class="line"></div><div class="line">scala&gt; val wordcount = pairs.reduceByKey(_+_, <span class="number">5</span>) </div><div class="line">wordcount: org.apache.spark.rdd.RDD[(String, Int)] = ShuffledRDD[<span class="number">4</span>] at reduceByKey at &lt;console&gt;:<span class="number">30</span></div><div class="line"></div><div class="line">scala&gt; wordcount.collect</div><div class="line">res0: Array[(String, Int)] = Array((Hello,<span class="number">1</span>), (we,<span class="number">1</span>), (<span class="string">""</span>,<span class="number">1</span>), (roll,<span class="number">1</span>), (first,<span class="number">1</span>), (How,<span class="number">1</span>), (world,<span class="number">1</span>))</div></pre></td></tr></table></figure></p>
+<h4 id="DAG"><a href="#DAG" class="headerlink" title="DAG"></a>DAG</h4><img src="/2018/02/24/spark-rdd-dependence/wordcount_DAG.png" width="1000">
+<ul>
+<li>與Wordcount Demo部分的圖相呼應，reduceByKey造成了Shuffle，故分割成2個Stage</li>
+<li>Completed Stages中，Stage id為0的Tasks為2，是因為textFile預設為2個Partition，而Partition數量與Task對應</li>
+<li>Stage id為1的Tasks為5，是因為reduceByKey的第二個參數指定為輸出5個Partition</li>
+</ul>
+<h4 id="Dependency-Objects-and-Lineage"><a href="#Dependency-Objects-and-Lineage" class="headerlink" title="Dependency Objects and Lineage"></a>Dependency Objects and Lineage</h4><ul>
+<li>使用dependencies方法得知該RDD的Dependency object</li>
+<li>使用toDebugString方法得知該RDD的Lineage以及RDD object，在DAG圖上也會顯示RDD object的訊息</li>
+<li>根據Dependency object或RDD object可以得知Transformation的Dependency類別(Narrow or Wide)，以及是否會產生Shuffle<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">scala&gt; words.dependencies </div><div class="line">res1: Seq[org.apache.spark.Dependency[_]] = List(org.apache.spark.OneToOneDependency@79799b21)</div><div class="line"></div><div class="line">scala&gt; pairs.dependencies</div><div class="line">res2: Seq[org.apache.spark.Dependency[_]] = List(org.apache.spark.OneToOneDependency@6eedbb7b)</div><div class="line"></div><div class="line">scala&gt; wordcount.dependencies</div><div class="line">res3: Seq[org.apache.spark.Dependency[_]] = List(org.apache.spark.ShuffleDependency@43c0b11a)</div><div class="line"></div><div class="line">scala&gt; words.toDebugString</div><div class="line">res4: String =</div><div class="line">(2) MapPartitionsRDD[2] at flatMap at &lt;console&gt;:26 []</div><div class="line"> |  file:////home/hadoop/testFile MapPartitionsRDD[1] at textFile at &lt;console&gt;:24 []</div><div class="line"> |  file:////home/hadoop/testFile HadoopRDD[0] at textFile at &lt;console&gt;:24 []</div><div class="line"></div><div class="line">scala&gt; pairs.toDebugString</div><div class="line">res5: String =</div><div class="line">(2) MapPartitionsRDD[3] at map at &lt;console&gt;:28 []</div><div class="line"> |  MapPartitionsRDD[2] at flatMap at &lt;console&gt;:26 []</div><div class="line"> |  file:////home/hadoop/testFile MapPartitionsRDD[1] at textFile at &lt;console&gt;:24 []</div><div class="line"> |  file:////home/hadoop/testFile HadoopRDD[0] at textFile at &lt;console&gt;:24 []</div><div class="line"></div><div class="line">scala&gt; wordcount.toDebugString</div><div class="line">res6: String =</div><div class="line">(5) ShuffledRDD[4] at reduceByKey at &lt;console&gt;:30 []</div><div class="line"> +-(2) MapPartitionsRDD[3] at map at &lt;console&gt;:28 []</div><div class="line">    |  MapPartitionsRDD[2] at flatMap at &lt;console&gt;:26 []</div><div class="line">    |  file:////home/hadoop/testFile MapPartitionsRDD[1] at textFile at &lt;console&gt;:24 []</div><div class="line">    |  file:////home/hadoop/testFile HadoopRDD[0] at textFile at &lt;console&gt;:24 []</div></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/spark-shuffle/" rel="next" title="Spark Shuffle">
+                <i class="fa fa-chevron-left"></i> Spark Shuffle
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-RDD-Dependence"><span class="nav-number">1.</span> <span class="nav-text">Spark RDD Dependence</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dependencies"><span class="nav-number">1.1.</span> <span class="nav-text">Dependencies</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Narrow-Dependencies"><span class="nav-number">1.1.1.</span> <span class="nav-text">Narrow Dependencies</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Wide-Dependencies"><span class="nav-number">1.1.2.</span> <span class="nav-text">Wide Dependencies:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dependencies-and-Lineage-Concept"><span class="nav-number">1.1.3.</span> <span class="nav-text">Dependencies and Lineage Concept</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transformations"><span class="nav-number">1.1.4.</span> <span class="nav-text">Transformations</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dependency-Objects"><span class="nav-number">1.1.5.</span> <span class="nav-text">Dependency Objects</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Wordcount-Demo"><span class="nav-number">1.2.</span> <span class="nav-text">Wordcount Demo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spark-Shell-Demo"><span class="nav-number">1.3.</span> <span class="nav-text">Spark Shell Demo</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DAG"><span class="nav-number">1.3.1.</span> <span class="nav-text">DAG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dependency-Objects-and-Lineage"><span class="nav-number">1.3.2.</span> <span class="nav-text">Dependency Objects and Lineage</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
