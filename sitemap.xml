@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://0x90e.github.io/spark-shared-variables/</loc>
+    
+    <lastmod>2018-03-04T17:27:07.558Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0x90e.github.io/spark-rdd-dependence/</loc>
     
     <lastmod>2018-02-24T16:11:13.507Z</lastmod>

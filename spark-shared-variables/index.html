@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Shared Variables 如果有一個操作(map, reduce)是執行在遠端集群節點上，而此操作內使用到的外部變量，Spark會通過複製的方式，從Driver端傳遞到每台執行該操作的節點上，而且每台遠端節點上的變量，是無法進行更新對應在Driver那份原始變量的。 在上述的情況下，讀寫共享變量在跨Task的情況下就不是這麼的高效了，所以Spark提供了兩種機制的共享變量機制: Broad">
+<meta name="keywords" content="Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spark_shared_variables">
+<meta property="og:url" content="https://0x90e.github.io/spark-shared-variables/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Shared Variables 如果有一個操作(map, reduce)是執行在遠端集群節點上，而此操作內使用到的外部變量，Spark會通過複製的方式，從Driver端傳遞到每台執行該操作的節點上，而且每台遠端節點上的變量，是無法進行更新對應在Driver那份原始變量的。 在上述的情況下，讀寫共享變量在跨Task的情況下就不是這麼的高效了，所以Spark提供了兩種機制的共享變量機制: Broad">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0x90e.github.io/2018/03/04/spark-shared-variables/normal_variables.svg">
+<meta property="og:image" content="https://0x90e.github.io/2018/03/04/spark-shared-variables/broadcast_variables.svg">
+<meta property="og:image" content="https://0x90e.github.io/2018/03/04/spark-shared-variables/spark_shared_normal.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/03/04/spark-shared-variables/spark_shared_mapjoin.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/03/04/spark-shared-variables/spark_shared_accumulator.png">
+<meta property="og:updated_time" content="2018-03-04T17:27:07.558Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="spark_shared_variables">
+<meta name="twitter:description" content="Shared Variables 如果有一個操作(map, reduce)是執行在遠端集群節點上，而此操作內使用到的外部變量，Spark會通過複製的方式，從Driver端傳遞到每台執行該操作的節點上，而且每台遠端節點上的變量，是無法進行更新對應在Driver那份原始變量的。 在上述的情況下，讀寫共享變量在跨Task的情況下就不是這麼的高效了，所以Spark提供了兩種機制的共享變量機制: Broad">
+<meta name="twitter:image" content="https://0x90e.github.io/2018/03/04/spark-shared-variables/normal_variables.svg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/spark-shared-variables/"/>
+
+
+
+
+
+  <title>spark_shared_variables | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-shared-variables/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">spark_shared_variables</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-04T17:03:21+08:00">
+                2018-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Shared-Variables"><a href="#Shared-Variables" class="headerlink" title="Shared Variables"></a>Shared Variables</h2><ul>
+<li>如果有一個操作(map, reduce)是執行在遠端集群節點上，而此操作內使用到的外部變量，Spark會通過複製的方式，從Driver端傳遞到每台執行該操作的節點上，<br>而且每台遠端節點上的變量，是無法進行更新對應在Driver那份原始變量的。</li>
+<li>在上述的情況下，讀寫共享變量在跨Task的情況下就不是這麼的高效了，所以Spark提供了兩種機制的共享變量機制:<ul>
+<li>Broadcast Variables</li>
+<li>Accumulators</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<h3 id="Broadcast-Variables"><a href="#Broadcast-Variables" class="headerlink" title="Broadcast Variables"></a>Broadcast Variables</h3><ul>
+<li><a href="https://spark.apache.org/docs/latest/rdd-programming-guide.html#broadcast-variables" title="Broadcast Variables" target="_blank" rel="external">Broadcast variables</a></li>
+<li>透過SparkContext構建Broadcast variables</li>
+<li>可以大幅降低序列化任務的大小，以及降低每個跨集群啟動Job的成本</li>
+<li>對較大的變量，透過Broadcast variable傳遞到每個Job，有效降低記憶體使用量</li>
+<li>當多個跨Stage的Task需要相同一份Data，或使用Deserialized將Data cache時，使用Broadcast Variables才是有用的</li>
+<li>每台Work node中第一個使用到Broadcast variable的Task，會透過BlockManager向Driver端拉取Broadcast variable到自己的Executor上</li>
+<li>而相同Work node上但不同Executor的其他Task需要使用到Broadcast variable時，會透過BlockManager向已經有Broadcast variable的Executor拉取</li>
+<li>Spark提供兩種Broadcast機制<ul>
+<li>TorrentBroadcast: 預設使用</li>
+<li>HttpBroadcast</li>
+</ul>
+</li>
+<li>若現在有50 Executor, 1000 Tasks, Data 100M<ul>
+<li>未使用Broadcast Variables所使用的記憶體空間: 1000 * 100M</li>
+<li>使用Broadcast Variables所使用的記憶體空間: 50 * 1000M </li>
+</ul>
+</li>
+<li>未使用Broadcast Variables的示意圖</li>
+</ul>
+<img src="/2018/03/04/spark-shared-variables/normal_variables.svg" width="300">
+<ul>
+<li>使用Broadcast Variables的示意圖</li>
+</ul>
+<img src="/2018/03/04/spark-shared-variables/broadcast_variables.svg" width="300">
+<h3 id="Accumulators"><a href="#Accumulators" class="headerlink" title="Accumulators"></a>Accumulators</h3><ul>
+<li><a href="https://spark.apache.org/docs/latest/rdd-programming-guide.html#accumulators" title="Accumulators" target="_blank" rel="external">Accumulators</a></li>
+<li>透過SparkContext構建Accumulators</li>
+<li>一個只能進行add的操作的變量，透過關聯和交換操作，達成高效的並行處理</li>
+<li>Spark原生支援Numeric類型的Accumulators，可以透用繼承的方式進行擴展</li>
+</ul>
+<h3 id="Broadcast-Variables-Code"><a href="#Broadcast-Variables-Code" class="headerlink" title="Broadcast Variables Code"></a>Broadcast Variables Code</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">/*</div><div class="line">peopleInfo:</div><div class="line">110 Smith</div><div class="line">130 Allen</div><div class="line"></div><div class="line">departmentInfo:</div><div class="line">110 Sales 001</div><div class="line">111 Accounting 002</div><div class="line"></div><div class="line">result:</div><div class="line">110,Smith,Sales</div><div class="line">*/</div><div class="line"></div><div class="line">val peopleInfo = sc.parallelize(Array((<span class="string">"110"</span>, <span class="string">"Smith"</span>),(<span class="string">"222"</span>, <span class="string">"Allen"</span>))).map(x=&gt;(x._1, x))</div><div class="line">val departmentInfo = sc.parallelize(Array((<span class="string">"110"</span>, <span class="string">"Sales"</span>, <span class="string">"001"</span>),(<span class="string">"111"</span>, <span class="string">"Accounting"</span>, <span class="string">"002"</span>))).map(x =&gt; (x._1, x))</div><div class="line"> </div><div class="line">peopleInfo.join(departmentInfo).map(x=&gt;&#123;</div><div class="line">    x._1 + <span class="string">","</span> + x._2._1._2 + <span class="string">","</span> + x._2._2._2</div><div class="line">&#125;).collect</div></pre></td></tr></table></figure>
+<img src="/2018/03/04/spark-shared-variables/spark_shared_normal.png" width="700">
+<ul>
+<li>可以透過上述的程式達成peopleInfo與departmentInfo的join操作</li>
+<li>另外也可以透過Broadcast Variables達成相同的操作</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">val peopleInfo = sc.parallelize(Array((&quot;110&quot;, &quot;Smith&quot;),(&quot;120&quot;, &quot;Allen&quot;))).collectAsMap()</div><div class="line">val broadcastValue = sc.broadcast(peopleInfo)</div><div class="line">val departmentInfo = sc.parallelize(Array((&quot;110&quot;, &quot;Sales&quot;, &quot;001&quot;),(&quot;111&quot;, &quot;Accounting&quot;, &quot;002&quot;)))</div><div class="line">departmentInfo.mapPartitions(iter =&gt; &#123;</div><div class="line">    val peopleMap = broadcastValue.value</div><div class="line">    var res = List[(String, String, String)]()</div><div class="line">    iter.foreach &#123; case (x, y, z) =&gt; &#123;</div><div class="line">        if (peopleMap.contains(x)) &#123;</div><div class="line">            res .::= ((x, peopleMap.getOrElse(x, &quot;&quot;), y))</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    &#125;</div><div class="line">    //arrayBuffer.iterator</div><div class="line">    res.iterator</div><div class="line">&#125;).collect</div></pre></td></tr></table></figure>
+<img src="/2018/03/04/spark-shared-variables/spark_shared_mapjoin.png" width="700">
+<ul>
+<li>上述透過Broadcast Variables與map類算子實作join操作，並與join操作達成相同效果</li>
+<li>此方法在數據傾斜時，而且操作對象是一個大表、一個小表時，可以完全避免Shuffle操作，也就不會發生數據傾斜的問題</li>
+<li>join操作產生Shuffle操作時，會將擁有相同key的數據拉到一個Shuffle read task中再進行join，也稱之為reduce join，但如果某個key的數據太多時，則會導致該Task處理時間很長，甚至處理不完</li>
+<li>可以將操作對象中的小表(RDD)透過Broadcast Variables進行<br>廣播，然後對大表進行map類算子，並在算子中使用小表的Broadcast Variables，並將原本的join邏輯實作在算子中，此流程也稱之為map join</li>
+</ul>
+<h3 id="Accumulators-Code"><a href="#Accumulators-Code" class="headerlink" title="Accumulators Code"></a>Accumulators Code</h3><p>此處使用Accumulator計算文件中為空的數據</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">val lines = sc.textFile(&quot;file:///home/hadoop/testFile&quot;)</div><div class="line"></div><div class="line">val nullNum = sc.longAccumulator(&quot;null line counter&quot;)</div><div class="line">val nonNullData = lines.filter(line =&gt; &#123;</div><div class="line">    var isNullLine = true</div><div class="line">    val splitLines = line.split(&quot;\t&quot;)</div><div class="line">    for (splitLine &lt;- splitLines)&#123;</div><div class="line">        if (&quot;&quot;.equals(splitLine))&#123;</div><div class="line">            isNullLine = false</div><div class="line">            nullNum.add(1)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    isNullLine</div><div class="line">&#125;)</div><div class="line"></div><div class="line">// 避免多次執行Action後，Transformation內的nullNum.add(1)被多次觸發</div><div class="line">nonNullData.cache()</div><div class="line"></div><div class="line">nonNullData.count</div><div class="line">println(&quot;Null line count: &quot; + nullNum.value)</div><div class="line">// Null line count: 1</div><div class="line"></div><div class="line">nonNullData.count</div><div class="line">println(&quot;Null line count: &quot; + nullNum.value)</div><div class="line">// 若不進行cache，此處會輸出 Null line count: 2</div></pre></td></tr></table></figure>
+<ul>
+<li>在執行Action之前，需要先對RDD進行cache，避免每次執行Action時，重複對Transformation內的Accumulators操作重複進行add，導致非預期的輸出</li>
+<li>在對應的Job頁面中的Tasks欄位，可以看到longAccumulator創建時所指定的Accumulator名稱</li>
+</ul>
+<img src="/2018/03/04/spark-shared-variables/spark_shared_accumulator.png" width="700">
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li><a href="https://github.com/lemonahit/spark-train" title="lemonahit Github" target="_blank" rel="external">lemonahit Github</a></li>
+<li><a href="https://tech.meituan.com/spark-tuning-pro.html" title="Spark性能优化指南——高级篇" target="_blank" rel="external">Spark性能优化指南——高级篇</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/spark-rdd-dependence/" rel="next" title="Spark RDD Dependence">
+                <i class="fa fa-chevron-left"></i> Spark RDD Dependence
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Shared-Variables"><span class="nav-number">1.</span> <span class="nav-text">Shared Variables</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Broadcast-Variables"><span class="nav-number">1.1.</span> <span class="nav-text">Broadcast Variables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Accumulators"><span class="nav-number">1.2.</span> <span class="nav-text">Accumulators</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Broadcast-Variables-Code"><span class="nav-number">1.3.</span> <span class="nav-text">Broadcast Variables Code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Accumulators-Code"><span class="nav-number">1.4.</span> <span class="nav-text">Accumulators Code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">1.5.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
