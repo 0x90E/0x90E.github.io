@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://0x90e.github.io/spark-streaming-basic/</loc>
+    
+    <lastmod>2018-03-07T16:58:21.224Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0x90e.github.io/spark-shared-variables/</loc>
     
     <lastmod>2018-03-04T17:49:27.953Z</lastmod>
