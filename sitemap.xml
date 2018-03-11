@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://0x90e.github.io/spark-streaming-receiver/</loc>
+    
+    <lastmod>2018-03-11T17:23:20.301Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0x90e.github.io/spark-streaming-basic/</loc>
     
-    <lastmod>2018-03-08T17:08:38.888Z</lastmod>
+    <lastmod>2018-03-11T16:55:56.295Z</lastmod>
     
   </url>
   
