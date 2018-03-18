@@ -75,18 +75,18 @@
 
 
 
-<meta name="description" content="Spark SQL DataFrame OperationsCode1234567891011121314151617181920212223242526272829303132import org.apache.spark.sql.SparkSessionobject DataFrameDemo &amp;#123;  def main(args: Array[String]): Unit = &amp;#12">
+<meta name="description" content="Spark Streaming File StreamSpark Streaming File Stream Spark streaming file stream 支持任何兼容HDFS API的文件系統，例如HDFS、S3、NFS File stream不需要執行Receiver去接收數據，故不需要配置任何Core">
 <meta name="keywords" content="Spark">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spark SQL DataFrame Operations">
-<meta property="og:url" content="https://0x90e.github.io/spark-sql-dataFrame-operations/index.html">
+<meta property="og:title" content="Spark Streaming File Stream">
+<meta property="og:url" content="https://0x90e.github.io/spark-streaming-file-stream/index.html">
 <meta property="og:site_name" content="0x90e&#39;s Blog">
-<meta property="og:description" content="Spark SQL DataFrame OperationsCode1234567891011121314151617181920212223242526272829303132import org.apache.spark.sql.SparkSessionobject DataFrameDemo &amp;#123;  def main(args: Array[String]): Unit = &amp;#12">
+<meta property="og:description" content="Spark Streaming File StreamSpark Streaming File Stream Spark streaming file stream 支持任何兼容HDFS API的文件系統，例如HDFS、S3、NFS File stream不需要執行Receiver去接收數據，故不需要配置任何Core">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-01-31T15:49:46.668Z">
+<meta property="og:updated_time" content="2018-03-18T16:27:17.005Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spark SQL DataFrame Operations">
-<meta name="twitter:description" content="Spark SQL DataFrame OperationsCode1234567891011121314151617181920212223242526272829303132import org.apache.spark.sql.SparkSessionobject DataFrameDemo &amp;#123;  def main(args: Array[String]): Unit = &amp;#12">
+<meta name="twitter:title" content="Spark Streaming File Stream">
+<meta name="twitter:description" content="Spark Streaming File StreamSpark Streaming File Stream Spark streaming file stream 支持任何兼容HDFS API的文件系統，例如HDFS、S3、NFS File stream不需要執行Receiver去接收數據，故不需要配置任何Core">
 
 
 
@@ -116,13 +116,13 @@
 
 
 
-  <link rel="canonical" href="https://0x90e.github.io/spark-sql-dataFrame-operations/"/>
+  <link rel="canonical" href="https://0x90e.github.io/spark-streaming-file-stream/"/>
 
 
 
 
 
-  <title>Spark SQL DataFrame Operations | 0x90e's Blog</title>
+  <title>Spark Streaming File Stream | 0x90e's Blog</title>
   
 
 
@@ -258,7 +258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-sql-dataFrame-operations/">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-streaming-file-stream/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="0x90e">
@@ -275,7 +275,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">Spark SQL DataFrame Operations</h2>
+          <h2 class="post-title" itemprop="name headline">Spark Streaming File Stream</h2>
         
 
         <div class="post-meta">
@@ -287,8 +287,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-08T02:01:12+08:00">
-                2017-12-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-19T00:18:05+08:00">
+                2018-03-19
               </time>
             
 
@@ -352,47 +352,31 @@
       
 
       
-        <h2 id="Spark-SQL-DataFrame-Operations"><a href="#Spark-SQL-DataFrame-Operations" class="headerlink" title="Spark SQL DataFrame Operations"></a>Spark SQL DataFrame Operations</h2><h3 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> org.apache.spark.sql.<span class="type">SparkSession</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">DataFrameDemo</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</div><div class="line"></div><div class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span></div><div class="line">      .builder().master(<span class="string">"local[2]"</span>)</div><div class="line">      .appName(<span class="string">"DataFrameDemo"</span>)</div><div class="line">      .getOrCreate()</div><div class="line"></div><div class="line">    <span class="keyword">val</span> df = spark.read.format(<span class="string">"json"</span>).load(<span class="string">"file/people.json"</span>)</div><div class="line">    println(<span class="string">"Displays the content of the DataFrame to stdout"</span>)</div><div class="line">    df.show()</div><div class="line"></div><div class="line">    println(<span class="string">"Print the schema in a tree format"</span>)</div><div class="line">    df.printSchema()</div><div class="line"></div><div class="line">    println(<span class="string">"Select only the name column"</span>)</div><div class="line">    df.select(<span class="string">"name"</span>).show()</div><div class="line"></div><div class="line">    <span class="comment">// This import is needed to use the $-notation</span></div><div class="line">    <span class="keyword">import</span> spark.implicits._</div><div class="line"></div><div class="line">    println(<span class="string">"Select everybody, but increment the age by 1"</span>)</div><div class="line">    df.select($<span class="string">"name"</span>, $<span class="string">"age"</span> + <span class="number">1</span>).show()</div><div class="line"></div><div class="line">    println(<span class="string">"Select people older than 21"</span>)</div><div class="line">    df.filter($<span class="string">"age"</span> &gt; <span class="number">21</span>).show()</div><div class="line"></div><div class="line">    spark.stop()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<a id="more"></a>
-<h3 id="Explanation"><a href="#Explanation" class="headerlink" title="Explanation"></a>Explanation</h3><h4 id="來源檔案內容"><a href="#來源檔案內容" class="headerlink" title="來源檔案內容"></a>來源檔案內容</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[hadoop@hadoop-01 file]<span class="comment"># cat people.json </span></div><div class="line">&#123;<span class="string">"name"</span>:<span class="string">"Michael"</span>&#125;</div><div class="line">&#123;<span class="string">"name"</span>:<span class="string">"Andy"</span>, <span class="string">"age"</span>:30&#125;</div><div class="line">&#123;<span class="string">"name"</span>:<span class="string">"Justin"</span>, <span class="string">"age"</span>:19&#125;</div></pre></td></tr></table></figure>
-<h4 id="對應輸出"><a href="#對應輸出" class="headerlink" title="對應輸出"></a>對應輸出</h4><ul>
-<li>df.show()<ul>
-<li>顯示當前DataFrame內的紀錄</li>
-<li>根據DataFrame源碼顯示，show()只會顯示前20條紀錄</li>
+        <h2 id="Spark-Streaming-File-Stream"><a href="#Spark-Streaming-File-Stream" class="headerlink" title="Spark Streaming File Stream"></a>Spark Streaming File Stream</h2><h3 id="Spark-Streaming-File-Stream-1"><a href="#Spark-Streaming-File-Stream-1" class="headerlink" title="Spark Streaming File Stream"></a>Spark Streaming File Stream</h3><ul>
+<li><a href="http://spark.apache.org/docs/latest/streaming-programming-guide.html#basic-sources" title="Spark streaming file stream" target="_blank" rel="external">Spark streaming file stream</a></li>
+<li>支持任何兼容HDFS API的文件系統，例如HDFS、S3、NFS</li>
+<li>File stream不需要執行Receiver去接收數據，故不需要配置任何Core<a id="more"></a></li>
+<li>使用key-value的方式來表示input的格式<ul>
+<li>key: offset</li>
+<li>value: file content</li>
+</ul>
+</li>
+<li>在文件移動到受監控目錄後，使用附加的方式所新增的內容，不會被處理</li>
+<li>文件必須是寫到受監控的目錄，並且是透過move的方式從其他位置寫入的文件<ul>
+<li>不能使用copy的原因，是因為copy可能無法完成一次性移動到受監控的目錄，導致Streaming報錯</li>
+</ul>
+</li>
+<li>文件會不會被處理，主要是根據文件最後修改時間作為依據，必須在Streaming啟動之後的時間，才會被處理</li>
+<li>所有輸入的文件的格式需要相同</li>
+<li>使用下列API創建File input stream，來監控新文件的產生<ul>
+<li>streamingContext.fileStream[KeyClass, ValueClass, InputFormatClass](dataDirectory)</li>
+<li>streamingContext.textFileStream(dataDirectory): For text files</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Displays the content of the DataFrame to stdout</div><div class="line">+----+-------+</div><div class="line">| age|   name|</div><div class="line">+----+-------+</div><div class="line">|null|Michael|</div><div class="line">|  30|   Andy|</div><div class="line">|  19| Justin|</div><div class="line">+----+-------+</div></pre></td></tr></table></figure>
-<ul>
-<li>df.printSchema()<ul>
-<li>透過樹狀結構將DataFrame中的schema列印出來</li>
-<li>DataFrame會自行對json格式內的紀錄進行類型推導，譬如age的類型為long</li>
-</ul>
-</li>
-<li>df.select(“name”).show()<ul>
-<li>顯示特定column name的紀錄</li>
-<li>指定的column name入參為String類型</li>
-<li>API source: select(col: String, cols: String*): DataFrame</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Print the schema <span class="keyword">in</span> a tree format</div><div class="line">root</div><div class="line"> |-- age: long (nullable = <span class="literal">true</span>)</div><div class="line"> |-- name: string (nullable = <span class="literal">true</span>)</div><div class="line"></div><div class="line">Select only the name column</div><div class="line">+-------+</div><div class="line">|   name|</div><div class="line">+-------+</div><div class="line">|Michael|</div><div class="line">|   Andy|</div><div class="line">| Justin|</div><div class="line">+-------+</div></pre></td></tr></table></figure>
-<ul>
-<li>import spark.implicits._<ul>
-<li>引用隱式轉換，確保column類型可以正常使用</li>
-</ul>
-</li>
-<li>df.select($”name”, $”age” + 1).show()<ul>
-<li>入參為column類型</li>
-<li>API source: select(cols: Column*): DataFrame </li>
-</ul>
-</li>
-<li>df.filter($”age” &gt; 21).show()<ul>
-<li>透過columnt輸入過濾條件</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Select everybody, but increment the age by 1</div><div class="line">+-------+---------+</div><div class="line">|   name|(age + 1)|</div><div class="line">+-------+---------+</div><div class="line">|Michael|     null|</div><div class="line">|   Andy|       31|</div><div class="line">| Justin|       20|</div><div class="line">+-------+---------+</div><div class="line"></div><div class="line">Select people older than 21</div><div class="line">+---+----+</div><div class="line">|age|name|</div><div class="line">+---+----+</div><div class="line">| 30|Andy|</div><div class="line">+---+----+</div></pre></td></tr></table></figure>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * Create an input stream that monitors a Hadoop-compatible filesystem</span></div><div class="line"><span class="comment"> * for new files and reads them using the given key-value types and input format.</span></div><div class="line"><span class="comment"> * Files must be written to the monitored directory by "moving" them from another</span></div><div class="line"><span class="comment"> * location within the same file system. File names starting with . are ignored.</span></div><div class="line"><span class="comment"> * <span class="doctag">@param</span> directory HDFS directory to monitor for new file</span></div><div class="line"><span class="comment"> * <span class="doctag">@tparam</span> K Key type for reading HDFS file</span></div><div class="line"><span class="comment"> * <span class="doctag">@tparam</span> V Value type for reading HDFS file</span></div><div class="line"><span class="comment"> * <span class="doctag">@tparam</span> F Input format for reading HDFS file</span></div><div class="line"><span class="comment"> */</span></div><div class="line">def fileStream[</div><div class="line">  K: ClassTag,</div><div class="line">  V: ClassTag,</div><div class="line">  F &lt;: NewInputFormat[K, V]: ClassTag</div><div class="line">] (directory: String): InputDStream[(K, V)] = &#123;</div><div class="line">  <span class="keyword">new</span> FileInputDStream[K, V, F](<span class="keyword">this</span>, directory)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * Create an input stream that monitors a Hadoop-compatible filesystem</span></div><div class="line"><span class="comment"> * for new files and reads them as text files (using key as LongWritable, value</span></div><div class="line"><span class="comment"> * as Text and input format as TextInputFormat). Files must be written to the</span></div><div class="line"><span class="comment"> * monitored directory by "moving" them from another location within the same</span></div><div class="line"><span class="comment"> * file system. File names starting with . are ignored.</span></div><div class="line"><span class="comment"> * <span class="doctag">@param</span> directory HDFS directory to monitor for new file</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="function">def <span class="title">textFileStream</span><span class="params">(directory: String)</span>: DStream[String] </span>= withNamedScope(<span class="string">"text file stream"</span>) &#123;</div><div class="line">  fileStream[LongWritable, Text, TextInputFormat](directory).map(_._2.toString)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -422,8 +406,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/spark-sql-dataset-dataframe/" rel="next" title="Spark SQL DataSet and DataFrame">
-                <i class="fa fa-chevron-left"></i> Spark SQL DataSet and DataFrame
+              <a href="/spark-streaming-receiver/" rel="next" title="Spark Streaming Receiver">
+                <i class="fa fa-chevron-left"></i> Spark Streaming Receiver
               </a>
             
           </div>
@@ -431,10 +415,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/spark-sql-dataframe-rdd/" rel="prev" title="Spark SQL DataFrame RDD">
-                Spark SQL DataFrame RDD <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -586,7 +566,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-SQL-DataFrame-Operations"><span class="nav-number">1.</span> <span class="nav-text">Spark SQL DataFrame Operations</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Code"><span class="nav-number">1.1.</span> <span class="nav-text">Code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Explanation"><span class="nav-number">1.2.</span> <span class="nav-text">Explanation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#來源檔案內容"><span class="nav-number">1.2.1.</span> <span class="nav-text">來源檔案內容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#對應輸出"><span class="nav-number">1.2.2.</span> <span class="nav-text">對應輸出</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-Streaming-File-Stream"><span class="nav-number">1.</span> <span class="nav-text">Spark Streaming File Stream</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spark-Streaming-File-Stream-1"><span class="nav-number">1.1.</span> <span class="nav-text">Spark Streaming File Stream</span></a></li></ol></li></ol></div>
             
 
           </div>
