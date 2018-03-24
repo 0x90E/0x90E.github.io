@@ -75,23 +75,23 @@
 
 
 
-<meta name="description" content="Shared Variables 如果有一個操作(map, reduce)是執行在遠端集群節點上，而此操作內使用到的外部變量，Spark會通過複製的方式，從Driver端傳遞到每台執行該操作的節點上，而且每台遠端節點上的變量，是無法進行更新對應在Driver那份原始變量的。 在上述的情況下，讀寫共享變量在跨Task的情況下就不是這麼的高效了，所以Spark提供了兩種機制的共享變量機制: Broad">
+<meta name="description" content="Spark Shared Variables 如果有一個操作(map, reduce)是執行在遠端集群節點上，而此操作內使用到的外部變量，Spark會通過複製的方式，從Driver端傳遞到每台執行該操作的節點上，而且每台遠端節點上的變量，是無法進行更新對應在Driver那份原始變量的。 在上述的情況下，讀寫共享變量在跨Task的情況下就不是這麼的高效了，所以Spark提供了兩種機制的共享變量機制:">
 <meta name="keywords" content="Spark">
 <meta property="og:type" content="article">
-<meta property="og:title" content="spark_shared_variables">
+<meta property="og:title" content="Spark Shared Variables">
 <meta property="og:url" content="https://0x90e.github.io/spark-shared-variables/index.html">
 <meta property="og:site_name" content="0x90e&#39;s Blog">
-<meta property="og:description" content="Shared Variables 如果有一個操作(map, reduce)是執行在遠端集群節點上，而此操作內使用到的外部變量，Spark會通過複製的方式，從Driver端傳遞到每台執行該操作的節點上，而且每台遠端節點上的變量，是無法進行更新對應在Driver那份原始變量的。 在上述的情況下，讀寫共享變量在跨Task的情況下就不是這麼的高效了，所以Spark提供了兩種機制的共享變量機制: Broad">
+<meta property="og:description" content="Spark Shared Variables 如果有一個操作(map, reduce)是執行在遠端集群節點上，而此操作內使用到的外部變量，Spark會通過複製的方式，從Driver端傳遞到每台執行該操作的節點上，而且每台遠端節點上的變量，是無法進行更新對應在Driver那份原始變量的。 在上述的情況下，讀寫共享變量在跨Task的情況下就不是這麼的高效了，所以Spark提供了兩種機制的共享變量機制:">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://0x90e.github.io/2018/03/04/spark-shared-variables/normal_variables.svg">
 <meta property="og:image" content="https://0x90e.github.io/2018/03/04/spark-shared-variables/broadcast_variables.svg">
 <meta property="og:image" content="https://0x90e.github.io/2018/03/04/spark-shared-variables/spark_shared_normal.png">
 <meta property="og:image" content="https://0x90e.github.io/2018/03/04/spark-shared-variables/spark_shared_mapjoin.png">
 <meta property="og:image" content="https://0x90e.github.io/2018/03/04/spark-shared-variables/spark_shared_accumulator.png">
-<meta property="og:updated_time" content="2018-03-04T17:49:27.953Z">
+<meta property="og:updated_time" content="2018-03-23T17:31:09.714Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="spark_shared_variables">
-<meta name="twitter:description" content="Shared Variables 如果有一個操作(map, reduce)是執行在遠端集群節點上，而此操作內使用到的外部變量，Spark會通過複製的方式，從Driver端傳遞到每台執行該操作的節點上，而且每台遠端節點上的變量，是無法進行更新對應在Driver那份原始變量的。 在上述的情況下，讀寫共享變量在跨Task的情況下就不是這麼的高效了，所以Spark提供了兩種機制的共享變量機制: Broad">
+<meta name="twitter:title" content="Spark Shared Variables">
+<meta name="twitter:description" content="Spark Shared Variables 如果有一個操作(map, reduce)是執行在遠端集群節點上，而此操作內使用到的外部變量，Spark會通過複製的方式，從Driver端傳遞到每台執行該操作的節點上，而且每台遠端節點上的變量，是無法進行更新對應在Driver那份原始變量的。 在上述的情況下，讀寫共享變量在跨Task的情況下就不是這麼的高效了，所以Spark提供了兩種機制的共享變量機制:">
 <meta name="twitter:image" content="https://0x90e.github.io/2018/03/04/spark-shared-variables/normal_variables.svg">
 
 
@@ -128,7 +128,7 @@
 
 
 
-  <title>spark_shared_variables | 0x90e's Blog</title>
+  <title>Spark Shared Variables | 0x90e's Blog</title>
   
 
 
@@ -281,7 +281,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">spark_shared_variables</h2>
+          <h2 class="post-title" itemprop="name headline">Spark Shared Variables</h2>
         
 
         <div class="post-meta">
@@ -358,7 +358,7 @@
       
 
       
-        <h2 id="Shared-Variables"><a href="#Shared-Variables" class="headerlink" title="Shared Variables"></a>Shared Variables</h2><ul>
+        <h2 id="Spark-Shared-Variables"><a href="#Spark-Shared-Variables" class="headerlink" title="Spark Shared Variables"></a>Spark Shared Variables</h2><ul>
 <li>如果有一個操作(map, reduce)是執行在遠端集群節點上，而此操作內使用到的外部變量，Spark會通過複製的方式，從Driver端傳遞到每台執行該操作的節點上，<br>而且每台遠端節點上的變量，是無法進行更新對應在Driver那份原始變量的。</li>
 <li>在上述的情況下，讀寫共享變量在跨Task的情況下就不是這麼的高效了，所以Spark提供了兩種機制的共享變量機制:<ul>
 <li>Broadcast Variables</li>
@@ -546,7 +546,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -617,7 +617,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Shared-Variables"><span class="nav-number">1.</span> <span class="nav-text">Shared Variables</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Broadcast-Variables"><span class="nav-number">1.1.</span> <span class="nav-text">Broadcast Variables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Accumulators"><span class="nav-number">1.2.</span> <span class="nav-text">Accumulators</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Broadcast-Variables-Code"><span class="nav-number">1.3.</span> <span class="nav-text">Broadcast Variables Code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Accumulators-Code"><span class="nav-number">1.4.</span> <span class="nav-text">Accumulators Code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">1.5.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-Shared-Variables"><span class="nav-number">1.</span> <span class="nav-text">Spark Shared Variables</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Broadcast-Variables"><span class="nav-number">1.1.</span> <span class="nav-text">Broadcast Variables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Accumulators"><span class="nav-number">1.2.</span> <span class="nav-text">Accumulators</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Broadcast-Variables-Code"><span class="nav-number">1.3.</span> <span class="nav-text">Broadcast Variables Code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Accumulators-Code"><span class="nav-number">1.4.</span> <span class="nav-text">Accumulators Code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">1.5.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></div>
             
 
           </div>

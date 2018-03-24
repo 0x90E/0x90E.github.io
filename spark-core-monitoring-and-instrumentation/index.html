@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Spark Monitoring and Instrumentation Spark monitoring 每個SparkContext啟動，皆會啟動Web UI，預設在4040端口上，若4040端口被佔用則往上累加 該Web UI包含了許多資訊，當中包含執行過程和調優的訊息">
+<meta name="keywords" content="Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spark_core_monitoring_and_instrumentation">
+<meta property="og:url" content="https://0x90e.github.io/spark-core-monitoring-and-instrumentation/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Spark Monitoring and Instrumentation Spark monitoring 每個SparkContext啟動，皆會啟動Web UI，預設在4040端口上，若4040端口被佔用則往上累加 該Web UI包含了許多資訊，當中包含執行過程和調優的訊息">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0x90e.github.io/2018/03/24/spark-core-monitoring-and-instrumentation/spark_core_history_server_init.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/03/24/spark-core-monitoring-and-instrumentation/spark_core_history_server_incomplete_1.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/03/24/spark-core-monitoring-and-instrumentation/spark_core_history_server_incomplete_2.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/03/24/spark-core-monitoring-and-instrumentation/spark_core_history_server_complete.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/03/24/spark-core-monitoring-and-instrumentation/spark_core_history_server_rest_applications.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/03/24/spark-core-monitoring-and-instrumentation/spark_core_history_server_rest_applications_id.png">
+<meta property="og:updated_time" content="2018-03-24T16:52:07.200Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="spark_core_monitoring_and_instrumentation">
+<meta name="twitter:description" content="Spark Monitoring and Instrumentation Spark monitoring 每個SparkContext啟動，皆會啟動Web UI，預設在4040端口上，若4040端口被佔用則往上累加 該Web UI包含了許多資訊，當中包含執行過程和調優的訊息">
+<meta name="twitter:image" content="https://0x90e.github.io/2018/03/24/spark-core-monitoring-and-instrumentation/spark_core_history_server_init.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/spark-core-monitoring-and-instrumentation/"/>
+
+
+
+
+
+  <title>spark_core_monitoring_and_instrumentation | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-core-monitoring-and-instrumentation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">spark_core_monitoring_and_instrumentation</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-24T23:23:39+08:00">
+                2018-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Spark-Monitoring-and-Instrumentation"><a href="#Spark-Monitoring-and-Instrumentation" class="headerlink" title="Spark Monitoring and Instrumentation"></a>Spark Monitoring and Instrumentation</h3><ul>
+<li><a href="http://spark.apache.org/docs/latest/monitoring.html" title="Spark monitoring" target="_blank" rel="external">Spark monitoring</a></li>
+<li>每個SparkContext啟動，皆會啟動Web UI，預設在4040端口上，若4040端口被佔用則往上累加</li>
+<li>該Web UI包含了許多資訊，當中包含執行過程和調優的訊息<a id="more"></a></li>
+<li>當SparkContext的Job結束後，包含非正常結束，上述的Web UI也會消失</li>
+<li>為了不讓重要的資訊消失，可以在Spark job開始時，指定以下參數，那麼資訊將會被永久的保存:<ul>
+<li>spark.eventLog.enabled true</li>
+<li>spark.eventLog.dir [Spark history server log directory]</li>
+</ul>
+</li>
+<li>將上述資訊保存後，可以透過Spark history server來進行查看</li>
+<li>Spark history server開啟後預設在18080端口執行，並列出Incomplete與Completed的Applications和Attempts</li>
+<li>使用下列參數指定已保存資訊的所在資料夾，讓Spark history server讀取，而在指定資料夾內的子資料夾放置每個Application的資訊<ul>
+<li>spark.history.fs.logDirectory </li>
+</ul>
+</li>
+</ul>
+<h3 id="History-Server-Environment-Variables-and-Configuration-Options"><a href="#History-Server-Environment-Variables-and-Configuration-Options" class="headerlink" title="History Server Environment Variables and Configuration Options"></a>History Server Environment Variables and Configuration Options</h3><ul>
+<li><a href="http://spark.apache.org/docs/latest/monitoring.html#environment-variables" title="Environment variables" target="_blank" rel="external">Environment variables</a><ul>
+<li>SPARK_DAEMON_MEMORY: 在Application是長服務時，例如Spark thrift server，Log會非常多，此時預設的1G是無法正常把Log載入的，故需要調大</li>
+</ul>
+</li>
+<li><a href="http://spark.apache.org/docs/latest/monitoring.html#spark-configuration-options" title="Configuration options" target="_blank" rel="external">Configuration options</a>    <ul>
+<li>spark.history.fs.cleaner.enabled: 指定History server是否定時清理Log</li>
+<li>spark.history.fs.cleaner.interval: 清理時間的間隔區段</li>
+<li>spark.history.fs.cleaner.maxAge: 指定被清理的檔案年紀</li>
+<li>spark.history.retainedApplications: 指定History server在cache中要保留幾個Application的UI Data，如果User在Web中要觀看不存在cache的UI Data，則Histroy server則會從Disk中讀取</li>
+</ul>
+</li>
+</ul>
+<h3 id="History-Server-Demo"><a href="#History-Server-Demo" class="headerlink" title="History Server Demo"></a>History Server Demo</h3><ul>
+<li>設定spark-defaults.conf</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[hadoop@testmain ~]$ <span class="built_in">cd</span> <span class="variable">$SPARK_HOME</span></div><div class="line">[hadoop@testmain spark]$ vim conf/spark-defaults.conf</div><div class="line"><span class="comment">## 新增以下兩個語句，開啟History server，並指定Application Log寫入路徑，也可以指定成HDFS路徑</span></div><div class="line">spark.eventLog.enabled           <span class="literal">true</span></div><div class="line">spark.eventLog.dir               file:///home/hadoop/spark_log</div><div class="line"></div><div class="line">[hadoop@testmain spark]$ mkdir home/hadoop/spark_log</div></pre></td></tr></table></figure>
+<ul>
+<li>啟動History server</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[hadoop@testmain spark]$ ./sbin/start-history-server.sh</div><div class="line">starting org.apache.spark.deploy.history.HistoryServer, logging to /opt/software/spark/logs/spark-hadoop-org.apache.spark.deploy.history.HistoryServer-1-testmain.out</div></pre></td></tr></table></figure>
+<ul>
+<li>查看History server的Log，可以看到啟動時發生錯誤，以及錯誤原因</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">[hadoop@testmain spark]$ vim /opt/software/spark/logs/spark-hadoop-org.apache.spark.deploy.history.HistoryServer-1-testmain.out</div><div class="line"><span class="comment">## ...</span></div><div class="line">Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java.lang.reflect.InvocationTargetException</div><div class="line">        at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)</div><div class="line">        at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)</div><div class="line">        at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)</div><div class="line">        at java.lang.reflect.Constructor.newInstance(Constructor.java:423)</div><div class="line">        at org.apache.spark.deploy.history.HistoryServer$.main(HistoryServer.scala:278)</div><div class="line">        at org.apache.spark.deploy.history.HistoryServer.main(HistoryServer.scala)</div><div class="line">Caused by: java.io.FileNotFoundException: Log directory specified does not exist: file:/tmp/spark-events Did you configure the correct one through spark.history.fs.logDirectory?</div><div class="line">        at org.apache.spark.deploy.history.FsHistoryProvider.org<span class="variable">$apache</span><span class="variable">$spark</span><span class="variable">$deploy</span><span class="variable">$history</span><span class="variable">$FsHistoryProvider</span>$<span class="variable">$startPolling</span>(FsHistoryProvider.scala:214)</div><div class="line">        at org.apache.spark.deploy.history.FsHistoryProvider.initialize(FsHistoryProvider.scala:160)</div><div class="line">        at org.apache.spark.deploy.history.FsHistoryProvider.&lt;init&gt;(FsHistoryProvider.scala:156)</div><div class="line">        at org.apache.spark.deploy.history.FsHistoryProvider.&lt;init&gt;(FsHistoryProvider.scala:78)</div><div class="line">        ... 6 more</div><div class="line">Caused by: java.io.FileNotFoundException: File file:/tmp/spark-events does not exist</div><div class="line">        at org.apache.hadoop.fs.RawLocalFileSystem.deprecatedGetFileStatus(RawLocalFileSystem.java:611)</div><div class="line">        at org.apache.hadoop.fs.RawLocalFileSystem.getFileLinkStatusInternal(RawLocalFileSystem.java:824)</div><div class="line">        at org.apache.hadoop.fs.RawLocalFileSystem.getFileStatus(RawLocalFileSystem.java:601)</div><div class="line">        at org.apache.hadoop.fs.FilterFileSystem.getFileStatus(FilterFileSystem.java:421)</div><div class="line">        at org.apache.spark.deploy.history.FsHistoryProvider.org<span class="variable">$apache</span><span class="variable">$spark</span><span class="variable">$deploy</span><span class="variable">$history</span><span class="variable">$FsHistoryProvider</span>$<span class="variable">$startPolling</span>(FsHistoryProvider.scala:204)</div><div class="line">        ... 9 more</div></pre></td></tr></table></figure>
+<ul>
+<li>由上述錯誤訊息file:/tmp/spark-events does not exist，使用<a href="http://spark.apache.org/docs/latest/monitoring.html#spark-configuration-options" title="Spark configuration option" target="_blank" rel="external">官網</a>反查file:/tmp/spark-events的參數得知，此值是spark.history.fs.logDirectory的預設值，用來指定讀取Application log的位置</li>
+<li>透過配置spark-env.sh指定Application log的放置位置</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[hadoop@testmain spark]$ vi conf/spark-env.sh</div><div class="line"><span class="comment">## 也可以指定為HDFS路徑</span></div><div class="line">SPARK_HISTORY_OPTS=<span class="string">"-Dspark.history.fs.logDirectory=file:///home/hadoop/spark_log"</span></div></pre></td></tr></table></figure>
+<ul>
+<li>再次啟動History server，並查看Log</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">[hadoop@testmain spark]$ ./sbin/start-history-server.sh </div><div class="line">starting org.apache.spark.deploy.history.HistoryServer, logging to /opt/software/spark/logs/spark-hadoop-org.apache.spark.deploy.history.HistoryServer-1-testmain.out</div><div class="line">[hadoop@testmain spark]$ vim /opt/software/spark/logs/spark-hadoop-org.apache.spark.deploy.history.HistoryServer-1-testmain.out</div><div class="line">Spark Command: /usr/java/jdk1.8.0_144/jre/bin/java -cp /opt/software/spark/conf/:/opt/software/spark/jars/*:/opt/software/hadoop/etc/hadoop/ -Dspark.history.fs.logDirectory=file:///home/hadoop/spark_log -Xmx1g org.apache.spark.deploy.history.HistoryServer</div><div class="line">========================================</div><div class="line">18/03/24 01:22:18 INFO history.HistoryServer: Started daemon with process name: 12398@testmain</div><div class="line">18/03/24 01:22:18 INFO util.SignalUtils: Registered signal handler <span class="keyword">for</span> TERM</div><div class="line">18/03/24 01:22:18 INFO util.SignalUtils: Registered signal handler <span class="keyword">for</span> HUP</div><div class="line">18/03/24 01:22:18 INFO util.SignalUtils: Registered signal handler <span class="keyword">for</span> INT</div><div class="line">18/03/24 01:22:19 WARN util.NativeCodeLoader: Unable to load native-hadoop library <span class="keyword">for</span> your platform... using <span class="built_in">builtin</span>-java classes <span class="built_in">where</span> applicable</div><div class="line">18/03/24 01:22:20 INFO spark.SecurityManager: Changing view acls to: hadoop</div><div class="line">18/03/24 01:22:20 INFO spark.SecurityManager: Changing modify acls to: hadoop</div><div class="line">18/03/24 01:22:20 INFO spark.SecurityManager: Changing view acls groups to:</div><div class="line">18/03/24 01:22:20 INFO spark.SecurityManager: Changing modify acls groups to:</div><div class="line">18/03/24 01:22:20 INFO spark.SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(hadoop); groups with view permissions: Set(); users  with modify permissions: Set(hadoop); groups with modify permissions: Set()</div><div class="line">18/03/24 01:22:20 INFO history.FsHistoryProvider: History server ui acls disabled; users with admin permissions: ; groups with admin permissions</div><div class="line">18/03/24 01:22:21 INFO util.log: Logging initialized @3377ms</div><div class="line">18/03/24 01:22:21 INFO server.Server: jetty-9.3.z-SNAPSHOT</div><div class="line">18/03/24 01:22:21 INFO server.Server: Started @3507ms</div><div class="line">18/03/24 01:22:21 INFO server.AbstractConnector: Started ServerConnector@69ac76d8&#123;HTTP/1.1,[http/1.1]&#125;&#123;0.0.0.0:18080&#125;</div><div class="line">18/03/24 01:22:21 INFO util.Utils: Successfully started service on port 18080.</div><div class="line">18/03/24 01:22:21 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@736d6a5c&#123;/,null,AVAILABLE,@Spark&#125;</div><div class="line">18/03/24 01:22:21 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@85e6769&#123;/json,null,AVAILABLE,@Spark&#125;</div><div class="line">18/03/24 01:22:21 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@48a12036&#123;/api,null,AVAILABLE,@Spark&#125;</div><div class="line">18/03/24 01:22:21 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@4e70a728&#123;/static,null,AVAILABLE,@Spark&#125;</div><div class="line">18/03/24 01:22:21 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@2eced48b&#123;/<span class="built_in">history</span>,null,AVAILABLE,@Spark&#125;</div><div class="line">18/03/24 01:22:21 INFO history.HistoryServer: Bound HistoryServer to 0.0.0.0, and started at http://192.168.128.91:18080</div><div class="line"></div><div class="line"><span class="comment">## 使用jps查看History server是否有在運行</span></div><div class="line">[hadoop@testmain spark]$ jps</div><div class="line">12398 HistoryServer</div><div class="line">12478 Jps</div></pre></td></tr></table></figure>
+<ul>
+<li>啟動後可以使用Url來訪問History server<ul>
+<li>Url在Log的最後一行有顯示</li>
+</ul>
+</li>
+<li>因為當前沒有任何的Application log，所以在Incomplete或Cmplete皆沒有可以顯示的資料</li>
+</ul>
+<img src="/2018/03/24/spark-core-monitoring-and-instrumentation/spark_core_history_server_init.png" width="700">
+<ul>
+<li>使用spark-shell產生Application log</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[hadoop@testmain spark]$ bin/spark-shell --master <span class="built_in">local</span>[2] --jars /opt/software/hive/lib/mysql-connector-java-5.1.44-bin.jar</div><div class="line"></div><div class="line">val lines = sc.textFile(<span class="string">"file:///home/hadoop/testFile"</span>)</div><div class="line">val words = lines.flatMap(_.split(<span class="string">"\t"</span>))</div><div class="line">val pairs = words.map((_, 1))</div><div class="line">val wordcount = pairs.reduceByKey(_+_, 5)</div><div class="line">wordcount.collect</div></pre></td></tr></table></figure>
+<ul>
+<li>在Incompleted可以看到對應的Application，以及點擊進去可以看到細項資訊，這些資訊與8080端口上的資訊是一模一樣的</li>
+</ul>
+<img src="/2018/03/24/spark-core-monitoring-and-instrumentation/spark_core_history_server_incomplete_1.png" width="700">
+<img src="/2018/03/24/spark-core-monitoring-and-instrumentation/spark_core_history_server_incomplete_2.png" width="700">
+<ul>
+<li>在sc.stop後，Application會從Incomplete移動到Complete</li>
+<li>換句話說，若沒有執行sc.stop，則Application則不會被移動到Complete</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sc.stop</div></pre></td></tr></table></figure>
+<ul>
+<li>Complete Application對應的Web</li>
+</ul>
+<img src="/2018/03/24/spark-core-monitoring-and-instrumentation/spark_core_history_server_complete.png" width="700">
+<h3 id="REST-API"><a href="#REST-API" class="headerlink" title="REST API"></a>REST API</h3><ul>
+<li><a href="http://spark.apache.org/docs/latest/monitoring.html#rest-api" title="Spark monitoring REST API" target="_blank" rel="external">Spark monitoring REST API</a></li>
+<li>透過History server提供的REST API，構建自定義的可視化或監控工具</li>
+<li>可以處理的對象包含Running application和History server</li>
+<li>REST API的Endpoint詳細說明在官網中</li>
+<li>REST API的內部實現以及History server web UI資料顯示，皆是到spark.history.fs.logDirectory讀取每個Application的Log，然後進行資料抽取</li>
+</ul>
+<img src="/2018/03/24/spark-core-monitoring-and-instrumentation/spark_core_history_server_rest_applications.png" width="700">
+<img src="/2018/03/24/spark-core-monitoring-and-instrumentation/spark_core_history_server_rest_applications_id.png" width="700">
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/spark-streaming-file-stream/" rel="next" title="Spark Streaming File Stream">
+                <i class="fa fa-chevron-left"></i> Spark Streaming File Stream
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spark-Monitoring-and-Instrumentation"><span class="nav-number">1.</span> <span class="nav-text">Spark Monitoring and Instrumentation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#History-Server-Environment-Variables-and-Configuration-Options"><span class="nav-number">2.</span> <span class="nav-text">History Server Environment Variables and Configuration Options</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#History-Server-Demo"><span class="nav-number">3.</span> <span class="nav-text">History Server Demo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#REST-API"><span class="nav-number">4.</span> <span class="nav-text">REST API</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

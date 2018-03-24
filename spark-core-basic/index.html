@@ -84,7 +84,7 @@
 <meta property="og:description" content="Spark Core BasicCluster Overview">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://0x90e.github.io/2018/01/28/spark_core_basic/spark_workflow.svg">
-<meta property="og:updated_time" content="2018-02-12T16:00:31.227Z">
+<meta property="og:updated_time" content="2018-03-20T16:25:23.276Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark Core Basic">
 <meta name="twitter:description" content="Spark Core BasicCluster Overview">
@@ -422,7 +422,7 @@
 <h3 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h3><p>此段落解釋Spark cluster中，各<a href="http://spark.apache.org/docs/latest/cluster-overview.html#components" title="Components" target="_blank" rel="external">Component之間的關西</a></p>
 <ol>
 <li>Spark Application是由集群中一群互不影響的Process(Driver、Executor)所組成，Process之間透過main方法中的SparkContext來協調調度(由Driver program擁有)。<br>SparkContext可以連接多種不同類型的Cluster manager來達到資源配置，例如Standalone、YARN。一但連接成功，Spark請求Executor運行在Cluster中的節點。<br>將Application Code傳送至Executor上運行<br>最後SparkContext將傳送Task至Executor上運行。</li>
-<li>每一個Application都有自己的Executor Process，<br>這些Process在整個Application的週期內都是存活的，直到SparkContext.stop<br>。隔離的效益體現在在Driver端的調度，以及Exector端的Task運行(不同App的Task運行在不同的JVM上，不同的JVM表示不同的Process)，<br>但也意味者不同Spark App之間的資料無法共享，除非寫到外部數據元源。</li>
+<li>每一個Application都有自己的Executor Process，<br>這些Process在整個Application的週期內都是存活的，直到SparkContext.stop<br>。隔離的效益體現在在Driver端的調度，以及Executor端的Task運行(不同App的Task運行在不同的JVM上，不同的JVM表示不同的Process)，<br>但也意味者不同Spark App之間的資料無法共享，除非寫到外部數據元源。</li>
 <li>Spark Application不感知底層的Cluster manager，一但拿到Executor processes，並與它們進行交互，無論底層的架構是Mesos或YARN</li>
 <li>Driver必須監聽並接收從Executor來的連接，在整個Application的生命週期中，Driver並需能夠連接到Work節點。</li>
 <li>因為Driver是用來調度Task的，那麼它應該被運行在靠近Work節點，盡可能的是同一個本地的網路或同一個機架上。如果想發送一個遠端Cluster中，最好打開RPC到Driver上，並提交一些作業。</li>
@@ -561,7 +561,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
