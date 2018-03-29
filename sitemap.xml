@@ -2,6 +2,41 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://0x90e.github.io/spark-core-launching-on-yarn/</loc>
+    
+    <lastmod>2018-03-29T17:24:08.163Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0x90e.github.io/hdfs-read-write-procedure/</loc>
+    
+    <lastmod>2018-03-29T17:10:56.647Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0x90e.github.io/hadoop-compile/</loc>
+    
+    <lastmod>2018-03-29T17:09:54.285Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0x90e.github.io/spark-compile/</loc>
+    
+    <lastmod>2018-03-29T17:09:05.362Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0x90e.github.io/mysql-install-from-source/</loc>
+    
+    <lastmod>2018-03-29T17:07:57.634Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0x90e.github.io/spark-core-monitoring-and-instrumentation/</loc>
     
     <lastmod>2018-03-24T16:52:07.200Z</lastmod>
@@ -219,13 +254,6 @@
   </url>
   
   <url>
-    <loc>https://0x90e.github.io/mysql-install-from-source/</loc>
-    
-    <lastmod>2017-10-11T17:03:31.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://0x90e.github.io/verify_a_signature_with_certificate/</loc>
     
     <lastmod>2017-10-09T17:55:05.000Z</lastmod>
@@ -261,13 +289,6 @@
   </url>
   
   <url>
-    <loc>https://0x90e.github.io/spark-compile/</loc>
-    
-    <lastmod>2017-10-09T17:51:29.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://0x90e.github.io/hive-join/</loc>
     
     <lastmod>2017-10-09T17:50:58.000Z</lastmod>
@@ -289,23 +310,9 @@
   </url>
   
   <url>
-    <loc>https://0x90e.github.io/hdfs-read-write-procedure/</loc>
-    
-    <lastmod>2017-10-09T17:50:35.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://0x90e.github.io/hdfs-basics/</loc>
     
     <lastmod>2017-10-09T17:50:28.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://0x90e.github.io/hadoop-compile/</loc>
-    
-    <lastmod>2017-10-09T17:50:09.000Z</lastmod>
     
   </url>
   
