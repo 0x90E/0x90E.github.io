@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Launching Spark Application on Yarn ClusterNew Scala Project使用IDEA依序建立Scala project">
+<meta name="keywords" content="Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Launching Spark Application on Yarn Cluster">
+<meta property="og:url" content="https://0x90e.github.io/spark-core-launching-on-yarn-cluster/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Launching Spark Application on Yarn ClusterNew Scala Project使用IDEA依序建立Scala project">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0x90e.github.io/2018/04/18/spark-core-launching-on-yarn-cluster/idea_new_scala_project.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/04/18/spark-core-launching-on-yarn-cluster/idea_new_scala_project4.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/04/18/spark-core-launching-on-yarn-cluster/idea_run_maven_build.png">
+<meta property="og:updated_time" content="2018-04-17T16:49:37.733Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Launching Spark Application on Yarn Cluster">
+<meta name="twitter:description" content="Launching Spark Application on Yarn ClusterNew Scala Project使用IDEA依序建立Scala project">
+<meta name="twitter:image" content="https://0x90e.github.io/2018/04/18/spark-core-launching-on-yarn-cluster/idea_new_scala_project.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/spark-core-launching-on-yarn-cluster/"/>
+
+
+
+
+
+  <title>Launching Spark Application on Yarn Cluster | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-core-launching-on-yarn-cluster/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Launching Spark Application on Yarn Cluster</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-17T22:44:44+08:00">
+                2018-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Launching-Spark-Application-on-Yarn-Cluster"><a href="#Launching-Spark-Application-on-Yarn-Cluster" class="headerlink" title="Launching Spark Application on Yarn Cluster"></a>Launching Spark Application on Yarn Cluster</h2><h3 id="New-Scala-Project"><a href="#New-Scala-Project" class="headerlink" title="New Scala Project"></a>New Scala Project</h3><p>使用IDEA依序建立Scala project<br><img src="/2018/04/18/spark-core-launching-on-yarn-cluster/idea_new_scala_project.png" width="500"><br><a id="more"></a><br><img src="/2018/04/18/spark-core-launching-on-yarn-cluster/idea_new_scala_project4.png" width="500"><br>此後的設定使用預設即可，點擊Next直到專案建立完成</p>
+<h3 id="Add-Properties-and-Dependency-in-pom-xml"><a href="#Add-Properties-and-Dependency-in-pom-xml" class="headerlink" title="Add Properties and Dependency in pom.xml"></a>Add Properties and Dependency in pom.xml</h3><p>在pom.xml中添加Spark application所需的Properties與Dependency</p>
+<h4 id="Properties"><a href="#Properties" class="headerlink" title="Properties"></a>Properties</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">properties</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">scala.version</span>&gt;</span>2.11.8<span class="tag">&lt;/<span class="name">scala.version</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">spark.version</span>&gt;</span>2.2.0<span class="tag">&lt;/<span class="name">spark.version</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">properties</span>&gt;</span></div></pre></td></tr></table></figure>
+<h4 id="Dependency"><a href="#Dependency" class="headerlink" title="Dependency"></a>Dependency</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.spark<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spark-yarn_2.11<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spark.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="Sacla-Code"><a href="#Sacla-Code" class="headerlink" title="Sacla Code"></a>Sacla Code</h3><p>新增Scala object，命名為YarnApp，並放置在com.demo的package內</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> org.apache.spark.&#123;SparkConf, SparkContext&#125;</div><div class="line"></div><div class="line">object YarnApp &#123;</div><div class="line">  <span class="function">def <span class="title">main</span><span class="params">(args: Array[String])</span>: Unit </span>= &#123;</div><div class="line">    val conf: SparkConf = <span class="keyword">new</span> SparkConf()setAppName(<span class="string">"SparkOnYarmDemo"</span>)</div><div class="line">    val sc: SparkContext = <span class="keyword">new</span> SparkContext(conf)</div><div class="line">    val lines = sc.textFile(<span class="string">"hdfs:///testFile"</span>)</div><div class="line">    val words = lines.flatMap(_.split(<span class="string">"\t"</span>))</div><div class="line">    val pairs = words.map(x=&gt; (x, <span class="number">1</span>))</div><div class="line">    val word_count = pairs.reduceByKey(_+_, <span class="number">5</span>)</div><div class="line">    word_count.saveAsTextFile(<span class="string">"hdfs:///testFileResult"</span>)</div><div class="line">    sc.stop()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Run-Maven-Build"><a href="#Run-Maven-Build" class="headerlink" title="Run Maven Build"></a>Run Maven Build</h3><p>雙擊下圖中的Package<br><img src="/2018/04/18/spark-core-launching-on-yarn-cluster/idea_run_maven_build.png" width="500"></p>
+<p>IDEA下方會出現對應的Build資訊，若完成會出現對應的Log</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">## ...</span></div><div class="line">[INFO] Building jar: /home/hadoop//YarnDemo/target/YarnDemo-1.0-SNAPSHOT.jar</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] BUILD SUCCESS</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] Total time: 13.811 s</div><div class="line">[INFO] Finished at: 2018-04-17T23:08:02+08:00</div><div class="line">[INFO] Final Memory: 31M/576M</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line"></div><div class="line">Process finished with <span class="built_in">exit</span> code 0</div></pre></td></tr></table></figure>
+<h3 id="Start-yarn"><a href="#Start-yarn" class="headerlink" title="Start yarn"></a>Start yarn</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[hadoop@testmain ~]$ cd $HADOOP_HOME </div><div class="line">[hadoop@testmain hadoop]$ ./sbin/start-yarn.sh</div><div class="line">starting yarn daemons</div><div class="line">starting resourcemanager, logging to /opt/software/hadoop-2.8.1/logs/yarn-hadoop-resourcemanager-testmain.out</div><div class="line">localhost: starting nodemanager, logging to /opt/software/hadoop-2.8.1/logs/yarn-hadoop-nodemanager-testmain.out</div></pre></td></tr></table></figure>
+<h3 id="Submit-Spark-Application"><a href="#Submit-Spark-Application" class="headerlink" title="Submit Spark Application"></a>Submit Spark Application</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">[hadoop@testmain hadoop]$ <span class="built_in">cd</span> <span class="variable">$SPARK_HOME</span> </div><div class="line">[hadoop@testmain spark]$ ./bin/spark-submit --master yarn --deploy-mode cluster --class com.demo.YarnApp --jars /opt/software/hive/lib/mysql-connector-java-5.1.44-bin.jar /home/hadoop//YarnDemo/target/YarnDemo-1.0-SNAPSHOT.jar</div><div class="line">18/04/17 23:58:38 WARN util.NativeCodeLoader: Unable to load native-hadoop library <span class="keyword">for</span> your platform... using <span class="built_in">builtin</span>-java classes <span class="built_in">where</span> applicable</div><div class="line">18/04/17 23:58:39 INFO client.RMProxy: Connecting to ResourceManager at /0.0.0.0:8032</div><div class="line">18/04/17 23:58:39 INFO yarn.Client: Requesting a new application from cluster with 1 NodeManagers</div><div class="line">18/04/17 23:58:39 INFO yarn.Client: Verifying our application has not requested more than the maximum memory capability of the cluster (8192 MB per container)</div><div class="line">18/04/17 23:58:39 INFO yarn.Client: Will allocate AM container, with 1408 MB memory including 384 MB overhead</div><div class="line">18/04/17 23:58:39 INFO yarn.Client: Setting up container launch context <span class="keyword">for</span> our AM</div><div class="line">18/04/17 23:58:39 INFO yarn.Client: Setting up the launch environment <span class="keyword">for</span> our AM container</div><div class="line">18/04/17 23:58:39 INFO yarn.Client: Preparing resources <span class="keyword">for</span> our AM container</div><div class="line">18/04/17 23:58:40 WARN yarn.Client: Neither spark.yarn.jars nor spark.yarn.archive is <span class="built_in">set</span>, falling back to uploading libraries under SPARK_HOME.</div><div class="line">18/04/17 23:58:44 INFO yarn.Client: Uploading resource file:/tmp/spark-943af3c8-efdf-4891-9286-04a6f0c6bbbf/__spark_libs__6708108576073677879.zip -&gt; hdfs://192.168.128.91:9000/user/hadoop/.sparkStaging/application_1523980627954_0001/__spark_libs__6708108576073677879.zip</div><div class="line">18/04/17 23:58:45 INFO yarn.Client: Uploading resource file:/home/hadoop/yarnDemo-1.0-SNAPSHOT.jar -&gt; hdfs://192.168.128.91:9000/user/hadoop/.sparkStaging/application_1523980627954_0001/yarnDemo-1.0-SNAPSHOT.jar</div><div class="line">18/04/17 23:58:45 INFO yarn.Client: Uploading resource file:/opt/software/hive/lib/mysql-connector-java-5.1.44-bin.jar -&gt; hdfs://192.168.128.91:9000/user/hadoop/.sparkStaging/application_1523980627954_0001/mysql-connector-java-5.1.44-bin.jar</div><div class="line">18/04/17 23:58:45 INFO yarn.Client: Uploading resource file:/tmp/spark-943af3c8-efdf-4891-9286-04a6f0c6bbbf/__spark_conf__5651503554508990660.zip -&gt; hdfs://192.168.128.91:9000/user/hadoop/.sparkStaging/application_1523980627954_0001/__spark_conf__.zip</div><div class="line">18/04/17 23:58:45 INFO spark.SecurityManager: Changing view acls to: hadoop</div><div class="line">18/04/17 23:58:45 INFO spark.SecurityManager: Changing modify acls to: hadoop</div><div class="line">18/04/17 23:58:45 INFO spark.SecurityManager: Changing view acls groups to: </div><div class="line">18/04/17 23:58:45 INFO spark.SecurityManager: Changing modify acls groups to: </div><div class="line">18/04/17 23:58:45 INFO spark.SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(hadoop); groups with view permissions: Set(); users  with modify permissions: Set(hadoop); groups with modify permissions: Set()</div><div class="line">18/04/17 23:58:45 INFO yarn.Client: Submitting application application_1523980627954_0001 to ResourceManager</div><div class="line">18/04/17 23:58:45 INFO impl.YarnClientImpl: Submitted application application_1523980627954_0001</div><div class="line">18/04/17 23:58:46 INFO yarn.Client: Application report <span class="keyword">for</span> application_1523980627954_0001 (state: ACCEPTED)</div><div class="line">18/04/17 23:58:46 INFO yarn.Client: </div><div class="line">	 client token: N/A</div><div class="line">	 diagnostics: AM container is launched, waiting <span class="keyword">for</span> AM container to Register with RM</div><div class="line">	 ApplicationMaster host: N/A</div><div class="line">	 ApplicationMaster RPC port: -1</div><div class="line">	 queue: default</div><div class="line">	 start time: 1523980725728</div><div class="line">	 final status: UNDEFINED</div><div class="line">	 tracking URL: http://testmain:8088/proxy/application_1523980627954_0001/</div><div class="line">	 user: hadoop</div><div class="line">18/04/17 23:58:47 INFO yarn.Client: Application report <span class="keyword">for</span> application_1523980627954_0001 (state: ACCEPTED)</div><div class="line"><span class="comment">## ...</span></div><div class="line">18/04/17 23:58:57 INFO yarn.Client: Application report <span class="keyword">for</span> application_1523980627954_0001 (state: RUNNING)</div><div class="line">18/04/17 23:58:57 INFO yarn.Client: </div><div class="line">	 client token: N/A</div><div class="line">	 diagnostics: N/A</div><div class="line">	 ApplicationMaster host: 192.168.128.91</div><div class="line">	 ApplicationMaster RPC port: 0</div><div class="line">	 queue: default</div><div class="line">	 start time: 1523980725728</div><div class="line">	 final status: UNDEFINED</div><div class="line">	 tracking URL: http://testmain:8088/proxy/application_1523980627954_0001/</div><div class="line">	 user: hadoop</div><div class="line">18/04/17 23:58:58 INFO yarn.Client: Application report <span class="keyword">for</span> application_1523980627954_0001 (state: RUNNING)</div><div class="line"><span class="comment">## ...</span></div><div class="line">18/04/17 23:59:15 INFO yarn.Client: Application report <span class="keyword">for</span> application_1523980627954_0001 (state: FINISHED)</div><div class="line">18/04/17 23:59:15 INFO yarn.Client: </div><div class="line">	 client token: N/A</div><div class="line">	 diagnostics: N/A</div><div class="line">	 ApplicationMaster host: 192.168.128.91</div><div class="line">	 ApplicationMaster RPC port: 0</div><div class="line">	 queue: default</div><div class="line">	 start time: 1523980725728</div><div class="line">	 final status: SUCCEEDED</div><div class="line">	 tracking URL: http://testmain:8088/proxy/application_1523980627954_0001/</div><div class="line">	 user: hadoop</div><div class="line">18/04/17 23:59:15 INFO util.ShutdownHookManager: Shutdown hook called</div><div class="line">18/04/17 23:59:15 INFO util.ShutdownHookManager: Deleting directory /tmp/spark-943af3c8-efdf-4891-9286-04a6f0c6bbbf</div></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/spark-core-launching-on-yarn/" rel="next" title="Launching Spark on YARN">
+                <i class="fa fa-chevron-left"></i> Launching Spark on YARN
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Launching-Spark-Application-on-Yarn-Cluster"><span class="nav-number">1.</span> <span class="nav-text">Launching Spark Application on Yarn Cluster</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#New-Scala-Project"><span class="nav-number">1.1.</span> <span class="nav-text">New Scala Project</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Add-Properties-and-Dependency-in-pom-xml"><span class="nav-number">1.2.</span> <span class="nav-text">Add Properties and Dependency in pom.xml</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Properties"><span class="nav-number">1.2.1.</span> <span class="nav-text">Properties</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dependency"><span class="nav-number">1.2.2.</span> <span class="nav-text">Dependency</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sacla-Code"><span class="nav-number">1.3.</span> <span class="nav-text">Sacla Code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-Maven-Build"><span class="nav-number">1.4.</span> <span class="nav-text">Run Maven Build</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Start-yarn"><span class="nav-number">1.5.</span> <span class="nav-text">Start yarn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Submit-Spark-Application"><span class="nav-number">1.6.</span> <span class="nav-text">Submit Spark Application</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
