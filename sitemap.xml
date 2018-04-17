@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://0x90e.github.io/spark-core-yarn-mode/</loc>
+    
+    <lastmod>2018-04-17T18:23:12.393Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0x90e.github.io/spark-core-launching-on-yarn-cluster/</loc>
     
-    <lastmod>2018-04-17T16:57:30.205Z</lastmod>
+    <lastmod>2018-04-17T17:55:22.087Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://0x90e.github.io/spark-core-launching-on-yarn/</loc>
     
-    <lastmod>2018-03-29T17:24:08.163Z</lastmod>
+    <lastmod>2018-04-17T17:04:37.165Z</lastmod>
     
   </url>
   
