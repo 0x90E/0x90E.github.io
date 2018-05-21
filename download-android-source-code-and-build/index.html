@@ -83,7 +83,7 @@
 <meta property="og:site_name" content="0x90e&#39;s Blog">
 <meta property="og:description" content="Download Android Source Code and BuildBasic Infomation OS: Ubuntu 16.4 LTS Android Branch: android-7.1.2_r33 Device: Google Pixel One">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-05-21T17:27:47.774Z">
+<meta property="og:updated_time" content="2018-05-21T17:30:46.455Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Download Android Source Code and Build">
 <meta name="twitter:description" content="Download Android Source Code and BuildBasic Infomation OS: Ubuntu 16.4 LTS Android Branch: android-7.1.2_r33 Device: Google Pixel One">
@@ -375,7 +375,7 @@
 <h3 id="Downloading-the-Android-Source-Tree"><a href="#Downloading-the-Android-Source-Tree" class="headerlink" title="Downloading the Android Source Tree"></a>Downloading the Android Source Tree</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">android@android-pc:~/androidSource/android-7.1.2_r33$ repo sync -j8</div><div class="line"><span class="comment"># wait for a long time</span></div><div class="line">Syncing work tree: 100% (528/528), <span class="keyword">done</span>.</div></pre></td></tr></table></figure>
 <h3 id="Installing-Device-Driver"><a href="#Installing-Device-Driver" class="headerlink" title="Installing Device Driver"></a>Installing Device Driver</h3><ul>
 <li>根據<a href="https://source.android.com/setup/build-numbers#source-code-tags-and-builds" target="_blank" rel="external">source-code-tags-and-builds</a> 查看目標Device與Android branch對應的Build，然後到<a href="https://developers.google.com/android/drivers" target="_blank" rel="external">drivers</a>下載Build對應的Driver</li>
-<li>例如目標Device是Pixel，而Android Branch爲android-7.1.2_r33，則對應的Build爲NZH54D，所以到<a href="https://developers.google.com/android/drivers" target="_blank" rel="external">drivers</a>中找到<a href="https://developers.google.com/android/drivers#marlinnzh54d" target="_blank" rel="external">Pixel binaries for Android 7.1.2 (NZH54D)</a>，並下載2個Driver</li>
+<li>例如目標Device是Pixel，而Android Branch爲android-7.1.2_r33，則對應的Build爲NZH54D，所以到<a href="https://developers.google.com/android/drivers" target="_blank" rel="external">drivers</a>中找到<a href="https://developers.google.com/android/drivers#marlinnzh54d" target="_blank" rel="external">Pixel binaries for Android 7.1.2 (NZH54D)</a>，並下載當中的2個Driver</li>
 <li>下載完後將Driver解壓縮，並進行安裝</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">android@android-pc:~/androidSource/android-7.1.2_r33$ tar -zxvf qcom-sailfish-nzh54d-56bb51e3.tgz</div><div class="line">android@android-pc:~/androidSource/android-7.1.2_r33$ ./extract-qcom-sailfish.sh</div><div class="line"></div><div class="line">android@android-pc:~/androidSource/android-7.1.2_r33$ tar -zxvf google_devices-sailfish-nzh54d-cc9ac173.tgz</div><div class="line">android@android-pc:~/androidSource/android-7.1.2_r33$ ./extract-google_devices-sailfish.sh</div></pre></td></tr></table></figure>
