@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Download Android Source Code and BuildBasic Infomation OS: Ubuntu 16.4 LTS Android Branch: android-7.1.2_r33 Device: Google Pixel One">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Download Android Source Code and Build">
+<meta property="og:url" content="https://0x90e.github.io/download-android-source-code-and-build/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Download Android Source Code and BuildBasic Infomation OS: Ubuntu 16.4 LTS Android Branch: android-7.1.2_r33 Device: Google Pixel One">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-05-21T17:24:22.118Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Download Android Source Code and Build">
+<meta name="twitter:description" content="Download Android Source Code and BuildBasic Infomation OS: Ubuntu 16.4 LTS Android Branch: android-7.1.2_r33 Device: Google Pixel One">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/download-android-source-code-and-build/"/>
+
+
+
+
+
+  <title>Download Android Source Code and Build | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/download-android-source-code-and-build/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Download Android Source Code and Build</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-22T01:20:51+08:00">
+                2018-05-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Download-Android-Source-Code-and-Build"><a href="#Download-Android-Source-Code-and-Build" class="headerlink" title="Download Android Source Code and Build"></a>Download Android Source Code and Build</h2><h3 id="Basic-Infomation"><a href="#Basic-Infomation" class="headerlink" title="Basic Infomation"></a>Basic Infomation</h3><ul>
+<li>OS: Ubuntu 16.4 LTS</li>
+<li>Android Branch: android-7.1.2_r33</li>
+<li>Device: Google Pixel One<a id="more"></a>
+</li>
+</ul>
+<h3 id="Installing-OpenJDK"><a href="#Installing-OpenJDK" class="headerlink" title="Installing OpenJDK"></a>Installing OpenJDK</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">android@android-pc:~$ sudo apt-get update</div><div class="line">android@android-pc:~$ sudo apt-get install openjdk-8-jdk</div><div class="line"></div><div class="line"><span class="comment">## Configures the default for the java and javac</span></div><div class="line">android@android-pc:~$ sudo update-alternatives --config java</div><div class="line">android@android-pc:~$ sudo update-alternatives --config javac</div></pre></td></tr></table></figure>
+<h3 id="Installing-Required-Packages"><a href="#Installing-Required-Packages" class="headerlink" title="Installing Required Packages"></a>Installing Required Packages</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android@android-pc:~$ sudo apt-get install git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache libgl1-mesa-dev libxml2-utils xsltproc unzip</div></pre></td></tr></table></figure>
+<h3 id="Installing-Android-Platform-Tools"><a href="#Installing-Android-Platform-Tools" class="headerlink" title="Installing Android Platform Tools"></a>Installing Android Platform Tools</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">android@android-pc:~$ wget https://dl.google.com/android/repository/platform-tools-latest-linux.zip</div><div class="line">android@android-pc:~$ unzip platform-tools-latest-linux.zip -d ~/androidTools</div><div class="line">android@android-pc:~$ vim ~/.bashrc</div><div class="line"><span class="comment">## 於文件最下方加入以下語句，讓Android tools可以在任何位置被使用</span></div><div class="line">ANDROID_TOOLS=<span class="string">"~/androidTools"</span></div><div class="line"><span class="built_in">export</span> PATH=<span class="variable">$ANDROID_TOOLS</span>/bin:<span class="variable">$PATH</span></div><div class="line"></div><div class="line">android@android-pc:~$ <span class="built_in">source</span> ~/.bashrc</div></pre></td></tr></table></figure>
+<h3 id="Init-Git-Information"><a href="#Init-Git-Information" class="headerlink" title="Init Git Information"></a>Init Git Information</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">android@android-pc:~$ sudo apt-get git</div><div class="line">android@android-pc:~$ git config --global user.name <span class="string">"Your Name"</span></div><div class="line">android@android-pc:~$ git config --global user.email <span class="string">"you@example.com"</span></div></pre></td></tr></table></figure>
+<h3 id="Installing-Repo"><a href="#Installing-Repo" class="headerlink" title="Installing Repo"></a>Installing Repo</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">android@android-pc:~$ mkdir ~/bin</div><div class="line">android@android-pc:~$ vim ~/.bashrc</div><div class="line"><span class="comment">## 於文件最下方加入以下語句，讓repo可以在任何位置被使用</span></div><div class="line"><span class="built_in">export</span> PATH=~/bin:<span class="variable">$PATH</span></div><div class="line"></div><div class="line">android@android-pc:~$ <span class="built_in">source</span> ~/.bashrc</div><div class="line"></div><div class="line"><span class="comment">## 下載repo，並儲存成~/bin/repo</span></div><div class="line">android@android-pc:~$ curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo</div><div class="line"></div><div class="line"><span class="comment">## 賦予repo執行權限</span></div><div class="line">android@android-pc:~$ sudo chmod a+x ~/bin/repo</div></pre></td></tr></table></figure>
+<h3 id="Initializing-a-Repo-client"><a href="#Initializing-a-Repo-client" class="headerlink" title="Initializing a Repo client"></a>Initializing a Repo client</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">android@android-pc:~$ mkdir androidSource</div><div class="line">android@android-pc:~$ <span class="built_in">cd</span> androidSource</div><div class="line">android@android-pc:~/androidSource$ mkdir android-7.1.2_r33</div><div class="line">android@android-pc:~/androidSource$ <span class="built_in">cd</span> android-7.1.2_r33</div><div class="line">android@android-pc:~/androidSource/android-7.1.2_r33$ repo init -u https://android.googlesource.com/platform/manifest -b android-7.1.2_r33 --depth=1</div></pre></td></tr></table></figure>
+<ul>
+<li>repo init參數說明:<ul>
+<li>-u <a href="https://android.googlesource.com/platform/manifest" target="_blank" rel="external">https://android.googlesource.com/platform/manifest</a>: 固定寫法</li>
+<li>-b android-7.1.2_r33: 可以查看<a href="https://source.android.com/setup/build-numbers#source-code-tags-and-builds," title="ource-code-tags-and-builds" target="_blank" rel="external">source-code-tags-and-builds</a> 中目標Device所支持的Android branch來進行選擇</li>
+<li>–depth=1 代表建立深度爲1的shallow clone，這樣就不用下載大量的Git歷史訊息，可以大大減少下載的量，並且對實際開發已經足夠使用</li>
+</ul>
+</li>
+</ul>
+<h3 id="Downloading-the-Android-Source-Tree"><a href="#Downloading-the-Android-Source-Tree" class="headerlink" title="Downloading the Android Source Tree"></a>Downloading the Android Source Tree</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">android@android-pc:~/androidSource/android-7.1.2_r33$ repo sync -j8</div><div class="line"><span class="comment"># wait for a long time</span></div><div class="line">Syncing work tree: 100% (528/528), <span class="keyword">done</span>.</div></pre></td></tr></table></figure>
+<h3 id="Installing-Device-Driver"><a href="#Installing-Device-Driver" class="headerlink" title="Installing Device Driver"></a>Installing Device Driver</h3><ul>
+<li>根據<a href="https://source.android.com/setup/build-numbers#source-code-tags-and-builds" target="_blank" rel="external">source-code-tags-and-builds</a> 查看目標Device與Android branch對應的Build，然後到<a href="https://developers.google.com/android/drivers" target="_blank" rel="external">drivers</a>下載Build對應的Driver</li>
+<li>例如目標Device是Pixel，而Android Branch爲android-7.1.2_r33，則對應的Build爲NZH54D，所以到<a href="https://developers.google.com/android/drivers" target="_blank" rel="external">drivers</a>中找到<a href="https://developers.google.com/android/drivers#marlinnzh54d" target="_blank" rel="external">Pixel binaries for Android 7.1.2 (NZH54D)</a>，並下載2個Driver</li>
+<li>下載完後將Driver解壓縮，並進行安裝</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">android@android-pc:~/androidSource/android-7.1.2_r33$ tar -zxvf qcom-sailfish-nzh54d-56bb51e3.tgz</div><div class="line">android@android-pc:~/androidSource/android-7.1.2_r33$ ./extract-qcom-sailfish.sh</div><div class="line"></div><div class="line">android@android-pc:~/androidSource/android-7.1.2_r33$ tar -zxvf google_devices-sailfish-nzh54d-cc9ac173.tgz</div><div class="line">android@android-pc:~/androidSource/android-7.1.2_r33$ ./extract-google_devices-sailfish.sh</div></pre></td></tr></table></figure>
+<h3 id="Buiding-Android-Source"><a href="#Buiding-Android-Source" class="headerlink" title="Buiding Android Source"></a>Buiding Android Source</h3><ul>
+<li>lunch 後選擇目標Device的代號，Device code name 可以參考<a href="https://source.android.com/setup/running#selecting-device-build" target="_blank" rel="external">selecting-device-build</a><ul>
+<li>例如Pxiel的Code name 爲sailfish，所以選擇18.aosp_sailfish-userdebug</li>
+</ul>
+</li>
+<li>若之後修改了Android source code，要進行重新編譯，則進行此步驟即可</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">android@android-pc:~/androidSource/android-7.1.2_r33$ <span class="built_in">source</span> build/envsetup.sh</div><div class="line"><span class="comment">## 若已經知道Code name，可以直接使用 lunch 18</span></div><div class="line">android@android-pc:~/androidSource/android-7.1.2_r33$ lunch</div><div class="line"></div><div class="line">Youre building on Linux</div><div class="line"></div><div class="line">Lunch menu... pick a combo:</div><div class="line">     1. aosp_arm-eng</div><div class="line">     2. aosp_arm64-eng</div><div class="line">     3. aosp_mips-eng</div><div class="line">     4. aosp_mips64-eng</div><div class="line">     5. aosp_x86-eng</div><div class="line">     6. aosp_x86_64-eng</div><div class="line">     7. full_fugu-userdebug</div><div class="line">     8. aosp_fugu-userdebug</div><div class="line">     9. mini_emulator_arm64-userdebug</div><div class="line">     10. m_e_arm-userdebug</div><div class="line">     11. m_e_mips-userdebug</div><div class="line">     12. m_e_mips64-eng</div><div class="line">     13. mini_emulator_x86-userdebug</div><div class="line">     14. mini_emulator_x86_64-userdebug</div><div class="line">     15. aosp_dragon-userdebug</div><div class="line">     16. aosp_dragon-eng</div><div class="line">     17. aosp_marlin-userdebug</div><div class="line">     18. aosp_sailfish-userdebug</div><div class="line">     19. aosp_flounder-userdebug</div><div class="line">     20. aosp_angler-userdebug</div><div class="line">     21. aosp_bullhead-userdebug</div><div class="line">     22. hikey-userdebug</div><div class="line">     23. aosp_shamu-userdebug</div><div class="line"></div><div class="line">Which would you like? [aosp_arm-eng] 18</div><div class="line"></div><div class="line">make -j4</div><div class="line"><span class="comment">## wait for a long time</span></div><div class="line"></div><div class="line"><span class="comment">#### make completed successfully (61:14 (mm:ss)) ####</span></div></pre></td></tr></table></figure>
+<h3 id="Referance"><a href="#Referance" class="headerlink" title="Referance"></a>Referance</h3><p>Google Android Developers:</p>
+<ul>
+<li><a href="https://developer.android.com/studio/releases/platform-tools.html" target="_blank" rel="external">https://developer.android.com/studio/releases/platform-tools.html</a></li>
+<li><a href="https://source.android.com/setup/downloading" target="_blank" rel="external">https://source.android.com/setup/downloading</a></li>
+<li><a href="https://source.android.com/setup/initializing" target="_blank" rel="external">https://source.android.com/setup/initializing</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/spark-core-yarn-mode/" rel="next" title="Spark on YARN Deployment Modes">
+                <i class="fa fa-chevron-left"></i> Spark on YARN Deployment Modes
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Download-Android-Source-Code-and-Build"><span class="nav-number">1.</span> <span class="nav-text">Download Android Source Code and Build</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-Infomation"><span class="nav-number">1.1.</span> <span class="nav-text">Basic Infomation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Installing-OpenJDK"><span class="nav-number">1.2.</span> <span class="nav-text">Installing OpenJDK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Installing-Required-Packages"><span class="nav-number">1.3.</span> <span class="nav-text">Installing Required Packages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Installing-Android-Platform-Tools"><span class="nav-number">1.4.</span> <span class="nav-text">Installing Android Platform Tools</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Init-Git-Information"><span class="nav-number">1.5.</span> <span class="nav-text">Init Git Information</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Installing-Repo"><span class="nav-number">1.6.</span> <span class="nav-text">Installing Repo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Initializing-a-Repo-client"><span class="nav-number">1.7.</span> <span class="nav-text">Initializing a Repo client</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Downloading-the-Android-Source-Tree"><span class="nav-number">1.8.</span> <span class="nav-text">Downloading the Android Source Tree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Installing-Device-Driver"><span class="nav-number">1.9.</span> <span class="nav-text">Installing Device Driver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Buiding-Android-Source"><span class="nav-number">1.10.</span> <span class="nav-text">Buiding Android Source</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Referance"><span class="nav-number">1.11.</span> <span class="nav-text">Referance</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
