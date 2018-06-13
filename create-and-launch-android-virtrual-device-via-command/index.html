@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Create and Launch Android Virtrual Device via CommandBasic Infomation OS: Ubuntu 16.4 LTS Android System Image: android_24_armeabi-v7a  Introduction正常步驟下，會使用Android Studio中的AVD(Android Virtrual Device">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Create and Launch Android Virtrual Device via Command">
+<meta property="og:url" content="https://0x90e.github.io/create-and-launch-android-virtrual-device-via-command/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Create and Launch Android Virtrual Device via CommandBasic Infomation OS: Ubuntu 16.4 LTS Android System Image: android_24_armeabi-v7a  Introduction正常步驟下，會使用Android Studio中的AVD(Android Virtrual Device">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-06-13T18:08:26.108Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Create and Launch Android Virtrual Device via Command">
+<meta name="twitter:description" content="Create and Launch Android Virtrual Device via CommandBasic Infomation OS: Ubuntu 16.4 LTS Android System Image: android_24_armeabi-v7a  Introduction正常步驟下，會使用Android Studio中的AVD(Android Virtrual Device">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/create-and-launch-android-virtrual-device-via-command/"/>
+
+
+
+
+
+  <title>Create and Launch Android Virtrual Device via Command | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/create-and-launch-android-virtrual-device-via-command/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Create and Launch Android Virtrual Device via Command</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-14T01:57:54+08:00">
+                2018-06-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Create-and-Launch-Android-Virtrual-Device-via-Command"><a href="#Create-and-Launch-Android-Virtrual-Device-via-Command" class="headerlink" title="Create and Launch Android Virtrual Device via Command"></a>Create and Launch Android Virtrual Device via Command</h2><h3 id="Basic-Infomation"><a href="#Basic-Infomation" class="headerlink" title="Basic Infomation"></a>Basic Infomation</h3><ul>
+<li>OS: Ubuntu 16.4 LTS</li>
+<li>Android System Image: android_24_armeabi-v7a</li>
+</ul>
+<h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>正常步驟下，會使用Android Studio中的AVD(Android Virtrual Device) Manager管理與啓動Android emulator，<br>但有時需透過Terminal的方式達到相同的目的，例如自動化沙箱</p>
+<a id="more"></a>
+<h3 id="Creating-Android-Virtrual-Device"><a href="#Creating-Android-Virtrual-Device" class="headerlink" title="Creating Android Virtrual Device"></a>Creating Android Virtrual Device</h3><ol>
+<li>通過AVD Manager下載system image<ul>
+<li>此步驟與使用AVD Manager創建emulator無異，一方面無法取得Google repo的system image的下載位置，另一方面是需要下載後的資料夾結構，所以直接使用AVD Manager下載system image，是最方便的做法</li>
+</ul>
+</li>
+<li>使用avdmanager建立emulator<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">android@android-pc:~$ <span class="built_in">cd</span> Android/Sdk</div><div class="line">android@android-pc:~/Android/Sdk$ <span class="built_in">cd</span> tools/bin</div><div class="line">android@android-pc:~/Android/Sdk/tools/bin$ ./avdmanager create avd -n android_24_v7a -k <span class="string">""</span></div><div class="line">Error: Package path is not valid. Valid system image paths are:ository...       </div><div class="line">system-images;android-24;default;armeabi-v7a</div><div class="line">null</div><div class="line"></div><div class="line">android@android-pc:~/Android/Sdk/tools/bin$ ./avdmanager create avd -n android_24_v7a -k <span class="string">"system-images;android-24;default;armeabi-v7a"</span></div><div class="line"></div><div class="line">android@android-pc:~/Android/Sdk/tools/bin$ ./avdmanager list avd</div><div class="line">    Name: android_24_v7a</div><div class="line">    Path: /home/android/.android/avd/android_24_v7a.avd</div><div class="line">  Target: </div><div class="line">          Based on: Android 7.0 (Nougat) Tag/ABI: default/armeabi-v7a</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<ul>
+<li>Android/Sdk: 爲本電腦的Androd Sdk放置處，此路徑是在Android studio安裝時自動選擇的，若爲自行安裝的Android Sdk，則進入對應的路徑</li>
+<li>tools/bin: 在Android Sdk路徑下的tools/bin，爲avdmanager工具所在</li>
+<li>./avdmanager:<ul>
+<li>-n: Android emulator的名稱</li>
+<li>-k: 若不知道要填什麼，可以先留空，avdmanager會出錯，然後列出可以使用system image<ul>
+<li>list avd: 列舉所有的Android emulator，確認emulator創建成功</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Launching-Android-Virtrual-Device"><a href="#Launching-Android-Virtrual-Device" class="headerlink" title="Launching Android Virtrual Device"></a>Launching Android Virtrual Device</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">android@android-pc:~/Android/Sdk/tools/bin$ <span class="built_in">cd</span> ..</div><div class="line">android@android-pc:~/Android/Sdk/tools$ emulator -list-avds</div><div class="line">android_24_v7a</div><div class="line"></div><div class="line">android@android-pc:~/Android/Sdk/tools$ emulator -avd android_24_v7a</div><div class="line">emulator: WARNING: encryption is off</div><div class="line">libGL error: unable to load driver: radeonsi_dri.so</div><div class="line">libGL error: driver pointer missing</div><div class="line">libGL error: failed to load driver: radeonsi</div><div class="line">libGL error: unable to load driver: swrast_dri.so</div><div class="line">libGL error: failed to load driver: swrast</div><div class="line">X Error of failed request:  BadValue (<span class="built_in">integer</span> parameter out of range <span class="keyword">for</span> operation)</div><div class="line">  Major opcode of failed request:  155 (GLX)</div><div class="line">  Minor opcode of failed request:  24 (X_GLXCreateNewContext)</div><div class="line">  Value <span class="keyword">in</span> failed request:  0x0</div><div class="line">  Serial number of failed request:  58</div><div class="line">  Current serial number <span class="keyword">in</span> output stream:  59</div><div class="line"></div><div class="line">android@android-pc:~/Android/Sdk/tools$ emulator -avd android_24_v7a -use-system-libs</div></pre></td></tr></table></figure>
+<ul>
+<li>emulator:<ul>
+<li>-list-avds: 列舉可用的AVD</li>
+<li>第一次啓動時出現so依賴錯誤，故新增下列參數後再次啓動</li>
+<li>-use-system-libs: Use system libstdc++ instead of bundled one</li>
+</ul>
+</li>
+</ul>
+<h3 id="Deleting-Android-Virtrual-Device"><a href="#Deleting-Android-Virtrual-Device" class="headerlink" title="Deleting Android Virtrual Device"></a>Deleting Android Virtrual Device</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">android@android-pc:~/Android/Sdk/tools$ <span class="built_in">cd</span> bin</div><div class="line">android@android-pc:~/Android/Sdk/tools/bin$ ./avdmanager delete avd -n android_24_v7a</div></pre></td></tr></table></figure>
+<ul>
+<li>./avdmanager:<ul>
+<li>-n: Android emulator的名稱</li>
+</ul>
+</li>
+</ul>
+<h3 id="Adb-Install-Apk-Error-on-AVD"><a href="#Adb-Install-Apk-Error-on-AVD" class="headerlink" title="Adb Install Apk Error on AVD"></a>Adb Install Apk Error on AVD</h3><ul>
+<li>INSTALL_FAILED_OLDER_SDK<ul>
+<li>Apk對安裝平臺的SDK版本做出最低限制</li>
+</ul>
+</li>
+<li>INSTALL_FAILED_NO_MATCHING_ABIS<ul>
+<li>Apk與安裝平臺的架構不同，例如將armeabi-v7a的Apk安裝在x86_64的平臺上</li>
+<li>所以雖然x86_64的Android emulator快arm很多，但不能安裝Apk就沒有意義了</li>
+</ul>
+</li>
+</ul>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li><a href="https://developer.android.com/studio/command-line/avdmanager" title="Google develpoer avdmanager" target="_blank" rel="external">Google develpoer avdmanager</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/setup-raspberry-pi-using-a-mac/" rel="next" title="Setup Raspberry Pi Using a Mac">
+                <i class="fa fa-chevron-left"></i> Setup Raspberry Pi Using a Mac
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Create-and-Launch-Android-Virtrual-Device-via-Command"><span class="nav-number">1.</span> <span class="nav-text">Create and Launch Android Virtrual Device via Command</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-Infomation"><span class="nav-number">1.1.</span> <span class="nav-text">Basic Infomation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Introduction"><span class="nav-number">1.2.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Creating-Android-Virtrual-Device"><span class="nav-number">1.3.</span> <span class="nav-text">Creating Android Virtrual Device</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Launching-Android-Virtrual-Device"><span class="nav-number">1.4.</span> <span class="nav-text">Launching Android Virtrual Device</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deleting-Android-Virtrual-Device"><span class="nav-number">1.5.</span> <span class="nav-text">Deleting Android Virtrual Device</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adb-Install-Apk-Error-on-AVD"><span class="nav-number">1.6.</span> <span class="nav-text">Adb Install Apk Error on AVD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">1.7.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Raspberry," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Setup Raspberry Pi Using a MacBasic Infomation OS: macOS High Sierra Raspberry Pi device:  Raspberry Pi model B, 1GB RAM, 802.11b/g/n, Wireless LAN, Bluetooth 4.1 Raspberry OS: Raspbian stretch lite 2">
+<meta name="keywords" content="Raspberry">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Setup Raspberry Pi Using a Mac">
+<meta property="og:url" content="https://0x90e.github.io/setup-raspberry-pi-using-a-mac/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Setup Raspberry Pi Using a MacBasic Infomation OS: macOS High Sierra Raspberry Pi device:  Raspberry Pi model B, 1GB RAM, 802.11b/g/n, Wireless LAN, Bluetooth 4.1 Raspberry OS: Raspbian stretch lite 2">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0x90e.github.io/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_change_password.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_change_password_success.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_ssh_1.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_ssh_2.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_ssh_3.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_ssh_4.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_wifi_1.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_wifi_2.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_wifi_3.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_wifi_4.png">
+<meta property="og:updated_time" content="2018-06-13T18:00:41.825Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Setup Raspberry Pi Using a Mac">
+<meta name="twitter:description" content="Setup Raspberry Pi Using a MacBasic Infomation OS: macOS High Sierra Raspberry Pi device:  Raspberry Pi model B, 1GB RAM, 802.11b/g/n, Wireless LAN, Bluetooth 4.1 Raspberry OS: Raspbian stretch lite 2">
+<meta name="twitter:image" content="https://0x90e.github.io/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_change_password.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/setup-raspberry-pi-using-a-mac/"/>
+
+
+
+
+
+  <title>Setup Raspberry Pi Using a Mac | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/setup-raspberry-pi-using-a-mac/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Setup Raspberry Pi Using a Mac</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-14T01:38:26+08:00">
+                2018-06-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Misc/" itemprop="url" rel="index">
+                    <span itemprop="name">Misc</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Setup-Raspberry-Pi-Using-a-Mac"><a href="#Setup-Raspberry-Pi-Using-a-Mac" class="headerlink" title="Setup Raspberry Pi Using a Mac"></a>Setup Raspberry Pi Using a Mac</h2><h3 id="Basic-Infomation"><a href="#Basic-Infomation" class="headerlink" title="Basic Infomation"></a>Basic Infomation</h3><ul>
+<li>OS: macOS High Sierra</li>
+<li>Raspberry Pi device:  Raspberry Pi model B, 1GB RAM, 802.11b/g/n, Wireless LAN, Bluetooth 4.1</li>
+<li>Raspberry OS: Raspbian stretch lite 2018-04-18</li>
+<li>SD card: SanDisk Ultra 32GB</li>
+</ul>
+<a id="more"></a>
+<h3 id="Downloading-Raspbian-stretch-lite-image"><a href="#Downloading-Raspbian-stretch-lite-image" class="headerlink" title="Downloading Raspbian stretch lite image"></a>Downloading Raspbian stretch lite image</h3><ul>
+<li>可至<a href="https://www.raspberrypi.org/downloads/raspbian/" title="raspbian" target="_blank" rel="external">Raspbian</a>下載最新的Raspbian stretch lite</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">MacBook-Pro:~ user$ mkdir raspbian</div><div class="line">MacBook-Pro:~ user$ <span class="built_in">cd</span> raspbian</div><div class="line">MacBook-Pro:raspbian ~ user$ ls</div><div class="line"><span class="comment">## 此為下載好的Raspbian stretch lite image</span></div><div class="line">2018-04-18-raspbian-stretch-lite.zip</div><div class="line"></div><div class="line">MacBook-Pro:raspbian ~ user$ unzip 2018-04-18-raspbian-stretch-lite.zip </div><div class="line">Archive:  2018-04-18-raspbian-stretch-lite.zip</div><div class="line">  inflating: 2018-04-18-raspbian-stretch-lite.img</div><div class="line"></div><div class="line"><span class="comment">## 解壓縮後的img檔案 </span></div><div class="line">MacBook-Pro:raspbian ~ user$ ll | grep img</div><div class="line">-rw-r--r--  1 user  staff  1862270976 Apr 18 09:08 2018-04-18-raspbian-stretch-lite.img</div></pre></td></tr></table></figure>
+<h3 id="Burning-Raspbian-image-to-SD-card"><a href="#Burning-Raspbian-image-to-SD-card" class="headerlink" title="Burning Raspbian image to SD card"></a>Burning Raspbian image to SD card</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">MacBook-Pro:raspbian ~ user$ diskutil list</div><div class="line">/dev/disk0 (internal):</div><div class="line">   <span class="comment">#:                       TYPE NAME                    SIZE       IDENTIFIER</span></div><div class="line">   0:      GUID_partition_scheme                         500.3 GB   disk0</div><div class="line">   1:                        EFI EFI                     314.6 MB   disk0s1</div><div class="line">   2:                 Apple_APFS Container disk1         500.0 GB   disk0s2</div><div class="line"></div><div class="line">/dev/disk1 (synthesized):</div><div class="line">   <span class="comment">#:                       TYPE NAME                    SIZE       IDENTIFIER</span></div><div class="line">   0:      APFS Container Scheme -                      +500.0 GB   disk1</div><div class="line">                                 Physical Store disk0s2</div><div class="line">   1:                APFS Volume Macintosh HD            404.0 GB   disk1s1</div><div class="line">   2:                APFS Volume Preboot                 23.4 MB    disk1s2</div><div class="line">   3:                APFS Volume Recovery                517.8 MB   disk1s3</div><div class="line">   4:                APFS Volume VM                      7.5 GB     disk1s4</div><div class="line"></div><div class="line">/dev/disk2 (external, physical):</div><div class="line">   <span class="comment">#:                       TYPE NAME                    SIZE       IDENTIFIER</span></div><div class="line">   0:     FDisk_partition_scheme                        *31.1 GB    disk2</div><div class="line">   1:             Windows_FAT_32                         31.1 GB    disk2s1</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">## 目標SD card為/dev/disk2</span></div><div class="line"><span class="comment">## 可以根據TYPE NAME或SIZE來判斷目標SD card的identifier</span></div><div class="line"><span class="comment">## 若挑錯identifier可能造成電腦資料被破壞，慎思!</span></div><div class="line">MacBook-Pro:raspbian ~ user$ diskutil unmountDisk /dev/disk2</div><div class="line">Unmount of all volumes on disk2 was successful</div><div class="line"></div><div class="line"><span class="comment">## 將Raspbian image寫入SD card</span></div><div class="line">MacBook-Pro:raspbian ~ user$ sudo dd bs=1m <span class="keyword">if</span>=2018-04-18-raspbian-stretch-lite.img of=/dev/rdisk2</div><div class="line">Password:</div><div class="line">1776+0 records <span class="keyword">in</span></div><div class="line">1776+0 records out</div><div class="line">1862270976 bytes transferred <span class="keyword">in</span> 125.462224 secs (14843280 bytes/sec)</div></pre></td></tr></table></figure>
+<h3 id="Launching-Raspbian"><a href="#Launching-Raspbian" class="headerlink" title="Launching Raspbian"></a>Launching Raspbian</h3><ol>
+<li>插上SD card</li>
+<li>接上HDMI螢幕</li>
+<li>接上Micro USB電源線</li>
+<li>使用預設帳號密碼登入: pi/raspberry</li>
+<li><p>進入Raspbian設定頁面:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pi@raspberrypi:~ $ sudo raspi-config</div></pre></td></tr></table></figure>
+</li>
+<li><p>變更登入密碼</p>
+<img src="/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_change_password.png" width="700">
+<img src="/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_change_password_success.png" width="700">
+</li>
+<li><p>開啟SSH server</p>
+<img src="/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_ssh_1.png" width="700">
+<img src="/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_ssh_2.png" width="700">
+<img src="/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_ssh_3.png" width="700">
+<img src="/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_ssh_4.png" width="700">
+</li>
+<li><p>開啟Wifi</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">pi@raspberrypi:~ $ sudo vi /etc/network/interfaces</div><div class="line">allow-hotplug wlan0</div><div class="line">iface wlan0 inet manual</div><div class="line">    wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf</div><div class="line"></div><div class="line"></div><div class="line">pi@raspberrypi:~ $ sudo vi /etc/wpa_supplicant/wpa_supplicant.conf</div><div class="line">ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev</div><div class="line">update_config=1</div><div class="line">country=TW</div><div class="line"></div><div class="line"></div><div class="line">pi@raspberrypi:~ $ sudo systemctl <span class="built_in">enable</span> wpa_supplicant.service</div><div class="line">pi@raspberrypi:~ $ sudo reboot</div><div class="line"><span class="comment">## 須先重新登入raspberry</span></div><div class="line">pi@raspberrypi:~ $ sudo raspi-config</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<img src="/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_wifi_1.png" width="700">
+<img src="/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_wifi_2.png" width="700">
+<img src="/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_wifi_3.png" width="700">
+<img src="/2018/06/14/setup-raspberry-pi-using-a-mac/raspbian_config_enable_wifi_4.png" width="700">
+<h3 id="Launching-Raspbian-Without-HDMI-Monitor"><a href="#Launching-Raspbian-Without-HDMI-Monitor" class="headerlink" title="Launching Raspbian Without HDMI Monitor"></a>Launching Raspbian Without HDMI Monitor</h3><p>此步驟可以達成在沒有HDMI螢幕的情況下，透過ssh經由Wifi啟動並設置Raspbian</p>
+<ol>
+<li><p>在將Raspbian image寫入SD card後，進行下述操作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">MacBook-Pro:raspbian ~ user$ <span class="built_in">cd</span> /Volumes/boot</div><div class="line"></div><div class="line"><span class="comment">## 為之後要使用的ssh命令建立檔案</span></div><div class="line">MacBook-Pro:boot chung$ touch ssh</div><div class="line"></div><div class="line"><span class="comment">## 設定Wifi的配置</span></div><div class="line"><span class="comment">## NATWORK_NAME: Wifi device的名稱</span></div><div class="line"><span class="comment">## YOUR_PASSWORD: Wifi device的密碼</span></div><div class="line">MacBook-Pro:boot chung$ vim wpa_supplicant.conf</div><div class="line">ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev</div><div class="line">update_config=1</div><div class="line">country=GB</div><div class="line"></div><div class="line">network=&#123;</div><div class="line">        ssid=<span class="string">"NATWORK_NAME"</span></div><div class="line">        psk=<span class="string">"YOUR_PASSWORD"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>將SD card插入Raspbian</p>
+</li>
+<li>接上Micro USB電源線</li>
+<li>取得Raspbian的IP，有以下2種方式:<ul>
+<li>至Wifi device的管理頁面查看新連上的裝置所被配置的IP</li>
+<li>使用網路嗅探工具，例如nmap，查看相同Wifi環境下的IP</li>
+</ul>
+</li>
+<li>使用ssh以及預設帳號密碼登入: pi/raspberry</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Raspberry/" rel="tag"># Raspberry</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/download-android-source-code-and-build/" rel="next" title="Download Android Source Code and Build">
+                <i class="fa fa-chevron-left"></i> Download Android Source Code and Build
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/create-and-launch-android-virtrual-device-via-command/" rel="prev" title="Create and Launch Android Virtrual Device via Command">
+                Create and Launch Android Virtrual Device via Command <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Setup-Raspberry-Pi-Using-a-Mac"><span class="nav-number">1.</span> <span class="nav-text">Setup Raspberry Pi Using a Mac</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-Infomation"><span class="nav-number">1.1.</span> <span class="nav-text">Basic Infomation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Downloading-Raspbian-stretch-lite-image"><span class="nav-number">1.2.</span> <span class="nav-text">Downloading Raspbian stretch lite image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Burning-Raspbian-image-to-SD-card"><span class="nav-number">1.3.</span> <span class="nav-text">Burning Raspbian image to SD card</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Launching-Raspbian"><span class="nav-number">1.4.</span> <span class="nav-text">Launching Raspbian</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Launching-Raspbian-Without-HDMI-Monitor"><span class="nav-number">1.5.</span> <span class="nav-text">Launching Raspbian Without HDMI Monitor</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
