@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Python," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Python GIL(Global Interpreter Lock)本文將介紹GIL是什麼，為什麼存在，對Python的影響是什麼，以及一些歷史演進。本文主要參考David Beazley的2篇分享Inside the Python GIL與Inside the New GIL">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python GIL(Global Interpreter Lock)">
+<meta property="og:url" content="https://0x90e.github.io/python-gil/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Python GIL(Global Interpreter Lock)本文將介紹GIL是什麼，為什麼存在，對Python的影響是什麼，以及一些歷史演進。本文主要參考David Beazley的2篇分享Inside the Python GIL與Inside the New GIL">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0x90e.github.io/2018/07/31/python_gil/io_bound_threads.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/07/31/python_gil/cpu_bound_threads.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/07/31/python_gil/gil_battle.png">
+<meta property="og:image" content="https://0x90e.github.io/2018/07/31/python_gil/new_gil.png">
+<meta property="og:updated_time" content="2018-08-07T17:37:56.721Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python GIL(Global Interpreter Lock)">
+<meta name="twitter:description" content="Python GIL(Global Interpreter Lock)本文將介紹GIL是什麼，為什麼存在，對Python的影響是什麼，以及一些歷史演進。本文主要參考David Beazley的2篇分享Inside the Python GIL與Inside the New GIL">
+<meta name="twitter:image" content="https://0x90e.github.io/2018/07/31/python_gil/io_bound_threads.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/python-gil/"/>
+
+
+
+
+
+  <title>Python GIL(Global Interpreter Lock) | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/python-gil/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Python GIL(Global Interpreter Lock)</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-31T21:36:28+08:00">
+                2018-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Python-GIL-Global-Interpreter-Lock"><a href="#Python-GIL-Global-Interpreter-Lock" class="headerlink" title="Python GIL(Global Interpreter Lock)"></a>Python GIL(Global Interpreter Lock)</h2><p>本文將介紹<a href="https://github.com/python/cpython/blob/dd4d8b4d80065409dae69f966fd7617e5b3d97f1/Python/ceval.c#L238" title="This is the GIL" target="_blank" rel="external">GIL</a>是什麼，為什麼存在，對Python的影響是什麼，以及一些歷史演進。<br>本文主要參考David Beazley的2篇分享<a href="http://www.dabeaz.com/python/GIL.pdf" title="Inside the Python GIL" target="_blank" rel="external">Inside the Python GIL</a>與<a href="http://www.dabeaz.com/python/NewGIL.pdf" title="Inside the New GIL" target="_blank" rel="external">Inside the New GIL</a><br><a id="more"></a></p>
+<h3 id="Introduce"><a href="#Introduce" class="headerlink" title="Introduce"></a>Introduce</h3><p><a href="https://wiki.python.org/moin/GlobalInterpreterLock" title="GlobalInterpreterLock" target="_blank" rel="external">官方說明</a></p>
+<p>In CPython, the global interpreter lock, or GIL, is a mutex that protects access to Python objects, preventing multiple threads from executing Python bytecodes at once. This lock is necessary mainly because CPython’s memory management is not thread-safe. (However, since the GIL exists, other features have grown to depend on the guarantees that it enforces.)</p>
+<p>從上述中得知:</p>
+<ul>
+<li>GIL是一個控制Thread存取Python object的mutex</li>
+<li>GIL能確保同一時間只有一個Thread在Python interpreter內執行</li>
+<li>GIL存在的原因之一是因為CPython的memory management不是thread-safe</li>
+</ul>
+<p>上述多次提到Thread，在Python中的Thread是一個Operating system的Thread，例如POSIX thread, Windows thread。<br>換言之，Python thread的scheduling與switching皆是由OS處理</p>
+<h3 id="Types-of-Threads"><a href="#Types-of-Threads" class="headerlink" title="Types of Threads"></a>Types of Threads</h3><p>GIL與Thread密不可分，而GIL對不同種類的Thread的關係和影響也不同。<br>以下分別對兩種Thread分別闡述:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/I/O_bound" title="I/O bound" target="_blank" rel="external">I/O bound threads</a>  </li>
+<li><a href="https://en.wikipedia.org/wiki/CPU-bound" title="CPU bound" target="_blank" rel="external">CPU bound threads</a></li>
+</ul>
+<h4 id="I-O-bound-threads"><a href="#I-O-bound-threads" class="headerlink" title="I/O bound threads"></a>I/O bound threads</h4><img src="/2018/07/31/python_gil/io_bound_threads.png" width="500">
+<p>由圖得知(圖片來源:<a href="http://www.dabeaz.com/python/GIL.pdf" title="Inside the Python GIL" target="_blank" rel="external">Inside the Python GIL</a>):</p>
+<ul>
+<li>在I/O bound threads執行前，並須先Acquire GIL</li>
+<li>遇到I/O block時，會Release GIL</li>
+<li>當GIL不被任何Thread持有時，則其他Thread有機會Acquire GIL</li>
+<li>換言之，在I/O bound threads時，Multiple thread會比Single thread速度快</li>
+</ul>
+<h4 id="CPU-bound-threads"><a href="#CPU-bound-threads" class="headerlink" title="CPU bound threads"></a>CPU bound threads</h4><img src="/2018/07/31/python_gil/cpu_bound_threads.png" width="500">
+<p>由圖得知(圖片來源:<a href="http://www.dabeaz.com/python/GIL.pdf" title="Inside the Python GIL" target="_blank" rel="external">Inside the Python GIL</a>):</p>
+<ul>
+<li>CPU bound不像I/O bound threads會被I/O block</li>
+<li>Python interpreter會定期執行Check<ul>
+<li>預設是100 interpreter ticks執行一次Check<ul>
+<li>Tick: <ul>
+<li>由很多個Python interpreter instructions組成</li>
+<li>不是基於時間來計算的，所以每個Tick的執行時間不相同</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>使用sys.setcheckinterval()更改此值</li>
+<li>執行Check時讓當前持有GIL的Thread release GIL，則其他Thread有機會拿到GIL</li>
+</ul>
+</li>
+<li>如果Main thread拿到了GIL，則會額外處理Signal，例如Interrupt signal<ul>
+<li>結合Python thread沒有Thread的scheduling能力，引發另一個問題<ul>
+<li>只有在Main thread拿到GIL時，該Program的Signal才能被處理</li>
+<li>如果Main thread被不可中斷的Thread-join或Lock block時，Main thread永遠不會被OS安排到可被執行的狀態</li>
+<li>所以Signal也永遠不會被處理</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="GIL-Battle"><a href="#GIL-Battle" class="headerlink" title="GIL Battle"></a>GIL Battle</h4><img src="/2018/07/31/python_gil/gil_battle.png" width="500">
+<p>如圖所示(圖片來源:<a href="http://www.dabeaz.com/python/GIL.pdf" title="Inside the Python GIL" target="_blank" rel="external">Inside the Python GIL</a>)</p>
+<ul>
+<li>T1/T2皆為CPU bound threads，且執行在不同的CPU core上</li>
+<li>當T1在第一次Acquire GIL後，在每次的Check過程中，T1 release GIL之後，馬上又Acquire GIL並繼續執行，導致T2一直沒有機會Acquire GIL</li>
+<li>GIL Battle是因為下述兩個原則衝突導致<ul>
+<li>OS的Thread scheduling的目的是要發揮Multiple cores的優勢</li>
+<li>GIL讓Python interpreter同時只能執行一個Thread</li>
+</ul>
+</li>
+<li>對I/O bound threads的影響<ul>
+<li>當I/O bound thread接收到I/O block結束的信號時，但另一個Core的CPU bound thread不斷的release/Acquire GIL</li>
+<li>I/O bound thread也就無法讀取I/O的結果</li>
+<li>引發Priority inversion<ul>
+<li>在OS中，I/O bound thread的執行優先權高於CPU bound thread</li>
+<li>但在發生上述情況時，I/O bound thread反而不會優先於CPU bound thread被執行完，此情況稱為Priority inversion</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="New-GIL-in-Python3-2"><a href="#New-GIL-in-Python3-2" class="headerlink" title="New GIL in Python3.2"></a>New GIL in Python3.2</h3><p>Python 3.2的GIL進行了改善:</p>
+<ul>
+<li>Interpreter執行區間從Tick-based變更為Time-based<ul>
+<li>移除Tick機制，以及sys.setcheckinterval()</li>
+</ul>
+</li>
+<li>顯著的降低了Thrashing和Signaling的消耗</li>
+</ul>
+<h4 id="New-Thread-Switching"><a href="#New-Thread-Switching" class="headerlink" title="New Thread Switching"></a>New Thread Switching</h4><ul>
+<li>使用全局變量<a href="https://github.com/python/cpython/blob/cd1d5c554c40b5b348de2e77d65986aa154e4477/Python/ceval.c#L291" title="gil_drop_request" target="_blank" rel="external">gil_drop_request</a>決定是否進行Release GIL</li>
+<li>Running thread release GIL<ul>
+<li>被強制的Release GIL: gil_drop_request由0設定為1</li>
+<li>自主的Release GIL: 進行I/O block或Sleep</li>
+</ul>
+</li>
+<li>Suspended thread的狀態轉換<ul>
+<li>開始執行後，發現已經有其他Thread正在執行，無法Acquire GIL，則進入Suspended狀態，並設定該狀態維持T時長<ul>
+<li>Case 1: 在T時間內接收到Release GIL signal後Acquire GIL</li>
+<li>Case 2: T時間內仍未接收到Release GIL signal，提出將gil_drop_request由0設定為1，則進入Suspended狀態，並設定該狀態維持T時長<ul>
+<li>Case 2.1: 在T時間內接收到Release GIL signal後Acquire GIL</li>
+<li>Case 2.2: OS將Release GIL signal發送給其他Suspended thread，則自己回到Case 2等完T時長</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Thread在Acquire GIL的一段時間內，不會馬上被強制Release GIL</li>
+</ul>
+</li>
+<li>若有多個Thread提出將gil_drop_request由0設定為1時，只有第一個要求會完成設置</li>
+<li>提出要求的Thread，不一定可以Acquire GIL，可能被其他也在等待的Thread Acquire GIL</li>
+<li>T時長:<ul>
+<li>預設為5 milliseconds (0.005s)</li>
+<li>使用sys.setswitchinterval()設定該值</li>
+</ul>
+</li>
+<li>Time-based機制消除了GIL Battle</li>
+<li>Case 2參考(圖片來源:<a href="http://www.dabeaz.com/python/NewGIL.pdf" title="Inside the New GIL" target="_blank" rel="external">Inside the New GIL</a>)<img src="/2018/07/31/python_gil/new_gil.png" width="500">
+</li>
+</ul>
+<h4 id="Interesting-Features"><a href="#Interesting-Features" class="headerlink" title="Interesting Features"></a>Interesting Features</h4><ul>
+<li>新的GIL允許Acquire GIL的Thread無視其他Thread或I/O priority，持有GIL一個T時長</li>
+<li>所以一個CPU-bound thread在整個操作週期中，會多次主動釋放GIL(例如多次Receive/Send data)，而在每次Acquire GIL前最少都得等待一個T時長，導致I/O bound thread的總反應時間增加</li>
+</ul>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li><a href="http://www.dabeaz.com/" title="David Beazley" target="_blank" rel="external">David Beazley</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/create-and-launch-android-virtrual-device-via-command/" rel="next" title="Create and Launch Android Virtrual Device via Command">
+                <i class="fa fa-chevron-left"></i> Create and Launch Android Virtrual Device via Command
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-GIL-Global-Interpreter-Lock"><span class="nav-number">1.</span> <span class="nav-text">Python GIL(Global Interpreter Lock)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Introduce"><span class="nav-number">1.1.</span> <span class="nav-text">Introduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Types-of-Threads"><span class="nav-number">1.2.</span> <span class="nav-text">Types of Threads</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#I-O-bound-threads"><span class="nav-number">1.2.1.</span> <span class="nav-text">I/O bound threads</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU-bound-threads"><span class="nav-number">1.2.2.</span> <span class="nav-text">CPU bound threads</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GIL-Battle"><span class="nav-number">1.2.3.</span> <span class="nav-text">GIL Battle</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#New-GIL-in-Python3-2"><span class="nav-number">1.3.</span> <span class="nav-text">New GIL in Python3.2</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#New-Thread-Switching"><span class="nav-number">1.3.1.</span> <span class="nav-text">New Thread Switching</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Interesting-Features"><span class="nav-number">1.3.2.</span> <span class="nav-text">Interesting Features</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">1.4.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
