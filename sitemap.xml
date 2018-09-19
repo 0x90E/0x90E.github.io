@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://0x90e.github.io/python-decorate/</loc>
+    
+    <lastmod>2018-09-19T14:56:58.110Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0x90e.github.io/elasticsearch-installation/</loc>
+    
+    <lastmod>2018-09-19T14:37:34.726Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0x90e.github.io/python-gil/</loc>
     
     <lastmod>2018-08-07T17:37:56.721Z</lastmod>
@@ -166,13 +180,6 @@
     <loc>https://0x90e.github.io/nginx-installation/</loc>
     
     <lastmod>2018-01-23T16:06:42.057Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://0x90e.github.io/elasticsearch-installation/</loc>
-    
-    <lastmod>2018-01-23T15:48:15.499Z</lastmod>
     
   </url>
   
