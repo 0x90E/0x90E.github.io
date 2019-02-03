@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Django,Python," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Django Launch and Request FlowBasic information Django version: 2.1  Django launch flowPEP 3333 PEP 3333 制定Web Server與Python web applications/frameworks的介面標準">
+<meta name="keywords" content="Django,Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="django_launch_and_request_flow">
+<meta property="og:url" content="https://0x90e.github.io/django-launch-and-request-flow/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Django Launch and Request FlowBasic information Django version: 2.1  Django launch flowPEP 3333 PEP 3333 制定Web Server與Python web applications/frameworks的介面標準">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://0x90e.github.io/2019/02/03/django-launch-and-request-flow/runserver_flow.svg">
+<meta property="og:image" content="https://0x90e.github.io/2019/02/03/django-launch-and-request-flow/request_flow.svg">
+<meta property="og:updated_time" content="2019-02-03T14:39:05.513Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="django_launch_and_request_flow">
+<meta name="twitter:description" content="Django Launch and Request FlowBasic information Django version: 2.1  Django launch flowPEP 3333 PEP 3333 制定Web Server與Python web applications/frameworks的介面標準">
+<meta name="twitter:image" content="https://0x90e.github.io/2019/02/03/django-launch-and-request-flow/runserver_flow.svg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/django-launch-and-request-flow/"/>
+
+
+
+
+
+  <title>django_launch_and_request_flow | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/django-launch-and-request-flow/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">django_launch_and_request_flow</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-03T21:56:50+08:00">
+                2019-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Django/" itemprop="url" rel="index">
+                    <span itemprop="name">Django</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Django-Launch-and-Request-Flow"><a href="#Django-Launch-and-Request-Flow" class="headerlink" title="Django Launch and Request Flow"></a>Django Launch and Request Flow</h2><h3 id="Basic-information"><a href="#Basic-information" class="headerlink" title="Basic information"></a>Basic information</h3><ul>
+<li>Django version: 2.1</li>
+</ul>
+<h3 id="Django-launch-flow"><a href="#Django-launch-flow" class="headerlink" title="Django launch flow"></a>Django launch flow</h3><h4 id="PEP-3333"><a href="#PEP-3333" class="headerlink" title="PEP 3333"></a>PEP 3333</h4><ul>
+<li><a href="https://www.python.org/dev/peps/pep-3333/" target="_blank" rel="external">PEP 3333</a><ul>
+<li>制定Web Server與Python web applications/frameworks的介面標準<a id="more"></a></li>
+</ul>
+</li>
+<li>角色<ul>
+<li>Web Server/Gatway<ul>
+<li>呼叫Application/Framework的callable實例，並傳入environ, start_response兩個參數<ul>
+<li>environ: <ul>
+<li>type: Dict</li>
+<li>當前環境的上下文管理變數，為Dict type</li>
+</ul>
+</li>
+<li>start_response: <ul>
+<li>Type: Callable</li>
+<li>接收两个参数, 分别是响应的状态码</li>
+<li>返回Response Body</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Application/Framework<ul>
+<li>需要實作一個callble的實例，包含函數、方法、類，或帶有<strong>call</strong>的方法</li>
+</ul>
+</li>
+<li>Middleware<ul>
+<li>對上級的Web Server或Middleware扮演Application的角色</li>
+<li>對下級的Application或Middleware扮演Server的角色</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Interaction-diagram"><a href="#Interaction-diagram" class="headerlink" title="Interaction diagram"></a>Interaction diagram</h4><img src="/2019/02/03/django-launch-and-request-flow/runserver_flow.svg" width="700">
+<h4 id="Explanation"><a href="#Explanation" class="headerlink" title="Explanation"></a>Explanation</h4><ul>
+<li>manage.py runserver<ul>
+<li>此為每個Django Application的入口，在建立Django Project時，會自動產生</li>
+<li>重點步驟<ul>
+<li>指定DJANGO_SETTINGS_MODUL，此為重要配置，Django Project相關配置皆使用該文件設定</li>
+<li>使用django.core.management的execute_from_command_line將參數傳遞至Django內部</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>management @django/core/management/<strong>init</strong>.py<ul>
+<li>初始化ManagementUtility，並呼叫其execute方法</li>
+</ul>
+</li>
+<li>utility: ManagementUtility @django/core/management/<strong>init</strong>.py<ul>
+<li>execute方法<ul>
+<li>判斷argv中的輸入，執行對應的動作，現在參數為”runserver”</li>
+<li>self.fetch_command(subcommand).run_from_argv(self.argv)<ul>
+<li>fetch_command(subcommand)取得Command </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Command @django/core/management/commands/runserver.py</p>
+<ul>
+<li>run_from_argv(self.argv)<ul>
+<li>run_from_argv在Command的父類 @django/core/management/base.py #BaseCommand</li>
+</ul>
+</li>
+<li>execute(self, <em>args, *</em>options) #BaseCommand</li>
+<li>handle(self, <em>args, *</em>options) #Command</li>
+<li>run(self, **options) #Command</li>
+<li><p>inner_run(self, <em>args, *</em>options) #Command</p>
+  <figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">inner_run</span><span class="params">(self, *args, **options)</span>:</span></div><div class="line">    <span class="comment"># ...</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        <span class="comment"># 取得WSGIHandler @django/core/handlers/wsgi.py</span></div><div class="line">        handler = self.get_handler(*args, **options)</div><div class="line">        run(self.addr, int(self.port), handler,</div><div class="line">            ipv6=self.use_ipv6, threading=threading, server_cls=self.server_cls)</div><div class="line">    <span class="keyword">except</span> socket.error <span class="keyword">as</span> e:</div><div class="line">        <span class="comment"># ...</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>run @django/core/servers/basehttp.py</p>
+  <figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(addr, port, wsgi_handler, ipv6=False, threading=False, server_cls=WSGIServer)</span>:</span></div><div class="line">    <span class="comment"># ...</span></div><div class="line">    <span class="comment"># httpd_cls是WSGIServer @django/core/servers/basehttp.py</span></div><div class="line">    <span class="comment"># WSGIRequestHandler @django/core/servers/basehttp.py</span></div><div class="line">    <span class="comment"># WSGIRequestHandler最中會指定給WSGIServer的父類BaseServer的self.RequestHandlerClass變數</span></div><div class="line">    httpd = httpd_cls(server_address, WSGIRequestHandler, ipv6=ipv6)</div><div class="line">    <span class="comment"># ...</span></div><div class="line">    <span class="comment"># wsgi_handler由上一步傳入的WSGIHandler @django/core/handlers/wsgi.py</span></div><div class="line">    httpd.set_app(wsgi_handler)</div><div class="line">    httpd.serve_forever()</div></pre></td></tr></table></figure>
+</li>
+<li><p>httpd.set_app</p>
+  <figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_app</span><span class="params">(self,application)</span>:</span></div><div class="line">    self.application = application</div></pre></td></tr></table></figure>
+<ul>
+<li>application會在之後處理HTTP request時候使用</li>
+</ul>
+</li>
+<li>httpd.serve_forever<ul>
+<li>父類 BaseServer中的方法</li>
+<li>不斷接收與處理HTTP request，直到接收到shutdown信號</li>
+</ul>
+</li>
+</ul>
+<h4 id="Djagno-with-PEP3333"><a href="#Djagno-with-PEP3333" class="headerlink" title="Djagno with PEP3333"></a>Djagno with PEP3333</h4><ul>
+<li>Web Server/Gatway &lt;-&gt; WSGIServer</li>
+<li>Application/Framework &lt;-&gt; WSGIHandler</li>
+</ul>
+<h3 id="Django-Request-and-Response-Flow"><a href="#Django-Request-and-Response-Flow" class="headerlink" title="Django Request and Response Flow"></a>Django Request and Response Flow</h3><h4 id="Interaction-diagram-1"><a href="#Interaction-diagram-1" class="headerlink" title="Interaction diagram"></a>Interaction diagram</h4><img src="/2019/02/03/django-launch-and-request-flow/request_flow.svg" width="700">
+<h4 id="Explanation-1"><a href="#Explanation-1" class="headerlink" title="Explanation"></a>Explanation</h4><ul>
+<li><p>HTTP request </p>
+<ul>
+<li>當有HTTP/HTTPS request到達時，WSGIServer的serve_forever方法中的which loop會透過_handle_request_noblock處理request，之後調用內部的process_request，finish_request方法</li>
+<li><p>上述方法皆在WSGIServer的父類BaseServer中</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">finish_request</span><span class="params">(self, request, client_address)</span>:</span></div><div class="line"><span class="string">"""Finish one request by instantiating RequestHandlerClass."""</span></div><div class="line">self.RequestHandlerClass(request, client_address, self)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>RequestHandlerClass</p>
+<ul>
+<li>在finish_request方法中調用了self.RequestHandlerClass</li>
+<li>RequestHandlerClass變量是run @django/core/servers/basehttp.py時傳入，Class為WSGIRequestHandler @django/core/servers/basehttp.py</li>
+<li><p>WSGIRequestHandler在其父類BaseRequestHandler的<strong>int</strong>方法中呼叫handle方法</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BaseRequestHandler</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, request, client_address, server)</span>:</span></div><div class="line">        <span class="comment"># ...</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self.handle()</div><div class="line">        <span class="keyword">finally</span>:</div><div class="line">            <span class="comment"># ...</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>handle方法實作在WSGIRequestHandler內，並呼叫自身的handle_one_request</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">WSGIRequestHandler</span><span class="params">(simple_server.WSGIRequestHandler)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="comment"># ...</span></div><div class="line">        handler = ServerHandler(</div><div class="line">            self.rfile, self.wfile, self.get_stderr(), self.get_environ()</div><div class="line">        )</div><div class="line">        handler.request_handler = self      <span class="comment"># backpointer for logging</span></div><div class="line">        handler.run(self.server.get_app())</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>ServerHandler</p>
+<ul>
+<li><p>run方法在其父類BaseHandler中</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BaseHandler</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self, application)</span>:</span></div><div class="line">        <span class="comment"># ...</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self.setup_environ()</div><div class="line">            self.result = application(self.environ, self.start_response)</div><div class="line">            self.finish_response()</div><div class="line">        <span class="keyword">except</span>:</div><div class="line">            <span class="comment"># ...</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">finish_response</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">if</span> <span class="keyword">not</span> self.result_is_file() <span class="keyword">or</span> <span class="keyword">not</span> self.sendfile():</div><div class="line">                <span class="keyword">for</span> data <span class="keyword">in</span> self.result:</div><div class="line">                    self.write(data)</div><div class="line">                self.finish_content()</div><div class="line">        <span class="keyword">finally</span>:</div><div class="line">            self.close()</div></pre></td></tr></table></figure>
+</li>
+<li><p>application(self.environ, self.start_response)</p>
+<ul>
+<li>application為run方法的參數，使用WSGIRequestHandler中的self.server.get_app()取得</li>
+</ul>
+</li>
+<li>self.server.get_app()<ul>
+<li>self.server是在WSGIRequestHandler初始化時，其父類的參數</li>
+<li>參數是在WSGIServer中，使用self傳入，故self.server就是WSGIServer object</li>
+<li>get_app方法對應WSGIServer的set_app方法，是在run @django/core/servers/basehttp.py 傳入，對應的是WSGIHandler</li>
+<li>故self.server.get_app()回傳的就是WSGIHandler class</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>WSGIHandler @django/core/handlers/wsgi.py</p>
+<ul>
+<li>在application(self.environ, self.start_response)會呼叫<strong>init</strong><ul>
+<li>載入middleware</li>
+</ul>
+</li>
+<li><p>在finish_response方法中的self.result會呼叫WSGIHandler的<strong>call</strong></p>
+<ul>
+<li>開始處理request，根據順序走訪middleware與開發者定義View，最終回傳response</li>
+<li><strong>call</strong>是根據PEP3333的Application規定實作，讓WSGIHandler成為callable，並且接收environ, start_response 2個參數</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">WSGIHandler</span><span class="params">(base.BaseHandler)</span>:</span></div><div class="line">    request_class = WSGIRequest</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *args, **kwargs)</span>:</span></div><div class="line">        super().__init__(*args, **kwargs)</div><div class="line">        self.load_middleware()</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, environ, start_response)</span>:</span></div><div class="line">        set_script_prefix(get_script_name(environ))</div><div class="line">        signals.request_started.send(sender=self.__class__, environ=environ)</div><div class="line">        request = self.request_class(environ)</div><div class="line">        response = self.get_response(request)</div><div class="line">        <span class="comment"># ...</span></div><div class="line">        <span class="keyword">return</span> response</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BaseHandler</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_response</span><span class="params">(self, request)</span>:</span></div><div class="line">    <span class="string">"""Return an HttpResponse object for the given HttpRequest."""</span></div><div class="line">    <span class="comment"># Setup default url resolver for this thread</span></div><div class="line">    set_urlconf(settings.ROOT_URLCONF)</div><div class="line">    response = self._middleware_chain(request)</div><div class="line">    response._closable_objects.append(request)</div><div class="line">    <span class="keyword">if</span> response.status_code &gt;= <span class="number">400</span>:</div><div class="line">        log_response(</div><div class="line">            <span class="string">'%s: %s'</span>, response.reason_phrase, request.path,</div><div class="line">            response=response,</div><div class="line">            request=request,</div><div class="line">        )</div><div class="line">    <span class="keyword">return</span> response</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Django/" rel="tag"># Django</a>
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/python-decorator/" rel="next" title="Python Decorator">
+                <i class="fa fa-chevron-left"></i> Python Decorator
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Django-Launch-and-Request-Flow"><span class="nav-number">1.</span> <span class="nav-text">Django Launch and Request Flow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-information"><span class="nav-number">1.1.</span> <span class="nav-text">Basic information</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Django-launch-flow"><span class="nav-number">1.2.</span> <span class="nav-text">Django launch flow</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PEP-3333"><span class="nav-number">1.2.1.</span> <span class="nav-text">PEP 3333</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Interaction-diagram"><span class="nav-number">1.2.2.</span> <span class="nav-text">Interaction diagram</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Explanation"><span class="nav-number">1.2.3.</span> <span class="nav-text">Explanation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Djagno-with-PEP3333"><span class="nav-number">1.2.4.</span> <span class="nav-text">Djagno with PEP3333</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Django-Request-and-Response-Flow"><span class="nav-number">1.3.</span> <span class="nav-text">Django Request and Response Flow</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Interaction-diagram-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">Interaction diagram</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Explanation-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">Explanation</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

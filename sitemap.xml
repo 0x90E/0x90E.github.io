@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://0x90e.github.io/django-launch-and-request-flow/</loc>
+    
+    <lastmod>2019-02-03T14:39:05.513Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0x90e.github.io/python-decorator/</loc>
     
     <lastmod>2018-09-19T15:15:00.159Z</lastmod>
