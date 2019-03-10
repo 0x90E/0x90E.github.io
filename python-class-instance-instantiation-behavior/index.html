@@ -64,7 +64,7 @@
 
 
 
-  <meta name="keywords" content="Spark," />
+  <meta name="keywords" content="Python," />
 
 
 
@@ -75,24 +75,18 @@
 
 
 
-<meta name="description" content="Spark Streaming BasicIntroduction Spark streaming introduction Ease of Use 使用高級別的API進行開發Application 支持多語言的API，包含Java、Scala以及Python Streaming job與Batch job的之間的實作方法沒有區別   Fault Tolerance 開箱及用的State">
-<meta name="keywords" content="Spark">
+<meta name="description" content="Python Class and Instance Instantiation Behavior__new__ and __init__ Function __new__ Official document 為Class function 用了特殊方法，所以實現時不用特別寫上@classmethod裝飾器   主要用途: 構建Instance return:  自身Class對應的Instance">
+<meta name="keywords" content="Python">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spark Streaming Basic">
-<meta property="og:url" content="https://0x90e.github.io/spark-streaming-basic/index.html">
+<meta property="og:title" content="Python Class and Instance Instantiation Behavior">
+<meta property="og:url" content="https://0x90e.github.io/python-class-instance-instantiation-behavior/index.html">
 <meta property="og:site_name" content="0x90e&#39;s Blog">
-<meta property="og:description" content="Spark Streaming BasicIntroduction Spark streaming introduction Ease of Use 使用高級別的API進行開發Application 支持多語言的API，包含Java、Scala以及Python Streaming job與Batch job的之間的實作方法沒有區別   Fault Tolerance 開箱及用的State">
+<meta property="og:description" content="Python Class and Instance Instantiation Behavior__new__ and __init__ Function __new__ Official document 為Class function 用了特殊方法，所以實現時不用特別寫上@classmethod裝飾器   主要用途: 構建Instance return:  自身Class對應的Instance">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://0x90e.github.io/2018/03/08/spark-streaming-basic/spark_streaming_arch.png">
-<meta property="og:image" content="https://0x90e.github.io/2018/03/08/spark-streaming-basic/spark_streaming_flow.png">
-<meta property="og:image" content="https://0x90e.github.io/2018/03/08/spark-streaming-basic/spark_streaming_receiver.png">
-<meta property="og:image" content="https://0x90e.github.io/2018/03/08/spark-streaming-basic/spark_streaming_statistics_1.png">
-<meta property="og:image" content="https://0x90e.github.io/2018/03/08/spark-streaming-basic/spark_streaming_statistics_2.png">
-<meta property="og:updated_time" content="2018-03-11T16:55:56.295Z">
+<meta property="og:updated_time" content="2019-03-10T14:00:36.360Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spark Streaming Basic">
-<meta name="twitter:description" content="Spark Streaming BasicIntroduction Spark streaming introduction Ease of Use 使用高級別的API進行開發Application 支持多語言的API，包含Java、Scala以及Python Streaming job與Batch job的之間的實作方法沒有區別   Fault Tolerance 開箱及用的State">
-<meta name="twitter:image" content="https://0x90e.github.io/2018/03/08/spark-streaming-basic/spark_streaming_arch.png">
+<meta name="twitter:title" content="Python Class and Instance Instantiation Behavior">
+<meta name="twitter:description" content="Python Class and Instance Instantiation Behavior__new__ and __init__ Function __new__ Official document 為Class function 用了特殊方法，所以實現時不用特別寫上@classmethod裝飾器   主要用途: 構建Instance return:  自身Class對應的Instance">
 
 
 
@@ -122,13 +116,13 @@
 
 
 
-  <link rel="canonical" href="https://0x90e.github.io/spark-streaming-basic/"/>
+  <link rel="canonical" href="https://0x90e.github.io/python-class-instance-instantiation-behavior/"/>
 
 
 
 
 
-  <title>Spark Streaming Basic | 0x90e's Blog</title>
+  <title>Python Class and Instance Instantiation Behavior | 0x90e's Blog</title>
   
 
 
@@ -264,7 +258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-streaming-basic/">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/python-class-instance-instantiation-behavior/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="0x90e">
@@ -281,7 +275,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">Spark Streaming Basic</h2>
+          <h2 class="post-title" itemprop="name headline">Python Class and Instance Instantiation Behavior</h2>
         
 
         <div class="post-meta">
@@ -293,8 +287,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-08T00:40:41+08:00">
-                2018-03-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-10T21:55:15+08:00">
+                2019-03-10
               </time>
             
 
@@ -316,8 +310,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Big-data/" itemprop="url" rel="index">
-                    <span itemprop="name">Big data</span>
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
                   </a>
                 </span>
 
@@ -358,76 +352,51 @@
       
 
       
-        <h2 id="Spark-Streaming-Basic"><a href="#Spark-Streaming-Basic" class="headerlink" title="Spark Streaming Basic"></a>Spark Streaming Basic</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><ul>
-<li><a href="http://spark.apache.org/streaming/" title="Spark streaming introduction" target="_blank" rel="external">Spark streaming introduction</a></li>
-<li>Ease of Use<ul>
-<li>使用高級別的API進行開發Application</li>
-<li>支持多語言的API，包含Java、Scala以及Python</li>
-<li>Streaming job與Batch job的之間的實作方法沒有區別</li>
+        <h2 id="Python-Class-and-Instance-Instantiation-Behavior"><a href="#Python-Class-and-Instance-Instantiation-Behavior" class="headerlink" title="Python Class and Instance Instantiation Behavior"></a>Python Class and Instance Instantiation Behavior</h2><h3 id="new-and-init-Function"><a href="#new-and-init-Function" class="headerlink" title="__new__ and __init__ Function"></a>__new__ and __init__ Function</h3><ul>
+<li>__new__<ul>
+<li><a href="https://docs.python.org/3.7/reference/datamodel.html?highlight=__new__#object.__new__" target="_blank" rel="external">Official document</a></li>
+<li>為Class function<ul>
+<li>用了特殊方法，所以實現時不用特別寫上@classmethod裝飾器</li>
 </ul>
 </li>
-<li>Fault Tolerance<ul>
-<li>開箱及用的Stateful exactly-once semantics</li>
-<li>開箱及用的恢復Lost wrok與Operator state功能，不需要開發者進行額外的開發</li>
+<li>主要用途: 構建Instance</li>
+<li>return: <ul>
+<li>自身Class對應的Instance，並作為__init__的第一個參數，及為self</li>
+<li>其他Class對應的Instance，會呼叫對應的__init__</li>
 </ul>
 </li>
-<li>Spark Integration<br>  - 與Spark Core、SQL、ML等結合<ul>
-<li>Streaminng job與Batch job之間的處理邏輯不需變動，修改輸入與輸出就可以</li>
 </ul>
 </li>
-<li>Deployment Options:<ul>
-<li>支持多個數據源，包含HDFS、Flume、Kafka、Twitter、ZeroMQ</li>
-<li>支持多個運行模式</li>
+<li>__init__<ul>
+<li><a href="https://docs.python.org/3.7/reference/datamodel.html?highlight=__new__#object.__init__" target="_blank" rel="external">Official document</a></li>
+<li>為Object function</li>
+<li>主要用途: 初始化Object變量</li>
+<li>return: 不允許返回任何值</li>
 </ul>
 </li>
 </ul>
 <a id="more"></a>
-<h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><ul>
-<li><a href="http://spark.apache.org/docs/latest/streaming-programming-guide.html#overview" title="Spark streaming overview" target="_blank" rel="external">Spark streaming overview</a></li>
-<li>為Spark core API的的擴展，建立scalable，high-throughput，fault-tolerant的流處理方案</li>
-<li>可以接受多個數據源，包含Kafka，Flume，Kinesis，或TCP sockets</li>
-<li>使用高級別的API進行複雜的處理，例如map，reduce，join與window</li>
-<li>處理後結果的可以輸出到多種外部系統，例如filesystems，databases和live dashboards</li>
-<li>可以將Spark  machine learning和graph processing應用至資料流處理中</li>
-</ul>
-<img src="/2018/03/08/spark-streaming-basic/spark_streaming_arch.png" width="700">
-<ul>
-<li>Spark streaming接收數據流後，會將劉切割成多個Batch操作，並交給Spark引擎，最終產生的匹處理結果</li>
-<li>Spark streaming處理時，可以設置匹處理的時間間隔<ul>
-<li>根據時間間隔切割成多個批次</li>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Some</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(cls, *agrs, **kwargs)</span>:</span></div><div class="line">        print(<span class="string">'&gt;&gt; __new__'</span>)</div><div class="line">        instance = object.__new__(cls)</div><div class="line">        <span class="keyword">return</span> instance</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span></div><div class="line">        print(<span class="string">'&gt;&gt; __init__'</span>)</div><div class="line">        self.name = name</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    car = Some(<span class="string">'car'</span>)</div><div class="line">    print(<span class="string">'name: &#123;&#125;'</span>.format(car.name))</div><div class="line"></div><div class="line">    print(<span class="string">'type of Some: &#123;&#125;'</span>.format(type(Some)))</div><div class="line">    print(<span class="string">'type of car: &#123;&#125;'</span>.format(type(car)))</div><div class="line"></div><div class="line"><span class="string">""" output </span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">&gt;&gt; __new__</span></div><div class="line"><span class="string">&gt;&gt; __init__</span></div><div class="line"><span class="string">name: Car</span></div><div class="line"><span class="string">type of Some: &lt;class 'type'&gt;</span></div><div class="line"><span class="string">type of car: &lt;class '__main__.Some'&gt;</span></div><div class="line"><span class="string">""</span></div></pre></td></tr></table></figure>
+<h3 id="Metaclass"><a href="#Metaclass" class="headerlink" title="Metaclass"></a>Metaclass</h3><ul>
+<li>在Python中，Class也是一個Object，代表Class與其他Object一樣，都有建立與初始化的過程與相關函數<ul>
+<li>Class建立的時機是當所在的module被import的時候</li>
 </ul>
 </li>
-<li>Spark streaming實際上是一個Mini batch的處理流程</li>
+<li>Metaclass即是定義Class object建立與初始化過程的角色</li>
+<li>Python預設使用type作為Metaclass的實作<ul>
+<li>若在自身Object中宣告的Metaclass則使用指定的Metaclass，否則尋找父類是否有指定並使用之；若一路往上都沒有找到宣告Metaclass的語句，則只用type作為Metaclass的實作</li>
+<li>可以透過繼承type來實作Metaclass，達到改變Class的建立與初始化過程</li>
+<li>在初始化install時，會呼叫Metaclass的__call__<ul>
+<li>若在自己實作的Metaclass中沒有實作__call__，則呼叫type的__call__</li>
+<li>type中的__call__預設會呼叫Class的__new__ 與 __init__</li>
 </ul>
-<img src="/2018/03/08/spark-streaming-basic/spark_streaming_flow.png" width="700">
-<ul>
-<li>Spark streaming提供一個高階API抽象操作，稱為Discretized stream或DStream</li>
-<li>DStream代表一個持續的Steam資料</li>
-<li>DStream可以透過外入輸入資料流進行創建，例如Kafka, Flume, and Kinesis</li>
-<li>DStream也可以透過高階操作應在其他DStream進行創建</li>
-<li>一個DStream是代表一個RDD的Sequence</li>
+</li>
 </ul>
-<h3 id="A-Quick-Example-in-Spark-shell"><a href="#A-Quick-Example-in-Spark-shell" class="headerlink" title="A Quick Example in Spark-shell"></a>A Quick Example in Spark-shell</h3><p>將下列代碼依序輸入Spark-shell中<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> org.apache.spark._</div><div class="line"><span class="keyword">import</span> org.apache.spark.streaming._</div><div class="line"></div><div class="line"><span class="comment">// Create a local StreamingContext with batch interval of 10 second.</span></div><div class="line">val ssc = <span class="keyword">new</span> StreamingContext(sc, Seconds(<span class="number">10</span>))</div><div class="line"></div><div class="line"><span class="comment">// Create a DStream that will connect to hostname:port, like localhost:9999</span></div><div class="line">val lines = ssc.socketTextStream(<span class="string">"localhost"</span>, <span class="number">9999</span>)</div><div class="line"></div><div class="line"><span class="comment">// Split each line into words</span></div><div class="line">val words = lines.flatMap(_.split(<span class="string">" "</span>))</div><div class="line"></div><div class="line"><span class="comment">// Count each word in each batch</span></div><div class="line">val pairs = words.map(word =&gt; (word, <span class="number">1</span>))</div><div class="line">val wordCounts = pairs.reduceByKey(_ + _)</div><div class="line"></div><div class="line"><span class="comment">// Print a few of the counts to the console</span></div><div class="line">wordCounts.print()</div><div class="line"></div><div class="line">ssc.start()             <span class="comment">// Start the computation</span></div><div class="line">ssc.awaitTermination()  <span class="comment">// Wait for the computation to terminate</span></div></pre></td></tr></table></figure></p>
-<p>接著在同一台電腦上的另一個Terminal輸入以下指令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">## Install the nc rpm package: yum install nc</span></div><div class="line">[hadoop@testmain ~]$ nc -lk 9999</div><div class="line">hello world</div></pre></td></tr></table></figure></p>
-<p>則在原本Spark-shell的Terminal會出現對應的訊息<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">18/03/09 00:58:17 WARN storage.RandomBlockReplicationPolicy: Expecting 1 replicas with only 0 peer/s.</div><div class="line">18/03/09 00:58:17 WARN storage.BlockManager: Block input-0-1520528296800 replicated to only 0 peer(s) instead of 1 peers</div><div class="line">-------------------------------------------</div><div class="line">Time: 1520528300000 ms</div><div class="line">-------------------------------------------</div><div class="line">(hello,1)</div><div class="line">(world,1)</div></pre></td></tr></table></figure></p>
-<p>在Spark頁面上以顯示對應的Receiver</p>
-<img src="/2018/03/08/spark-streaming-basic/spark_streaming_receiver.png" width="700">
-<p>在Spark頁面的Streaming分頁上對應的統計數據，其中包含剛剛輸入紀錄而且被處理的訊息</p>
-<img src="/2018/03/08/spark-streaming-basic/spark_streaming_statistics_1.png" width="700">
-<img src="/2018/03/08/spark-streaming-basic/spark_streaming_statistics_2.png" width="700">
-<h3 id="Spark-Streaming-Basic-Logic"><a href="#Spark-Streaming-Basic-Logic" class="headerlink" title="Spark Streaming Basic Logic"></a>Spark Streaming Basic Logic</h3><ol>
-<li>取得Spark streaming context</li>
-<li>使用Input DStream定義input sources</li>
-<li>使用Transformation與Output operation(對應Spark core的action)定義Streaming計算操做，實作業務邏輯</li>
-<li>使用streamingContext.start()啟動接收與處理數據</li>
-<li>使用streamingContext.awaitTermination()等待處理流程結束</li>
-<li>使用streamingContext.stop()關閉處理流程，一般不會在程式中使用，而是透過外部命令直接kill job</li>
-</ol>
-<h3 id="Points-to-Rember"><a href="#Points-to-Rember" class="headerlink" title="Points to Rember"></a>Points to Rember</h3><ul>
-<li>在streamingContext.start()後面加入業務邏輯是不會被執行的</li>
-<li>一但streamingContext.stop()後，是無法再被重新啟動的</li>
-<li>在一個JVM中，一個時間區段內，只有一個streamingContext會存活</li>
+</li>
+<li>type本身也是一個type Metaclass的instance，換句話說，type是本身的instance</li>
+<li>Metaclass可以是任何具有__call__()的物件，Python會呼叫所指定物件的__call__()方法，並將物件本身、類別名稱、父類別資訊與特性作為參數傳入</li>
 </ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeMeta</span><span class="params">(type)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(cls, cls_name, bases, attrs)</span>:</span></div><div class="line">        print(<span class="string">'&gt;&gt; SomeMeta.__new__'</span>)</div><div class="line">        <span class="keyword">return</span> type.__new__(cls, cls_name, bases, attrs)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, cls_name, bases, attrs)</span>:</span></div><div class="line">        print(<span class="string">'&gt;&gt; SomeMeta __init__'</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, *args, **kwargs)</span>:</span></div><div class="line">        print(<span class="string">'&gt;&gt; SomeMeta.__call__'</span>)</div><div class="line">        <span class="keyword">return</span> super(SomeMeta, self).__call__(*args, **kwargs)</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Some</span><span class="params">(metaclass=SomeMeta)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(cls, *agrs, **kwargs)</span>:</span></div><div class="line">        print(<span class="string">'&gt;&gt; __new__'</span>)</div><div class="line">        instance = object.__new__(cls)</div><div class="line">        <span class="keyword">return</span> instance</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span></div><div class="line">        print(<span class="string">'&gt;&gt; __init__'</span>)</div><div class="line">        self.name = name</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    print(<span class="string">'\n=== __main__  ===\n'</span>)</div><div class="line">    print(<span class="string">'class of SomeMeta: &#123;&#125;'</span>.format(SomeMeta.__class__))</div><div class="line">    car = Some(<span class="string">"Car"</span>)</div><div class="line">    print(<span class="string">"name: &#123;&#125;"</span>.format(car.name))</div><div class="line">    print(<span class="string">'type of Some: &#123;&#125;'</span>.format(type(Some)))</div><div class="line">    print(<span class="string">'type of car: &#123;&#125;'</span>.format(type(car)))</div><div class="line"></div><div class="line"></div><div class="line"><span class="string">""" output</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">&gt;&gt; SomeMeta.__new__</span></div><div class="line"><span class="string">&gt;&gt; SomeMeta __init__</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">=== __main__  ===</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">&gt;&gt; SomeMeta.__call__</span></div><div class="line"><span class="string">&gt;&gt; __new__</span></div><div class="line"><span class="string">&gt;&gt; __init__</span></div><div class="line"><span class="string">name: Car</span></div><div class="line"><span class="string">type of SomeMeta: &lt;class 'type'&gt;</span></div><div class="line"><span class="string">type of Some: &lt;class '__main__.SomeMeta'&gt;</span></div><div class="line"><span class="string">type of car: &lt;class '__main__.Some'&gt;</span></div><div class="line"><span class="string">"""</span></div></pre></td></tr></table></figure>
 
       
     </div>
@@ -445,7 +414,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Spark/" rel="tag"># Spark</a>
+            <a href="/tags/Python/" rel="tag"># Python</a>
           
         </div>
       
@@ -458,8 +427,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/spark-shared-variables/" rel="next" title="Spark Shared Variables">
-                <i class="fa fa-chevron-left"></i> Spark Shared Variables
+              <a href="/django-view-types/" rel="next" title="Django View Types">
+                <i class="fa fa-chevron-left"></i> Django View Types
               </a>
             
           </div>
@@ -467,10 +436,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/spark-streaming-receiver/" rel="prev" title="Spark Streaming Receiver">
-                Spark Streaming Receiver <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -622,7 +587,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-Streaming-Basic"><span class="nav-number">1.</span> <span class="nav-text">Spark Streaming Basic</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Introduction"><span class="nav-number">1.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Overview"><span class="nav-number">1.2.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-Quick-Example-in-Spark-shell"><span class="nav-number">1.3.</span> <span class="nav-text">A Quick Example in Spark-shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spark-Streaming-Basic-Logic"><span class="nav-number">1.4.</span> <span class="nav-text">Spark Streaming Basic Logic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Points-to-Rember"><span class="nav-number">1.5.</span> <span class="nav-text">Points to Rember</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-Class-and-Instance-Instantiation-Behavior"><span class="nav-number">1.</span> <span class="nav-text">Python Class and Instance Instantiation Behavior</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#new-and-init-Function"><span class="nav-number">1.1.</span> <span class="nav-text">__new__ and __init__ Function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Metaclass"><span class="nav-number">1.2.</span> <span class="nav-text">Metaclass</span></a></li></ol></li></ol></div>
             
 
           </div>

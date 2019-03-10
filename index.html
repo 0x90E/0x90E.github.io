@@ -254,6 +254,174 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/python-class-instance-instantiation-behavior/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/python-class-instance-instantiation-behavior/" itemprop="url">Python Class and Instance Instantiation Behavior</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-10T21:55:15+08:00">
+                2019-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="Python-Class-and-Instance-Instantiation-Behavior"><a href="#Python-Class-and-Instance-Instantiation-Behavior" class="headerlink" title="Python Class and Instance Instantiation Behavior"></a>Python Class and Instance Instantiation Behavior</h2><h3 id="new-and-init-Function"><a href="#new-and-init-Function" class="headerlink" title="__new__ and __init__ Function"></a>__new__ and __init__ Function</h3><ul>
+<li>__new__<ul>
+<li><a href="https://docs.python.org/3.7/reference/datamodel.html?highlight=__new__#object.__new__" target="_blank" rel="external">Official document</a></li>
+<li>為Class function<ul>
+<li>用了特殊方法，所以實現時不用特別寫上@classmethod裝飾器</li>
+</ul>
+</li>
+<li>主要用途: 構建Instance</li>
+<li>return: <ul>
+<li>自身Class對應的Instance，並作為__init__的第一個參數，及為self</li>
+<li>其他Class對應的Instance，會呼叫對應的__init__</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>__init__<ul>
+<li><a href="https://docs.python.org/3.7/reference/datamodel.html?highlight=__new__#object.__init__" target="_blank" rel="external">Official document</a></li>
+<li>為Object function</li>
+<li>主要用途: 初始化Object變量</li>
+<li>return: 不允許返回任何值</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/python-class-instance-instantiation-behavior/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/django-view-types/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1586,155 +1754,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-core-launching-on-yarn/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="0x90e">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="0x90e's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/spark-core-launching-on-yarn/" itemprop="url">Launching Spark on YARN</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-30T00:49:23+08:00">
-                2018-03-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Big-data/" itemprop="url" rel="index">
-                    <span itemprop="name">Big data</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="Launching-Spark-on-YARN"><a href="#Launching-Spark-on-YARN" class="headerlink" title="Launching Spark on YARN"></a>Launching Spark on YARN</h2><ul>
-<li><a href="http://spark.apache.org/docs/latest/running-on-yarn.html#launching-spark-on-yarn" title="Launching Spark on YARN" target="_blank" rel="external">Launching Spark on YARN</a></li>
-</ul>
-<h3 id="Launching-YARN"><a href="#Launching-YARN" class="headerlink" title="Launching YARN"></a>Launching YARN</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[hadoop@testmain ~]$ <span class="built_in">cd</span> <span class="variable">$HADOOP_HOME</span></div><div class="line">[hadoop@testmain hadoop]$ ./sbin/start-yarn.sh </div><div class="line">starting yarn daemons</div><div class="line">starting resourcemanager, logging to /opt/software/hadoop-2.8.1/logs/yarn-hadoop-resourcemanager-testmain.out</div><div class="line">localhost: starting nodemanager, logging to /opt/software/hadoop-2.8.1/logs/yarn-hadoop-nodemanager-testmain.out</div></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/spark-core-launching-on-yarn/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1789,7 +1808,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
