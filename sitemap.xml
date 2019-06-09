@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://0x90e.github.io/run-flink-application-by-bash-script-source-code-trace/</loc>
+    
+    <lastmod>2019-06-09T14:19:16.619Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0x90e.github.io/flink-streaming-source-code-trace-introduction/</loc>
     
-    <lastmod>2019-06-02T02:57:02.120Z</lastmod>
+    <lastmod>2019-06-09T14:12:49.092Z</lastmod>
     
   </url>
   

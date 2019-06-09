@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Flink," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Run Flink Application by Bash Script Source Code TraceBasic information Flink version: 1.8  Run Flink Application by Bash Script在使用Bash Script時，可以使用下面方式Submit一個SocketWindowWordCount的Flink applicati">
+<meta name="keywords" content="Flink">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Run Flink Application by Bash Script Source Code Trace">
+<meta property="og:url" content="https://0x90e.github.io/run-flink-application-by-bash-script-source-code-trace/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Run Flink Application by Bash Script Source Code TraceBasic information Flink version: 1.8  Run Flink Application by Bash Script在使用Bash Script時，可以使用下面方式Submit一個SocketWindowWordCount的Flink applicati">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-06-09T14:19:16.619Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Run Flink Application by Bash Script Source Code Trace">
+<meta name="twitter:description" content="Run Flink Application by Bash Script Source Code TraceBasic information Flink version: 1.8  Run Flink Application by Bash Script在使用Bash Script時，可以使用下面方式Submit一個SocketWindowWordCount的Flink applicati">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/run-flink-application-by-bash-script-source-code-trace/"/>
+
+
+
+
+
+  <title>Run Flink Application by Bash Script Source Code Trace | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/run-flink-application-by-bash-script-source-code-trace/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Run Flink Application by Bash Script Source Code Trace</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-09T22:05:42+08:00">
+                2019-06-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Run-Flink-Application-by-Bash-Script-Source-Code-Trace"><a href="#Run-Flink-Application-by-Bash-Script-Source-Code-Trace" class="headerlink" title="Run Flink Application by Bash Script Source Code Trace"></a>Run Flink Application by Bash Script Source Code Trace</h2><h3 id="Basic-information"><a href="#Basic-information" class="headerlink" title="Basic information"></a>Basic information</h3><ul>
+<li>Flink version: 1.8</li>
+</ul>
+<h3 id="Run-Flink-Application-by-Bash-Script"><a href="#Run-Flink-Application-by-Bash-Script" class="headerlink" title="Run Flink Application by Bash Script"></a>Run Flink Application by Bash Script</h3><p>在使用Bash Script時，可以使用下面方式Submit一個SocketWindowWordCount的Flink application至JobManager<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./flink run ../examples/streaming/SocketWindowWordCount.jar --port 9000</div></pre></td></tr></table></figure></p>
+<ul>
+<li>此時會調用CliFrontend Class 的main @org/apache/flink/client/cli/CliFrontend.java<br>主要分成兩個主要步驟:<ol>
+<li>創建CliFrontend object</li>
+<li>調用CliFrontend object的parseParameters，將使用者實作的Flink application邏輯Submit至JobManager</li>
+</ol>
+</li>
+<li>創建CliFrontend object時，會先構造其所需的參數，當中customCommandLines是透過Static function loadCustomCommandLines(…)構造，回傳的List當中，包含FlinkYarnSessionCli與DefaultCLI</li>
+</ul>
+<a id="more"></a>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CliFrontend</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">final</span> String[] args)</span> </span>&#123;</div><div class="line">		<span class="comment">// ...</span></div><div class="line"></div><div class="line">		<span class="comment">// 3. load the custom command lines</span></div><div class="line">		<span class="keyword">final</span> List&lt;CustomCommandLine&lt;?&gt;&gt; customCommandLines = loadCustomCommandLines(</div><div class="line">			configuration,</div><div class="line">			configurationDirectory);</div><div class="line"></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			<span class="keyword">final</span> CliFrontend cli = <span class="keyword">new</span> CliFrontend(</div><div class="line">				configuration,</div><div class="line">				customCommandLines);</div><div class="line"></div><div class="line">			SecurityUtils.install(<span class="keyword">new</span> SecurityConfiguration(cli.configuration));</div><div class="line">			<span class="keyword">int</span> retCode = SecurityUtils.getInstalledContext()</div><div class="line">					.runSecured(() -&gt; cli.parseParameters(args));</div><div class="line">			System.exit(retCode);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (Throwable t) &#123;</div><div class="line">            <span class="comment">// ...</span></div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> List&lt;CustomCommandLine&lt;?&gt;&gt; loadCustomCommandLines(Configuration configuration, String configurationDirectory) &#123;</div><div class="line">		List&lt;CustomCommandLine&lt;?&gt;&gt; customCommandLines = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">2</span>);</div><div class="line"></div><div class="line">		<span class="comment">//	Command line interface of the YARN session, with a special initialization here</span></div><div class="line">		<span class="comment">//	to prefix all options with y/yarn.</span></div><div class="line">		<span class="comment">//	Tips: DefaultCLI must be added at last, because getActiveCustomCommandLine(..) will get the</span></div><div class="line">		<span class="comment">//	      active CustomCommandLine in order and DefaultCLI isActive always return true.</span></div><div class="line">		<span class="keyword">final</span> String flinkYarnSessionCLI = <span class="string">"org.apache.flink.yarn.cli.FlinkYarnSessionCli"</span>;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			customCommandLines.add(</div><div class="line">				loadCustomCommandLine(flinkYarnSessionCLI,</div><div class="line">					configuration,</div><div class="line">					configurationDirectory,</div><div class="line">					<span class="string">"y"</span>,</div><div class="line">					<span class="string">"yarn"</span>));</div><div class="line">		&#125; <span class="keyword">catch</span> (NoClassDefFoundError | Exception e) &#123;</div><div class="line">			LOG.warn(<span class="string">"Could not load CLI class &#123;&#125;."</span>, flinkYarnSessionCLI, e);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		customCommandLines.add(<span class="keyword">new</span> DefaultCLI(configuration));</div><div class="line"></div><div class="line">		<span class="keyword">return</span> customCommandLines;</div><div class="line">	&#125;    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="CliFrontend-Class"><a href="#CliFrontend-Class" class="headerlink" title="CliFrontend Class"></a>CliFrontend Class</h3><ul>
+<li>parseParameters(…)<ul>
+<li>根據參數args調用對應的Action function，此處的Action為run，故調用run(params)<br>- run(…)</li>
+<li>使用buildProgram(runOptions)取得PackagedProgram object</li>
+<li>使用getActiveCustomCommandLine(commandLine)取得CustomCommandLine&lt;?&gt; object，此處為DefaultCLI Object @org/apache/flink/client/cli/DefaultCLI.java</li>
+<li>調用runProgram(…) Submit使用者的Flink application邏輯至JobManager</li>
+</ul>
+</li>
+</ul>
+<p>下列章節依序分別描述上述buildProgram與runProgram(…)兩步驟</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CliFrontend</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Configuration configuration;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> List&lt;CustomCommandLine&lt;?&gt;&gt; customCommandLines;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Options customCommandLineOptions;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> FiniteDuration clientTimeout;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> defaultParallelism;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">CliFrontend</span><span class="params">(</span></span></div><div class="line"><span class="function"><span class="params">			Configuration configuration,</span></span></div><div class="line"><span class="function"><span class="params">			List&lt;CustomCommandLine&lt;?&gt;&gt; customCommandLines)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		<span class="keyword">this</span>.configuration = Preconditions.checkNotNull(configuration);</div><div class="line">		<span class="keyword">this</span>.customCommandLines = Preconditions.checkNotNull(customCommandLines);</div><div class="line"></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			FileSystem.initialize(<span class="keyword">this</span>.configuration);</div><div class="line">		&#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"Error while setting the default "</span> +</div><div class="line">				<span class="string">"filesystem scheme from configuration."</span>, e);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">this</span>.customCommandLineOptions = <span class="keyword">new</span> Options();</div><div class="line"></div><div class="line">		<span class="keyword">for</span> (CustomCommandLine&lt;?&gt; customCommandLine : customCommandLines) &#123;</div><div class="line">			customCommandLine.addGeneralOptions(customCommandLineOptions);</div><div class="line">			customCommandLine.addRunOptions(customCommandLineOptions);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">this</span>.clientTimeout = AkkaUtils.getClientTimeout(<span class="keyword">this</span>.configuration);</div><div class="line">		<span class="keyword">this</span>.defaultParallelism = configuration.getInteger(CoreOptions.DEFAULT_PARALLELISM);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line"><span class="comment">	 * Parses the command line arguments and starts the requested action.</span></div><div class="line"><span class="comment">	 *</span></div><div class="line"><span class="comment">	 * <span class="doctag">@param</span> args command line arguments of the client.</span></div><div class="line"><span class="comment">	 * <span class="doctag">@return</span> The return code of the program</span></div><div class="line"><span class="comment">	 */</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">parseParameters</span><span class="params">(String[] args)</span> </span>&#123;	</div><div class="line">        <span class="comment">// ...</span></div><div class="line"></div><div class="line">		<span class="comment">// remove action from parameters</span></div><div class="line">		<span class="keyword">final</span> String[] params = Arrays.copyOfRange(args, <span class="number">1</span>, args.length);</div><div class="line"></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			<span class="comment">// do action</span></div><div class="line">			<span class="keyword">switch</span> (action) &#123;</div><div class="line">				<span class="keyword">case</span> ACTION_RUN:</div><div class="line">					run(params);</div><div class="line">					<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">				<span class="keyword">case</span> ACTION_LIST:</div><div class="line">                    # ...</div><div class="line">			&#125;</div><div class="line">		&#125; <span class="keyword">catch</span> (CliArgsException ce) &#123;</div><div class="line">            <span class="comment">// ...</span></div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line"><span class="comment">	 * Executions the run action.</span></div><div class="line"><span class="comment">	 *</span></div><div class="line"><span class="comment">	 * <span class="doctag">@param</span> args Command line arguments for the run action.</span></div><div class="line"><span class="comment">	 */</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		LOG.info(<span class="string">"Running 'run' command."</span>);</div><div class="line"></div><div class="line">		<span class="keyword">final</span> Options commandOptions = CliFrontendParser.getRunCommandOptions();</div><div class="line"></div><div class="line">		<span class="keyword">final</span> Options commandLineOptions = CliFrontendParser.mergeOptions(commandOptions, customCommandLineOptions);</div><div class="line"></div><div class="line">		<span class="keyword">final</span> CommandLine commandLine = CliFrontendParser.parse(commandLineOptions, args, <span class="keyword">true</span>);</div><div class="line"></div><div class="line">		<span class="keyword">final</span> RunOptions runOptions = <span class="keyword">new</span> RunOptions(commandLine);</div><div class="line"></div><div class="line">		<span class="comment">// evaluate help flag</span></div><div class="line">		<span class="keyword">if</span> (runOptions.isPrintHelp()) &#123;</div><div class="line">			CliFrontendParser.printHelpForRun(customCommandLines);</div><div class="line">			<span class="keyword">return</span>;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (runOptions.getJarFilePath() == <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> CliArgsException(<span class="string">"The program JAR file was not specified."</span>);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">final</span> PackagedProgram program;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			LOG.info(<span class="string">"Building program from JAR file"</span>);</div><div class="line">			program = buildProgram(runOptions);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (FileNotFoundException e) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> CliArgsException(<span class="string">"Could not build the program from JAR file."</span>, e);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">final</span> CustomCommandLine&lt;?&gt; customCommandLine = getActiveCustomCommandLine(commandLine);</div><div class="line"></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			runProgram(customCommandLine, commandLine, runOptions, program);</div><div class="line">		&#125; <span class="keyword">finally</span> &#123;</div><div class="line">			program.deleteExtractedLibraries();</div><div class="line">		&#125;</div><div class="line">	&#125;    </div><div class="line"></div><div class="line">	<span class="function">PackagedProgram <span class="title">buildProgram</span><span class="params">(ProgramOptions options)</span> <span class="keyword">throws</span> FileNotFoundException ProgramInvocationException </span>&#123;</div><div class="line">		String[] programArgs = options.getProgramArgs();</div><div class="line">		String jarFilePath = options.getJarFilePath();</div><div class="line">		List&lt;URL&gt; classpaths = options.getClasspaths();</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (jarFilePath == <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"The program JAR file was not specified."</span>);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		File jarFile = <span class="keyword">new</span> File(jarFilePath);</div><div class="line"></div><div class="line">        <span class="comment">// ...</span></div><div class="line"></div><div class="line">		<span class="comment">// Get assembler class</span></div><div class="line">		String entryPointClass = options.getEntryPointClassName();</div><div class="line"></div><div class="line">		PackagedProgram program = entryPointClass == <span class="keyword">null</span> ?</div><div class="line">				<span class="keyword">new</span> PackagedProgram(jarFile, classpaths, programArgs) :</div><div class="line">				<span class="keyword">new</span> PackagedProgram(jarFile, classpaths, entryPointClass, programArgs);</div><div class="line"></div><div class="line">		program.setSavepointRestoreSettings(options.getSavepointRestoreSettings());</div><div class="line"></div><div class="line">		<span class="keyword">return</span> program;</div><div class="line">	&#125;    </div><div class="line"></div><div class="line">	<span class="keyword">public</span> CustomCommandLine&lt;?&gt; getActiveCustomCommandLine(CommandLine commandLine) &#123;</div><div class="line">		<span class="keyword">for</span> (CustomCommandLine&lt;?&gt; cli : customCommandLines) &#123;</div><div class="line">			<span class="keyword">if</span> (cli.isActive(commandLine)) &#123;</div><div class="line">				<span class="keyword">return</span> cli;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"No command-line ran."</span>);</div><div class="line">	&#125;    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="PackagedProgram-Class"><a href="#PackagedProgram-Class" class="headerlink" title="PackagedProgram Class"></a>PackagedProgram Class</h4><ul>
+<li>在CliFrontend的buildProgram(…) function中，最終回傳一個PackagedProgram object @org/apache/flink/client/program/PackagedProgram.java</li>
+<li>PackagedProgram object主要封裝了使用者的Flink application的入口類、jar文件、classpath路徑、用戶配置的參數</li>
+<li>透過Bash script submit的方式會使hasMainMethod(mainClass) 回傳True，故此時的this.program = null</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PackagedProgram</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">PackagedProgram</span><span class="params">(File jarFile, List&lt;URL&gt; classpaths, @Nullable String entryPointClassName, String... args)</span> <span class="keyword">throws</span> ProgramInvocationException </span>&#123;</div><div class="line">		<span class="comment">// ...</span></div><div class="line"></div><div class="line">		<span class="comment">// load the entry point class</span></div><div class="line">		<span class="keyword">this</span>.mainClass = loadMainClass(entryPointClassName, userCodeClassLoader);</div><div class="line"></div><div class="line">		<span class="comment">// if the entry point is a program, instantiate the class and get the plan</span></div><div class="line">		<span class="keyword">if</span> (Program.class.isAssignableFrom(<span class="keyword">this</span>.mainClass)) &#123;</div><div class="line">			Program prg = <span class="keyword">null</span>;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				prg = InstantiationUtil.instantiate(<span class="keyword">this</span>.mainClass.asSubclass(Program.class), Program.class);</div><div class="line">			&#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">				<span class="comment">// validate that the class has a main method at least.</span></div><div class="line">				<span class="comment">// the main method possibly instantiates the program properly</span></div><div class="line">				<span class="keyword">if</span> (!hasMainMethod(mainClass)) &#123;</div><div class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> ProgramInvocationException(<span class="string">"The given program class implements the "</span> +</div><div class="line">							Program.class.getName() + <span class="string">" interface, but cannot be instantiated. "</span> +</div><div class="line">							<span class="string">"It also declares no main(String[]) method as alternative entry point"</span>, e);</div><div class="line">				&#125;</div><div class="line">			&#125; <span class="keyword">catch</span> (Throwable t) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> ProgramInvocationException(<span class="string">"Error while trying to instantiate program class."</span>, t);</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">this</span>.program = prg;</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (hasMainMethod(mainClass)) &#123;</div><div class="line">			<span class="keyword">this</span>.program = <span class="keyword">null</span>;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> ProgramInvocationException(<span class="string">"The given program class neither has a main(String[]) method, nor does it implement the "</span> +</div><div class="line">					Program.class.getName() + <span class="string">" interface."</span>);</div><div class="line">		&#125;</div><div class="line">	&#125;    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="runProgram-Function-of-CliFrontend-Class"><a href="#runProgram-Function-of-CliFrontend-Class" class="headerlink" title="runProgram Function of CliFrontend Class"></a>runProgram Function of CliFrontend Class</h4><ul>
+<li>ClusterDescriptor<t> clusterDescriptor<ul>
+<li>customCommandLine為外部傳入，實際為DefaultCLI Object @org/apache/flink/client/cli/DefaultCLI.java</li>
+<li>customCommandLine.createClusterDescriptor(…)會獲得StandaloneClusterDescriptor object @org/apache/flink/client/deployment/StandaloneClusterDescriptor.java</li>
+</ul>
+</t></li>
+<li>clusterDescriptor.retrieve(clusterId)<ul>
+<li>調用StandaloneClusterDescriptor object的retrieve(…)</li>
+<li>client變數會被賦值為RestClusterClient object @org/apache/flink/client/program/rest/RestClusterClient.java</li>
+</ul>
+</li>
+<li>executeProgram(…)<ul>
+<li>client.run(…)<ul>
+<li>調用RestClusterClient object父類別ClusterClient @org/apache/flink/client/program/ClusterClient.java 的run(PackagedProgram prog, int parallelism)</li>
+<li>run(PackagedProgram prog, int parallelism)<ul>
+<li>new ContextEnvironmentFactory(…)<ul>
+<li>獲取ContextEnvironmentFactory object @org/apache/flink/client/program/ContextEnvironmentFactory.java </li>
+<li>將ContextEnvironmentFactory object賦值給factory</li>
+</ul>
+</li>
+<li>ContextEnvironment.setAsContext(factory)<ul>
+<li>將ContextEnvironmentFactory object透過ContextEnvironment @org/apache/flink/client/program/ContextEnvironment.java賦值給ExecutionEnvironment @org/apache/flink/api/java/ExecutionEnvironment.java 的contextEnvironmentFactory，</li>
+<li>讓使用者的Flink application在實作邏輯時，使用ExecutionEnvironment.getExecutionEnvironment()獲得的ExecutionEnvironment即是ContextEnvironmentFactory object</li>
+</ul>
+</li>
+<li>prog.invokeInteractiveModeForExecution()<ul>
+<li>調用使用者的Flink application入口函數</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="User-Flink-Application"><a href="#User-Flink-Application" class="headerlink" title="User Flink Application"></a>User Flink Application</h4><ul>
+<li>env.execute(…)<ul>
+<li>調用ContextEnvironment的execute(…) function<ul>
+<li>client.run(…).getJobExecutionResult();<ul>
+<li>調用RestClusterClient父類ClusterClient的JobSubmissionResult的run(JobWithJars program, int parallelism)<ul>
+<li>準備執行所需的Graph，並調用RestClusterClient的submitJob(…)，將Flink application submit至JobManager</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CliFrontend</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">runProgram</span><span class="params">(</span></span></div><div class="line"><span class="function"><span class="params">			CustomCommandLine&lt;T&gt; customCommandLine,</span></span></div><div class="line"><span class="function"><span class="params">			CommandLine commandLine,</span></span></div><div class="line"><span class="function"><span class="params">			RunOptions runOptions,</span></span></div><div class="line"><span class="function"><span class="params">			PackagedProgram program)</span> <span class="keyword">throws</span> ProgramInvocationException, FlinkException </span>&#123;</div><div class="line">		<span class="keyword">final</span> ClusterDescriptor&lt;T&gt; clusterDescriptor = customCommandLine.createClusterDescriptor(commandLine);</div><div class="line"></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			<span class="keyword">final</span> T clusterId = customCommandLine.getClusterId(commandLine);</div><div class="line"></div><div class="line">			<span class="keyword">final</span> ClusterClient&lt;T&gt; client;</div><div class="line"></div><div class="line">			<span class="comment">// directly deploy the job if the cluster is started in job mode and detached</span></div><div class="line">			<span class="keyword">if</span> (clusterId == <span class="keyword">null</span> &amp;&amp; runOptions.getDetachedMode()) &#123;</div><div class="line">				<span class="comment">// ...</span></div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="keyword">if</span> (clusterId != <span class="keyword">null</span>) &#123;</div><div class="line">					client = clusterDescriptor.retrieve(clusterId);</div><div class="line">					shutdownHook = <span class="keyword">null</span>;</div><div class="line">				&#125; <span class="keyword">else</span> &#123;</div><div class="line">					<span class="comment">// ...</span></div><div class="line">				&#125;</div><div class="line"></div><div class="line">				<span class="keyword">try</span> &#123;</div><div class="line">					<span class="comment">// ...</span></div><div class="line"></div><div class="line">					executeProgram(program, client, userParallelism);</div><div class="line">				&#125; <span class="keyword">finally</span> &#123;</div><div class="line">					<span class="comment">// ...</span></div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125; <span class="keyword">finally</span> &#123;</div><div class="line">			<span class="comment">// ...</span></div><div class="line">		&#125;</div><div class="line">	&#125;    </div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">executeProgram</span><span class="params">(PackagedProgram program, ClusterClient&lt;?&gt; client, <span class="keyword">int</span> parallelism)</span> <span class="keyword">throws</span> ProgramMissingJobException, ProgramInvocationException </span>&#123;</div><div class="line">		logAndSysout(<span class="string">"Starting execution of program"</span>);</div><div class="line"></div><div class="line">		<span class="keyword">final</span> JobSubmissionResult result = client.run(program, parallelism);</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (<span class="keyword">null</span> == result) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> ProgramMissingJobException(<span class="string">"No JobSubmissionResult returned, please make sure you called "</span> +</div><div class="line">				<span class="string">"ExecutionEnvironment.execute()"</span>);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (result.isJobExecutionResult()) &#123;</div><div class="line">			logAndSysout(<span class="string">"Program execution finished"</span>);</div><div class="line">			JobExecutionResult execResult = result.getJobExecutionResult();</div><div class="line">			System.out.println(<span class="string">"Job with JobID "</span> + execResult.getJobID() + <span class="string">" has finished."</span>);</div><div class="line">			System.out.println(<span class="string">"Job Runtime: "</span> + execResult.getNetRuntime() + <span class="string">" ms"</span>);</div><div class="line">			Map&lt;String, Object&gt; accumulatorsResult = execResult.getAllAccumulatorResults();</div><div class="line">			<span class="keyword">if</span> (accumulatorsResult.size() &gt; <span class="number">0</span>) &#123;</div><div class="line">				System.out.println(<span class="string">"Accumulator Results: "</span>);</div><div class="line">				System.out.println(AccumulatorHelper.getResultsFormatted(accumulatorsResult));</div><div class="line">			&#125;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			logAndSysout(<span class="string">"Job has been submitted with JobID "</span> + result.getJobID());</div><div class="line">		&#125;</div><div class="line">	&#125;    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>@org/apache/flink/client/cli/DefaultCLI.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultCLI</span> <span class="keyword">extends</span> <span class="title">AbstractCustomCommandLine</span>&lt;<span class="title">StandaloneClusterId</span>&gt; </span>&#123;</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> StandaloneClusterDescriptor <span class="title">createClusterDescriptor</span><span class="params">(</span></span></div><div class="line"><span class="function"><span class="params">			CommandLine commandLine)</span> <span class="keyword">throws</span> FlinkException </span>&#123;</div><div class="line">		<span class="keyword">final</span> Configuration effectiveConfiguration = applyCommandLineOptionsToConfiguration(commandLine);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> <span class="keyword">new</span> StandaloneClusterDescriptor(effectiveConfiguration);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>@org/apache/flink/client/deployment/StandaloneClusterDescriptor.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StandaloneClusterDescriptor</span> <span class="keyword">implements</span> <span class="title">ClusterDescriptor</span>&lt;<span class="title">StandaloneClusterId</span>&gt; </span>&#123;</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> RestClusterClient&lt;StandaloneClusterId&gt; <span class="title">retrieve</span><span class="params">(StandaloneClusterId standaloneClusterId)</span> <span class="keyword">throws</span> ClusterRetrieveException </span>&#123;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			<span class="keyword">return</span> <span class="keyword">new</span> RestClusterClient&lt;&gt;(config, standaloneClusterId);</div><div class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> ClusterRetrieveException(<span class="string">"Couldn't retrieve standalone cluster"</span>, e);</div><div class="line">		&#125;</div><div class="line">	&#125;    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>@org/apache/flink/client/program/rest/RestClusterClient.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RestClusterClient</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">ClusterClient</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">NewClusterClient</span> </span>&#123;</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> JobSubmissionResult <span class="title">submitJob</span><span class="params">(JobGraph jobGraph, ClassLoader classLoader)</span> <span class="keyword">throws</span> ProgramInvocationException </span>&#123;</div><div class="line">		log.info(<span class="string">"Submitting job &#123;&#125; (detached: &#123;&#125;)."</span>, jobGraph.getJobID(), isDetached());</div><div class="line"></div><div class="line">		<span class="keyword">final</span> CompletableFuture&lt;JobSubmissionResult&gt; jobSubmissionFuture = submitJob(jobGraph);</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (isDetached()) &#123;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				<span class="keyword">return</span> jobSubmissionFuture.get();</div><div class="line">			&#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> ProgramInvocationException(<span class="string">"Could not submit job"</span>,</div><div class="line">					jobGraph.getJobID(), ExceptionUtils.stripExecutionException(e));</div><div class="line">			&#125;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="keyword">final</span> CompletableFuture&lt;JobResult&gt; jobResultFuture = jobSubmissionFuture.thenCompose(</div><div class="line">				ignored -&gt; requestJobResult(jobGraph.getJobID()));</div><div class="line"></div><div class="line">			<span class="keyword">final</span> JobResult jobResult;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				jobResult = jobResultFuture.get();</div><div class="line">			&#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> ProgramInvocationException(<span class="string">"Could not retrieve the execution result."</span>,</div><div class="line">					jobGraph.getJobID(), ExceptionUtils.stripExecutionException(e));</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				<span class="keyword">this</span>.lastJobExecutionResult = jobResult.toJobExecutionResult(classLoader);</div><div class="line">				<span class="keyword">return</span> lastJobExecutionResult;</div><div class="line">			&#125; <span class="keyword">catch</span> (JobExecutionException e) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> ProgramInvocationException(<span class="string">"Job failed."</span>, jobGraph.getJobID(), e);</div><div class="line">			&#125; <span class="keyword">catch</span> (IOException | ClassNotFoundException e) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> ProgramInvocationException(<span class="string">"Job failed."</span>, jobGraph.getJobID(), e);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> CompletableFuture&lt;JobSubmissionResult&gt; <span class="title">submitJob</span><span class="params">(@Nonnull JobGraph jobGraph)</span> </span>&#123;</div><div class="line">		<span class="comment">// we have to enable queued scheduling because slot will be allocated lazily</span></div><div class="line">		jobGraph.setAllowQueuedScheduling(<span class="keyword">true</span>);</div><div class="line"></div><div class="line">		CompletableFuture&lt;java.nio.file.Path&gt; jobGraphFileFuture = CompletableFuture.supplyAsync(() -&gt; &#123;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				<span class="keyword">final</span> java.nio.file.Path jobGraphFile = Files.createTempFile(<span class="string">"flink-jobgraph"</span>, <span class="string">".bin"</span>);</div><div class="line">				<span class="keyword">try</span> (ObjectOutputStream objectOut = <span class="keyword">new</span> ObjectOutputStream(Files.newOutputStream(jobGraphFile))) &#123;</div><div class="line">					objectOut.writeObject(jobGraph);</div><div class="line">				&#125;</div><div class="line">				<span class="keyword">return</span> jobGraphFile;</div><div class="line">			&#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> CompletionException(<span class="keyword">new</span> FlinkException(<span class="string">"Failed to serialize JobGraph."</span>, e));</div><div class="line">			&#125;</div><div class="line">		&#125;, executorService);</div><div class="line"></div><div class="line">		CompletableFuture&lt;Tuple2&lt;JobSubmitRequestBody, Collection&lt;FileUpload&gt;&gt;&gt; requestFuture = jobGraphFileFuture.thenApply(jobGraphFile -&gt; &#123;</div><div class="line">			List&lt;String&gt; jarFileNames = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">8</span>);</div><div class="line">			List&lt;JobSubmitRequestBody.DistributedCacheFile&gt; artifactFileNames = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">8</span>);</div><div class="line">			Collection&lt;FileUpload&gt; filesToUpload = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">8</span>);</div><div class="line"></div><div class="line">			filesToUpload.add(<span class="keyword">new</span> FileUpload(jobGraphFile, RestConstants.CONTENT_TYPE_BINARY));</div><div class="line"></div><div class="line">			<span class="keyword">for</span> (Path jar : jobGraph.getUserJars()) &#123;</div><div class="line">				jarFileNames.add(jar.getName());</div><div class="line">				filesToUpload.add(<span class="keyword">new</span> FileUpload(Paths.get(jar.toUri()), RestConstants.CONTENT_TYPE_JAR));</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="keyword">for</span> (Map.Entry&lt;String, DistributedCache.DistributedCacheEntry&gt; artifacts : jobGraph.getUserArtifacts().entrySet()) &#123;</div><div class="line">				artifactFileNames.add(<span class="keyword">new</span> JobSubmitRequestBody.DistributedCacheFile(artifacts.getKey(), <span class="keyword">new</span> Path(artifacts.getValue().filePath).getName()));</div><div class="line">				filesToUpload.add(<span class="keyword">new</span> FileUpload(Paths.get(artifacts.getValue().filePath), RestConstants.CONTENT_TYPE_BINARY));</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="keyword">final</span> JobSubmitRequestBody requestBody = <span class="keyword">new</span> JobSubmitRequestBody(</div><div class="line">				jobGraphFile.getFileName().toString(),</div><div class="line">				jarFileNames,</div><div class="line">				artifactFileNames);</div><div class="line"></div><div class="line">			<span class="keyword">return</span> Tuple2.of(requestBody, Collections.unmodifiableCollection(filesToUpload));</div><div class="line">		&#125;);</div><div class="line"></div><div class="line">		<span class="keyword">final</span> CompletableFuture&lt;JobSubmitResponseBody&gt; submissionFuture = requestFuture.thenCompose(</div><div class="line">			requestAndFileUploads -&gt; sendRetriableRequest(</div><div class="line">				JobSubmitHeaders.getInstance(),</div><div class="line">				EmptyMessageParameters.getInstance(),</div><div class="line">				requestAndFileUploads.f0,</div><div class="line">				requestAndFileUploads.f1,</div><div class="line">				isConnectionProblemOrServiceUnavailable())</div><div class="line">		);</div><div class="line"></div><div class="line">		submissionFuture</div><div class="line">			.thenCombine(jobGraphFileFuture, (ignored, jobGraphFile) -&gt; jobGraphFile)</div><div class="line">			.thenAccept(jobGraphFile -&gt; &#123;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				Files.delete(jobGraphFile);</div><div class="line">			&#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">				log.warn(<span class="string">"Could not delete temporary file &#123;&#125;."</span>, jobGraphFile, e);</div><div class="line">			&#125;</div><div class="line">		&#125;);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> submissionFuture</div><div class="line">			.thenApply(</div><div class="line">				(JobSubmitResponseBody jobSubmitResponseBody) -&gt; <span class="keyword">new</span> JobSubmissionResult(jobGraph.getJobID()))</div><div class="line">			.exceptionally(</div><div class="line">				(Throwable throwable) -&gt; &#123;</div><div class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> CompletionException(<span class="keyword">new</span> JobSubmissionException(jobGraph.getJobID(), <span class="string">"Failed to submit JobGraph."</span>, ExceptionUtils.stripCompletionException(throwable)));</div><div class="line">				&#125;);</div><div class="line">	&#125;        </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>@org/apache/flink/client/program/ClusterClient.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ClusterClient</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> JobSubmissionResult <span class="title">run</span><span class="params">(PackagedProgram prog, <span class="keyword">int</span> parallelism)</span></span></div><div class="line"><span class="function">			<span class="keyword">throws</span> ProgramInvocationException, ProgramMissingJobException </span>&#123;</div><div class="line">		Thread.currentThread().setContextClassLoader(prog.getUserCodeClassLoader());</div><div class="line">		<span class="keyword">if</span> (prog.isUsingProgramEntryPoint()) &#123;</div><div class="line">            <span class="comment">// ...</span></div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (prog.isUsingInteractiveMode()) &#123;</div><div class="line">			log.info(<span class="string">"Starting program in interactive mode (detached: &#123;&#125;)"</span>, isDetached());</div><div class="line"></div><div class="line">			<span class="comment">// ...</span></div><div class="line"></div><div class="line">			ContextEnvironmentFactory factory = <span class="keyword">new</span> ContextEnvironmentFactory(<span class="keyword">this</span>, libraries,</div><div class="line">					prog.getClasspaths(), prog.getUserCodeClassLoader(), parallelism, isDetached(),</div><div class="line">					prog.getSavepointSettings());</div><div class="line">			ContextEnvironment.setAsContext(factory);</div><div class="line"></div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				<span class="comment">// invoke main method</span></div><div class="line">				prog.invokeInteractiveModeForExecution();</div><div class="line">				<span class="keyword">if</span> (lastJobExecutionResult == <span class="keyword">null</span> &amp;&amp; factory.getLastEnvCreated() == <span class="keyword">null</span>) &#123;</div><div class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> ProgramMissingJobException(<span class="string">"The program didn't contain a Flink job."</span>);</div><div class="line">				&#125;</div><div class="line">				<span class="keyword">if</span> (isDetached()) &#123;</div><div class="line">					<span class="comment">// in detached mode, we execute the whole user code to extract the Flink job, afterwards we run it here</span></div><div class="line">					<span class="keyword">return</span> ((DetachedEnvironment) factory.getLastEnvCreated()).finalizeExecute();</div><div class="line">				&#125;</div><div class="line">				<span class="keyword">else</span> &#123;</div><div class="line">					<span class="comment">// in blocking mode, we execute all Flink jobs contained in the user code and then return here</span></div><div class="line">					<span class="keyword">return</span> <span class="keyword">this</span>.lastJobExecutionResult;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">finally</span> &#123;</div><div class="line">				ContextEnvironment.unsetContext();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> ProgramInvocationException(<span class="string">"PackagedProgram does not have a valid invocation mode."</span>);</div><div class="line">		&#125;                </div><div class="line">    &#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> JobSubmissionResult <span class="title">run</span><span class="params">(JobWithJars program, <span class="keyword">int</span> parallelism)</span> <span class="keyword">throws</span> ProgramInvocationException </span>&#123;</div><div class="line">		<span class="keyword">return</span> run(program, parallelism, SavepointRestoreSettings.none());</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> JobSubmissionResult <span class="title">run</span><span class="params">(JobWithJars jobWithJars, <span class="keyword">int</span> parallelism, SavepointRestoreSettings savepointSettings)</span></span></div><div class="line"><span class="function">			<span class="keyword">throws</span> CompilerException, ProgramInvocationException </span>&#123;</div><div class="line">		ClassLoader classLoader = jobWithJars.getUserCodeClassLoader();</div><div class="line">		<span class="keyword">if</span> (classLoader == <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"The given JobWithJars does not provide a usercode class loader."</span>);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		OptimizedPlan optPlan = getOptimizedPlan(compiler, jobWithJars, parallelism);</div><div class="line">		<span class="keyword">return</span> run(optPlan, jobWithJars.getJarFiles(), jobWithJars.getClasspaths(), classLoader, savepointSettings);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> JobSubmissionResult <span class="title">run</span><span class="params">(FlinkPlan compiledPlan,</span></span></div><div class="line"><span class="function"><span class="params">			List&lt;URL&gt; libraries, List&lt;URL&gt; classpaths, ClassLoader classLoader, SavepointRestoreSettings savepointSettings)</span></span></div><div class="line"><span class="function">			<span class="keyword">throws</span> ProgramInvocationException </span>&#123;</div><div class="line">		JobGraph job = getJobGraph(flinkConfig, compiledPlan, libraries, classpaths, savepointSettings);</div><div class="line">		<span class="keyword">return</span> submitJob(job, classLoader);</div><div class="line">	&#125;            </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>@org/apache/flink/client/program/ContextEnvironment.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ContextEnvironment</span> <span class="keyword">extends</span> <span class="title">ExecutionEnvironment</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setAsContext</span><span class="params">(ContextEnvironmentFactory factory)</span> </span>&#123;</div><div class="line">		initializeContextEnvironment(factory);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> JobExecutionResult <span class="title">execute</span><span class="params">(String jobName)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		Plan p = createProgramPlan(jobName);</div><div class="line">		JobWithJars toRun = <span class="keyword">new</span> JobWithJars(p, <span class="keyword">this</span>.jarFilesToAttach, <span class="keyword">this</span>.classpathsToAttach,</div><div class="line">				<span class="keyword">this</span>.userCodeClassLoader);</div><div class="line">		<span class="keyword">this</span>.lastJobExecutionResult = client.run(toRun, getParallelism(), savepointSettings).getJobExecutionResult();</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.lastJobExecutionResult;</div><div class="line">	&#125;    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>@org/apache/flink/api/java/ExecutionEnvironment.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Public</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ExecutionEnvironment</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">initializeContextEnvironment</span><span class="params">(ExecutionEnvironmentFactory ctx)</span> </span>&#123;</div><div class="line">		contextEnvironmentFactory = Preconditions.checkNotNull(ctx);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutionEnvironment <span class="title">getExecutionEnvironment</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> contextEnvironmentFactory == <span class="keyword">null</span> ?</div><div class="line">				createLocalEnvironment() : contextEnvironmentFactory.createExecutionEnvironment();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Flink/" rel="tag"># Flink</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/flink-streaming-source-code-trace-introduction/" rel="next" title="Flink Streaming Source Code Trace Introduction">
+                <i class="fa fa-chevron-left"></i> Flink Streaming Source Code Trace Introduction
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Run-Flink-Application-by-Bash-Script-Source-Code-Trace"><span class="nav-number">1.</span> <span class="nav-text">Run Flink Application by Bash Script Source Code Trace</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-information"><span class="nav-number">1.1.</span> <span class="nav-text">Basic information</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-Flink-Application-by-Bash-Script"><span class="nav-number">1.2.</span> <span class="nav-text">Run Flink Application by Bash Script</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CliFrontend-Class"><span class="nav-number">1.3.</span> <span class="nav-text">CliFrontend Class</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PackagedProgram-Class"><span class="nav-number">1.3.1.</span> <span class="nav-text">PackagedProgram Class</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#runProgram-Function-of-CliFrontend-Class"><span class="nav-number">1.3.2.</span> <span class="nav-text">runProgram Function of CliFrontend Class</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#User-Flink-Application"><span class="nav-number">1.3.3.</span> <span class="nav-text">User Flink Application</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

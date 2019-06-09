@@ -254,6 +254,163 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/run-flink-application-by-bash-script-source-code-trace/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/run-flink-application-by-bash-script-source-code-trace/" itemprop="url">Run Flink Application by Bash Script Source Code Trace</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-09T22:05:42+08:00">
+                2019-06-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="Run-Flink-Application-by-Bash-Script-Source-Code-Trace"><a href="#Run-Flink-Application-by-Bash-Script-Source-Code-Trace" class="headerlink" title="Run Flink Application by Bash Script Source Code Trace"></a>Run Flink Application by Bash Script Source Code Trace</h2><h3 id="Basic-information"><a href="#Basic-information" class="headerlink" title="Basic information"></a>Basic information</h3><ul>
+<li>Flink version: 1.8</li>
+</ul>
+<h3 id="Run-Flink-Application-by-Bash-Script"><a href="#Run-Flink-Application-by-Bash-Script" class="headerlink" title="Run Flink Application by Bash Script"></a>Run Flink Application by Bash Script</h3><p>在使用Bash Script時，可以使用下面方式Submit一個SocketWindowWordCount的Flink application至JobManager<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./flink run ../examples/streaming/SocketWindowWordCount.jar --port 9000</div></pre></td></tr></table></figure></p>
+<ul>
+<li>此時會調用CliFrontend Class 的main @org/apache/flink/client/cli/CliFrontend.java<br>主要分成兩個主要步驟:<ol>
+<li>創建CliFrontend object</li>
+<li>調用CliFrontend object的parseParameters，將使用者實作的Flink application邏輯Submit至JobManager</li>
+</ol>
+</li>
+<li>創建CliFrontend object時，會先構造其所需的參數，當中customCommandLines是透過Static function loadCustomCommandLines(…)構造，回傳的List當中，包含FlinkYarnSessionCli與DefaultCLI</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/run-flink-application-by-bash-script-source-code-trace/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/flink-streaming-source-code-trace-introduction/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1598,155 +1755,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/download-android-source-code-and-build/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="0x90e">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="0x90e's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/download-android-source-code-and-build/" itemprop="url">Download Android Source Code and Build</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-22T01:20:51+08:00">
-                2018-05-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="Download-Android-Source-Code-and-Build"><a href="#Download-Android-Source-Code-and-Build" class="headerlink" title="Download Android Source Code and Build"></a>Download Android Source Code and Build</h2><h3 id="Basic-Infomation"><a href="#Basic-Infomation" class="headerlink" title="Basic Infomation"></a>Basic Infomation</h3><ul>
-<li>OS: Ubuntu 16.4 LTS</li>
-<li>Android Branch: android-7.1.2_r33</li>
-<li>Device: Google Pixel One
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/download-android-source-code-and-build/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1801,7 +1809,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
