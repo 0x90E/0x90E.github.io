@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Flink," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Basic information Flink version: 1.8  Flink Stream Graph此篇依序說明從使用者的Flink job如何生成Stream Graph。首先以SocketWindowWordCount示例代表使用者開發的Flink job">
+<meta name="keywords" content="Flink">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flink Stream Graph">
+<meta property="og:url" content="https://0x90e.github.io/flink-stream-graph/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Basic information Flink version: 1.8  Flink Stream Graph此篇依序說明從使用者的Flink job如何生成Stream Graph。首先以SocketWindowWordCount示例代表使用者開發的Flink job">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-06-27T00:03:49.684Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flink Stream Graph">
+<meta name="twitter:description" content="Basic information Flink version: 1.8  Flink Stream Graph此篇依序說明從使用者的Flink job如何生成Stream Graph。首先以SocketWindowWordCount示例代表使用者開發的Flink job">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/flink-stream-graph/"/>
+
+
+
+
+
+  <title>Flink Stream Graph | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/flink-stream-graph/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Flink Stream Graph</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-26T22:30:50+08:00">
+                2019-06-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Basic-information"><a href="#Basic-information" class="headerlink" title="Basic information"></a>Basic information</h3><ul>
+<li>Flink version: 1.8</li>
+</ul>
+<h3 id="Flink-Stream-Graph"><a href="#Flink-Stream-Graph" class="headerlink" title="Flink Stream Graph"></a>Flink Stream Graph</h3><p>此篇依序說明從使用者的Flink job如何生成Stream Graph。<br>首先以SocketWindowWordCount示例代表使用者開發的Flink job<br><a id="more"></a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SocketWindowWordCount</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        </div><div class="line">        <span class="comment">// ...</span></div><div class="line"></div><div class="line">		<span class="comment">// get the execution environment</span></div><div class="line">		<span class="keyword">final</span> StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</div><div class="line"></div><div class="line">		<span class="comment">// get input data by connecting to the socket</span></div><div class="line">		DataStream&lt;String&gt; text = env.socketTextStream(hostname, port, <span class="string">"\n"</span>);</div><div class="line"></div><div class="line">		<span class="comment">// parse the data, group it, window it, and aggregate the counts</span></div><div class="line">		DataStream&lt;WordWithCount&gt; windowCounts = text</div><div class="line"></div><div class="line">				.flatMap(<span class="keyword">new</span> FlatMapFunction&lt;String, WordWithCount&gt;() &#123;</div><div class="line">					<span class="meta">@Override</span></div><div class="line">					<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">flatMap</span><span class="params">(String value, Collector&lt;WordWithCount&gt; out)</span> </span>&#123;</div><div class="line">						<span class="keyword">for</span> (String word : value.split(<span class="string">"\\s"</span>)) &#123;</div><div class="line">							out.collect(<span class="keyword">new</span> WordWithCount(word, <span class="number">1L</span>));</div><div class="line">						&#125;</div><div class="line">					&#125;</div><div class="line">				&#125;)</div><div class="line"></div><div class="line">				.keyBy(<span class="string">"word"</span>)</div><div class="line">				.timeWindow(Time.seconds(<span class="number">5</span>))</div><div class="line"></div><div class="line">				.reduce(<span class="keyword">new</span> ReduceFunction&lt;WordWithCount&gt;() &#123;</div><div class="line">					<span class="meta">@Override</span></div><div class="line">					<span class="function"><span class="keyword">public</span> WordWithCount <span class="title">reduce</span><span class="params">(WordWithCount a, WordWithCount b)</span> </span>&#123;</div><div class="line">						<span class="keyword">return</span> <span class="keyword">new</span> WordWithCount(a.word, a.count + b.count);</div><div class="line">					&#125;</div><div class="line">				&#125;);</div><div class="line"></div><div class="line">		<span class="comment">// ...</span></div><div class="line"></div><div class="line">		env.execute(<span class="string">"Socket Window WordCount"</span>);</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h4 id="Get-StreamExecutionEnvironment-and-Get-Data-Source"><a href="#Get-StreamExecutionEnvironment-and-Get-Data-Source" class="headerlink" title="Get StreamExecutionEnvironment and Get Data Source"></a>Get StreamExecutionEnvironment and Get Data Source</h4><ul>
+<li>final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();<ul>
+<li>進入env instanceof ContextEnvironment分支，並取得StreamExecutionEnvironment object</li>
+</ul>
+</li>
+<li>env.socketTextStream(…);<ul>
+<li>調用StreamExecutionEnvironment @org/apache/flink/streaming/api/environment/StreamExecutionEnvironment.java</li>
+<li>在StreamExecutionEnvironment內部連續調用後，會來到socketTextStream(String hostname, int port, String delimiter, long maxRetry)<ul>
+<li>new SocketTextStreamFunction(…)<ul>
+<li>SocketTextStreamFunction class @org/apache/flink/streaming/api/functions/source/SocketTextStreamFunction.java</li>
+</ul>
+</li>
+<li>addSource(…)<ul>
+<li>最終調用addSource(SourceFunction<out> function, String sourceName, TypeInformation<out> typeInfo)</out></out></li>
+<li>回傳DataStreamSource&lt;> object @org/apache/flink/streaming/api/datastream/DataStreamSource.java</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Public</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamExecutionEnvironment</span> </span>&#123;</div><div class="line">    <span class="meta">@PublicEvolving</span></div><div class="line">    <span class="function"><span class="keyword">public</span> DataStreamSource&lt;String&gt; <span class="title">socketTextStream</span><span class="params">(String hostname, <span class="keyword">int</span> port, String delimiter, <span class="keyword">long</span> maxRetry)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> addSource(<span class="keyword">new</span> SocketTextStreamFunction(hostname, port, delimiter, maxRetry),</div><div class="line">                <span class="string">"Socket Stream"</span>);</div><div class="line">    &#125;  </div><div class="line"></div><div class="line">	<span class="keyword">public</span> &lt;OUT&gt; <span class="function">DataStreamSource&lt;OUT&gt; <span class="title">addSource</span><span class="params">(SourceFunction&lt;OUT&gt; function, String sourceName)</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> addSource(function, sourceName, <span class="keyword">null</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">public</span> &lt;OUT&gt; <span class="function">DataStreamSource&lt;OUT&gt; <span class="title">addSource</span><span class="params">(SourceFunction&lt;OUT&gt; function, String sourceName, TypeInformation&lt;OUT&gt; typeInfo)</span> </span>&#123;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (typeInfo == <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (function <span class="keyword">instanceof</span> ResultTypeQueryable) &#123;</div><div class="line">				typeInfo = ((ResultTypeQueryable&lt;OUT&gt;) function).getProducedType();</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="keyword">try</span> &#123;</div><div class="line">					typeInfo = TypeExtractor.createTypeInfo(</div><div class="line">							SourceFunction.class,</div><div class="line">							function.getClass(), <span class="number">0</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</div><div class="line">				&#125; <span class="keyword">catch</span> (<span class="keyword">final</span> InvalidTypesException e) &#123;</div><div class="line">					typeInfo = (TypeInformation&lt;OUT&gt;) <span class="keyword">new</span> MissingTypeInfo(sourceName, e);</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">boolean</span> isParallel = function <span class="keyword">instanceof</span> ParallelSourceFunction;</div><div class="line"></div><div class="line">		clean(function);</div><div class="line">		StreamSource&lt;OUT, ?&gt; sourceOperator;</div><div class="line">		<span class="keyword">if</span> (function <span class="keyword">instanceof</span> StoppableFunction) &#123;</div><div class="line">			sourceOperator = <span class="keyword">new</span> StoppableStreamSource&lt;&gt;(cast2StoppableSourceFunction(function));</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			sourceOperator = <span class="keyword">new</span> StreamSource&lt;&gt;(function);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">return</span> <span class="keyword">new</span> DataStreamSource&lt;&gt;(<span class="keyword">this</span>, typeInfo, sourceOperator, isParallel, sourceName);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@PublicEvolving</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SocketTextStreamFunction</span> <span class="keyword">implements</span> <span class="title">SourceFunction</span>&lt;<span class="title">String</span>&gt; </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SocketTextStreamFunction</span><span class="params">(String hostname, <span class="keyword">int</span> port, String delimiter, <span class="keyword">long</span> maxNumRetries)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>(hostname, port, delimiter, maxNumRetries, DEFAULT_CONNECTION_RETRY_SLEEP);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SocketTextStreamFunction</span><span class="params">(String hostname, <span class="keyword">int</span> port, String delimiter, <span class="keyword">long</span> maxNumRetries, <span class="keyword">long</span> delayBetweenRetries)</span> </span>&#123;</div><div class="line">		checkArgument(port &gt; <span class="number">0</span> &amp;&amp; port &lt; <span class="number">65536</span>, <span class="string">"port is out of range"</span>);</div><div class="line">		checkArgument(maxNumRetries &gt;= -<span class="number">1</span>, <span class="string">"maxNumRetries must be zero or larger (num retries), or -1 (infinite retries)"</span>);</div><div class="line">		checkArgument(delayBetweenRetries &gt;= <span class="number">0</span>, <span class="string">"delayBetweenRetries must be zero or positive"</span>);</div><div class="line"></div><div class="line">		<span class="keyword">this</span>.hostname = checkNotNull(hostname, <span class="string">"hostname must not be null"</span>);</div><div class="line">		<span class="keyword">this</span>.port = port;</div><div class="line">		<span class="keyword">this</span>.delimiter = delimiter;</div><div class="line">		<span class="keyword">this</span>.maxNumRetries = maxNumRetries;</div><div class="line">		<span class="keyword">this</span>.delayBetweenRetries = delayBetweenRetries;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Public</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataStreamSource</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">SingleOutputStreamOperator</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">DataStreamSource</span><span class="params">(StreamExecutionEnvironment environment,</span></span></div><div class="line"><span class="function"><span class="params">			TypeInformation&lt;T&gt; outTypeInfo, StreamSource&lt;T, ?&gt; operator,</span></span></div><div class="line"><span class="function"><span class="params">			<span class="keyword">boolean</span> isParallel, String sourceName)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>(environment, <span class="keyword">new</span> SourceTransformation&lt;&gt;(sourceName, operator, outTypeInfo, environment.getParallelism()));</div><div class="line"></div><div class="line">		<span class="keyword">this</span>.isParallel = isParallel;</div><div class="line">		<span class="keyword">if</span> (!isParallel) &#123;</div><div class="line">			setParallelism(<span class="number">1</span>);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="FlatMapFunction-and-Add-Transform"><a href="#FlatMapFunction-and-Add-Transform" class="headerlink" title="FlatMapFunction and Add Transform"></a>FlatMapFunction and Add Transform</h4><ul>
+<li>text.flatMap(…)<ul>
+<li>調用DataStreamSource的父類SingleOutputStreamOperator<t\>類的父類DataStream<t\> @org/apache/flink/streaming/api/datastream/DataStream.java<ul>
+<li>transform(…)<ul>
+<li>OneInputTransformation<t, r\=""> resultTransform = new OneInputTransformation&lt;&gt;(…)<br>  OneInputTransformation object @org/apache/flink/streaming/api/transformations/OneInputTransformation.java</t,></li>
+<li>SingleOutputStreamOperator<r\> returnStream = new SingleOutputStreamOperator(environment, resultTransform);<ul>
+<li>SingleOutputStreamOperator object @org/apache/flink/streaming/api/datastream/SingleOutputStreamOperator.java</li>
+</ul>
+</r\></li>
+<li>getExecutionEnvironment().addOperator(resultTransform);<ul>
+<li>getExecutionEnvironment()<ul>
+<li>取得在初始化時設定的environment，實際上為StreamExecutionEnvironment object</li>
+</ul>
+</li>
+<li>addOperator(…)<ul>
+<li>調用StreamExecutionEnvironment的addOperator(…)<ul>
+<li>將入參transformation加入到transformations class變量中</li>
+<li>transformations是List&lt; StreamTransformation&lt;?>></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</t\></t\></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Public</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataStream</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line">	<span class="keyword">public</span> &lt;R&gt; <span class="function">SingleOutputStreamOperator&lt;R&gt; <span class="title">flatMap</span><span class="params">(FlatMapFunction&lt;T, R&gt; flatMapper)</span> </span>&#123;</div><div class="line"></div><div class="line">		TypeInformation&lt;R&gt; outType = TypeExtractor.getFlatMapReturnTypes(clean(flatMapper),</div><div class="line">				getType(), Utils.getCallLocationName(), <span class="keyword">true</span>);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> transform(<span class="string">"Flat Map"</span>, outType, <span class="keyword">new</span> StreamFlatMap&lt;&gt;(clean(flatMapper)));</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@PublicEvolving</span></div><div class="line">	<span class="keyword">public</span> &lt;R&gt; <span class="function">SingleOutputStreamOperator&lt;R&gt; <span class="title">transform</span><span class="params">(String operatorName, TypeInformation&lt;R&gt; outTypeInfo, OneInputStreamOperator&lt;T, R&gt; operator)</span> </span>&#123;</div><div class="line"></div><div class="line">		<span class="comment">// read the output type of the input Transform to coax out errors about MissingTypeInfo</span></div><div class="line">		transformation.getOutputType();</div><div class="line"></div><div class="line">		OneInputTransformation&lt;T, R&gt; resultTransform = <span class="keyword">new</span> OneInputTransformation&lt;&gt;(</div><div class="line">				<span class="keyword">this</span>.transformation,</div><div class="line">				operatorName,</div><div class="line">				operator,</div><div class="line">				outTypeInfo,</div><div class="line">				environment.getParallelism());</div><div class="line"></div><div class="line">		<span class="meta">@SuppressWarnings</span>(&#123; <span class="string">"unchecked"</span>, <span class="string">"rawtypes"</span> &#125;)</div><div class="line">		SingleOutputStreamOperator&lt;R&gt; returnStream = <span class="keyword">new</span> SingleOutputStreamOperator(environment, resultTransform);</div><div class="line"></div><div class="line">		getExecutionEnvironment().addOperator(resultTransform);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> returnStream;</div><div class="line">	&#125;	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Public</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamExecutionEnvironment</span> </span>&#123;</div><div class="line">	<span class="keyword">protected</span> <span class="keyword">final</span> List&lt;StreamTransformation&lt;?&gt;&gt; transformations = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line"></div><div class="line">	<span class="meta">@Internal</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addOperator</span><span class="params">(StreamTransformation&lt;?&gt; transformation)</span> </span>&#123;</div><div class="line">		Preconditions.checkNotNull(transformation, <span class="string">"transformation must not be null."</span>);</div><div class="line">		<span class="keyword">this</span>.transformations.add(transformation);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Env-Exceute-and-Gerent-Stram-Graph"><a href="#Env-Exceute-and-Gerent-Stram-Graph" class="headerlink" title="Env Exceute and Gerent Stram Graph"></a>Env Exceute and Gerent Stram Graph</h4><ul>
+<li>execute(…)<ul>
+<li>調用StreamContextEnvironment的execute(…)<ul>
+<li>this.getStreamGraph();<ul>
+<li>調用StreamContextEnvironment父類StreamExecutionEnvironment的getStreamGraph()</li>
+<li>transformations及為之前的Class變量</li>
+<li>StreamGraphGenerator.generate(…)<ul>
+<li>在StreamGraphGenerator內部連續調用後，會遍歷StreamExecutionEnvironment的List<streamtransformation<?\>>，將StreamTransformation作為入參傳入transform(StreamTransformatio&lt;?> transform)<ul>
+<li>transform(…)<ul>
+<li>最終都會調用與StreamTransformation對應的transformXXX方法，例如transformOnInputTransform</li>
+<li>內部會遞迴的調用transform(…)，逐一加上StreamEdge、StreamNode<ul>
+<li>並非每個StreamTransformation都會在StreamGraph新增StreamEdge與StreamNode，邏輯上的StreamTransformation則不添加，而是將資訊合併到其他StreamTransformation的StreamEdge中；例如PartitionTransformation</li>
+</ul>
+</li>
+<li>StreamNode<ul>
+<li>儲存了UDF(User-Defined Funtion)、輸入輸出的序列化方法、所有輸入輸出的StreamEdge對象</li>
+</ul>
+</li>
+<li>StreamEdge<ul>
+<li>儲存上下的StreamNode訊息</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</streamtransformation<?\></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@PublicEvolving</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamContextEnvironment</span> <span class="keyword">extends</span> <span class="title">StreamExecutionEnvironment</span> </span>&#123;</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> JobExecutionResult <span class="title">execute</span><span class="params">(String jobName)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		Preconditions.checkNotNull(jobName, <span class="string">"Streaming Job name should not be null."</span>);</div><div class="line"></div><div class="line">		StreamGraph streamGraph = <span class="keyword">this</span>.getStreamGraph();</div><div class="line">		streamGraph.setJobName(jobName);</div><div class="line"></div><div class="line">		<span class="comment">// ...</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Public</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamExecutionEnvironment</span> </span>&#123;</div><div class="line">	<span class="meta">@Internal</span></div><div class="line">	<span class="function"><span class="keyword">public</span> StreamGraph <span class="title">getStreamGraph</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">if</span> (transformations.size() &lt;= <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"No operators defined in streaming topology. Cannot execute."</span>);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> StreamGraphGenerator.generate(<span class="keyword">this</span>, transformations);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Internal</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamGraphGenerator</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> StreamGraph <span class="title">generate</span><span class="params">(StreamExecutionEnvironment env, List&lt;StreamTransformation&lt;?&gt;&gt; transformations)</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">new</span> StreamGraphGenerator(env).generateInternal(transformations);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> StreamGraph <span class="title">generateInternal</span><span class="params">(List&lt;StreamTransformation&lt;?&gt;&gt; transformations)</span> </span>&#123;</div><div class="line">		<span class="keyword">for</span> (StreamTransformation&lt;?&gt; transformation: transformations) &#123;</div><div class="line">			transform(transformation);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> streamGraph;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> Collection&lt;Integer&gt; <span class="title">transform</span><span class="params">(StreamTransformation&lt;?&gt; transform)</span> </span>&#123;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (alreadyTransformed.containsKey(transform)) &#123;</div><div class="line">			<span class="keyword">return</span> alreadyTransformed.get(transform);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		LOG.debug(<span class="string">"Transforming "</span> + transform);</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (transform.getMaxParallelism() &lt;= <span class="number">0</span>) &#123;</div><div class="line"></div><div class="line">			<span class="comment">// if the max parallelism hasn't been set, then first use the job wide max parallelism</span></div><div class="line">			<span class="comment">// from the ExecutionConfig.</span></div><div class="line">			<span class="keyword">int</span> globalMaxParallelismFromConfig = env.getConfig().getMaxParallelism();</div><div class="line">			<span class="keyword">if</span> (globalMaxParallelismFromConfig &gt; <span class="number">0</span>) &#123;</div><div class="line">				transform.setMaxParallelism(globalMaxParallelismFromConfig);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">// call at least once to trigger exceptions about MissingTypeInfo</span></div><div class="line">		transform.getOutputType();</div><div class="line"></div><div class="line">		Collection&lt;Integer&gt; transformedIds;</div><div class="line">		<span class="keyword">if</span> (transform <span class="keyword">instanceof</span> OneInputTransformation&lt;?, ?&gt;) &#123;</div><div class="line">			transformedIds = transformOneInputTransform((OneInputTransformation&lt;?, ?&gt;) transform);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (transform <span class="keyword">instanceof</span> TwoInputTransformation&lt;?, ?, ?&gt;) &#123;</div><div class="line">			transformedIds = transformTwoInputTransform((TwoInputTransformation&lt;?, ?, ?&gt;) transform);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (transform <span class="keyword">instanceof</span> SourceTransformation&lt;?&gt;) &#123;</div><div class="line">			transformedIds = transformSource((SourceTransformation&lt;?&gt;) transform);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (transform <span class="keyword">instanceof</span> SinkTransformation&lt;?&gt;) &#123;</div><div class="line">			transformedIds = transformSink((SinkTransformation&lt;?&gt;) transform);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (transform <span class="keyword">instanceof</span> UnionTransformation&lt;?&gt;) &#123;</div><div class="line">			transformedIds = transformUnion((UnionTransformation&lt;?&gt;) transform);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (transform <span class="keyword">instanceof</span> SplitTransformation&lt;?&gt;) &#123;</div><div class="line">			transformedIds = transformSplit((SplitTransformation&lt;?&gt;) transform);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (transform <span class="keyword">instanceof</span> SelectTransformation&lt;?&gt;) &#123;</div><div class="line">			transformedIds = transformSelect((SelectTransformation&lt;?&gt;) transform);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (transform <span class="keyword">instanceof</span> FeedbackTransformation&lt;?&gt;) &#123;</div><div class="line">			transformedIds = transformFeedback((FeedbackTransformation&lt;?&gt;) transform);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (transform <span class="keyword">instanceof</span> CoFeedbackTransformation&lt;?&gt;) &#123;</div><div class="line">			transformedIds = transformCoFeedback((CoFeedbackTransformation&lt;?&gt;) transform);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (transform <span class="keyword">instanceof</span> PartitionTransformation&lt;?&gt;) &#123;</div><div class="line">			transformedIds = transformPartition((PartitionTransformation&lt;?&gt;) transform);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (transform <span class="keyword">instanceof</span> SideOutputTransformation&lt;?&gt;) &#123;</div><div class="line">			transformedIds = transformSideOutput((SideOutputTransformation&lt;?&gt;) transform);</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Unknown transformation: "</span> + transform);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">// need this check because the iterate transformation adds itself before</span></div><div class="line">		<span class="comment">// transforming the feedback edges</span></div><div class="line">		<span class="keyword">if</span> (!alreadyTransformed.containsKey(transform)) &#123;</div><div class="line">			alreadyTransformed.put(transform, transformedIds);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (transform.getBufferTimeout() &gt;= <span class="number">0</span>) &#123;</div><div class="line">			streamGraph.setBufferTimeout(transform.getId(), transform.getBufferTimeout());</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (transform.getUid() != <span class="keyword">null</span>) &#123;</div><div class="line">			streamGraph.setTransformationUID(transform.getId(), transform.getUid());</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (transform.getUserProvidedNodeHash() != <span class="keyword">null</span>) &#123;</div><div class="line">			streamGraph.setTransformationUserHash(transform.getId(), transform.getUserProvidedNodeHash());</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (transform.getMinResources() != <span class="keyword">null</span> &amp;&amp; transform.getPreferredResources() != <span class="keyword">null</span>) &#123;</div><div class="line">			streamGraph.setResources(transform.getId(), transform.getMinResources(), transform.getPreferredResources());</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">return</span> transformedIds;</div><div class="line">	&#125;	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Transformation-StreamTransformation-DataStream-and-StreamGraph"><a href="#Transformation-StreamTransformation-DataStream-and-StreamGraph" class="headerlink" title="Transformation(StreamTransformation), DataStream and StreamGraph"></a>Transformation(StreamTransformation), DataStream and StreamGraph</h3><ul>
+<li>DataStream是較常接觸到的概念，其代表同一種類型元素構成的數據流</li>
+<li>在構建DataStream或其子類時，需要傳入StreamTransformation object<ul>
+<li>StreamTransformation代表從一個或多個DataStream生成新的DataStream的操作；換言之，DataStream的Transformation，封裝了StreamTransformation</li>
+<li>在使用者調用DataStream的Transformation時，可以傳入UDF，而StreamOperator是運行時調用UDF的具體實現</li>
+</ul>
+</li>
+<li>使用者DataStream上通過Transformation，會將StreamTransformation加入到StreamExecutionEnvironment的List&lt; StreamTransformation&lt;?>>中，並且在執行前，轉換成StreamGraph</li>
+</ul>
+<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><ul>
+<li>DataStream<t\>#flatMap(FlatMapFunction<t, r\=""> flatMapper)<ul>
+<li>Transformation: flatMap</li>
+<li>StreamOperator: StreamFlatMap&lt;> @org/apache/flink/streaming/api/operators/StreamFlatMap.java</li>
+<li>UDF: FlatMapFunction<t, r\=""> @org/apache/flink/api/common/functions/FlatMapFunction.java</t,></li>
+<li>StreamTransformation: OneInputTransformation<t, r\=""> @org/apache/flink/streaming/api/transformations/OneInputTransformation.java<ul>
+<li>使用getExecutionEnvironment().addOperator(resultTransform)，加入到StreamExecutionEnvironment的List&lt; StreamTransformation&lt;?>>中</li>
+</ul>
+</t,></li>
+<li>Return DataStream: SingleOutputStreamOperator<r\> @org/apache/flink/streaming/api/datastream/SingleOutputStreamOperator.java<ul>
+<li>構建時，使用OneInputTransformation<t, r\="">作為參數</t,></li>
+</ul>
+</r\></li>
+</ul>
+</t,></t\></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Public</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataStream</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line">	<span class="keyword">public</span> &lt;R&gt; <span class="function">SingleOutputStreamOperator&lt;R&gt; <span class="title">flatMap</span><span class="params">(FlatMapFunction&lt;T, R&gt; flatMapper)</span> </span>&#123;</div><div class="line"></div><div class="line">		TypeInformation&lt;R&gt; outType = TypeExtractor.getFlatMapReturnTypes(clean(flatMapper),</div><div class="line">				getType(), Utils.getCallLocationName(), <span class="keyword">true</span>);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> transform(<span class="string">"Flat Map"</span>, outType, <span class="keyword">new</span> StreamFlatMap&lt;&gt;(clean(flatMapper)));</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@PublicEvolving</span></div><div class="line">	<span class="keyword">public</span> &lt;R&gt; <span class="function">SingleOutputStreamOperator&lt;R&gt; <span class="title">transform</span><span class="params">(String operatorName, TypeInformation&lt;R&gt; outTypeInfo, OneInputStreamOperator&lt;T, R&gt; operator)</span> </span>&#123;</div><div class="line"></div><div class="line">		<span class="comment">// read the output type of the input Transform to coax out errors about MissingTypeInfo</span></div><div class="line">		transformation.getOutputType();</div><div class="line"></div><div class="line">		OneInputTransformation&lt;T, R&gt; resultTransform = <span class="keyword">new</span> OneInputTransformation&lt;&gt;(</div><div class="line">				<span class="keyword">this</span>.transformation,</div><div class="line">				operatorName,</div><div class="line">				operator,</div><div class="line">				outTypeInfo,</div><div class="line">				environment.getParallelism());</div><div class="line"></div><div class="line">		<span class="meta">@SuppressWarnings</span>(&#123; <span class="string">"unchecked"</span>, <span class="string">"rawtypes"</span> &#125;)</div><div class="line">		SingleOutputStreamOperator&lt;R&gt; returnStream = <span class="keyword">new</span> SingleOutputStreamOperator(environment, resultTransform);</div><div class="line"></div><div class="line">		getExecutionEnvironment().addOperator(resultTransform);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> returnStream;</div><div class="line">	&#125;	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Internal</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamFlatMap</span>&lt;<span class="title">IN</span>, <span class="title">OUT</span>&gt;</span></div><div class="line"><span class="class">		<span class="keyword">extends</span> <span class="title">AbstractUdfStreamOperator</span>&lt;<span class="title">OUT</span>, <span class="title">FlatMapFunction</span>&lt;<span class="title">IN</span>, <span class="title">OUT</span>&gt;&gt;</span></div><div class="line"><span class="class">		<span class="keyword">implements</span> <span class="title">OneInputStreamOperator</span>&lt;<span class="title">IN</span>, <span class="title">OUT</span>&gt; </span>&#123;</div><div class="line">	<span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Public</span></div><div class="line"><span class="meta">@FunctionalInterface</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">FlatMapFunction</span>&lt;<span class="title">T</span>, <span class="title">O</span>&gt; <span class="keyword">extends</span> <span class="title">Function</span>, <span class="title">Serializable</span> </span>&#123;</div><div class="line">	<span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Internal</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OneInputTransformation</span>&lt;<span class="title">IN</span>, <span class="title">OUT</span>&gt; <span class="keyword">extends</span> <span class="title">StreamTransformation</span>&lt;<span class="title">OUT</span>&gt; </span>&#123;</div><div class="line">	<span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Public</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleOutputStreamOperator</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">DataStream</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line">	<span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Flink/" rel="tag"># Flink</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/run-flink-application-by-bash-script-source-code-trace/" rel="next" title="Run Flink Application by Bash Script Source Code Trace">
+                <i class="fa fa-chevron-left"></i> Run Flink Application by Bash Script Source Code Trace
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-information"><span class="nav-number">1.</span> <span class="nav-text">Basic information</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Flink-Stream-Graph"><span class="nav-number">2.</span> <span class="nav-text">Flink Stream Graph</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Get-StreamExecutionEnvironment-and-Get-Data-Source"><span class="nav-number">2.1.</span> <span class="nav-text">Get StreamExecutionEnvironment and Get Data Source</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FlatMapFunction-and-Add-Transform"><span class="nav-number">2.2.</span> <span class="nav-text">FlatMapFunction and Add Transform</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Env-Exceute-and-Gerent-Stram-Graph"><span class="nav-number">2.3.</span> <span class="nav-text">Env Exceute and Gerent Stram Graph</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transformation-StreamTransformation-DataStream-and-StreamGraph"><span class="nav-number">3.</span> <span class="nav-text">Transformation(StreamTransformation), DataStream and StreamGraph</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Example"><span class="nav-number">3.1.</span> <span class="nav-text">Example</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

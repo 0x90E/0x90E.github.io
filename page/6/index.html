@@ -91,7 +91,7 @@
     root: '/',
     scheme: 'Pisces',
     version: '5.1.3',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -254,6 +254,157 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-compile/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/spark-compile/" itemprop="url">Compile Spark Source Code</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-09T12:22:02+08:00">
+                2017-09-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="Compile-Spark-Source-Code"><a href="#Compile-Spark-Source-Code" class="headerlink" title="Compile Spark Source Code"></a>Compile Spark Source Code</h2><h3 id="Why-Spark"><a href="#Why-Spark" class="headerlink" title="Why Spark"></a>Why Spark</h3><img src="/2017/09/09/spark-compile/why_spark.svg" width="800">
+<h3 id="編譯步驟"><a href="#編譯步驟" class="headerlink" title="編譯步驟"></a>編譯步驟</h3><h3 id="基本訊息"><a href="#基本訊息" class="headerlink" title="基本訊息"></a>基本訊息</h3><ul>
+<li>OS: CentOS 6.5 64bit/macOS Sierra</li>
+<li>JDK: 8u144</li>
+<li>Maven: 3.3.9(Spark source code自帶)</li>
+<li><a href="http://spark.apache.org/downloads.html" title="Spark download" target="_blank" rel="external">Apache Spark下載位置</a>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/spark-compile/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/yarn-basics/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -353,7 +504,7 @@
 <li>集群資源統一管理，支援大部份大數據處理框架，例如MapReduce、Spark、Storm等，降低運維成本。
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/yarn-basics/#more" rel="contents">
+            <a class="btn" href="/yarn-basics/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -499,7 +650,7 @@
           <h2 id="HDFS-Read-Write-Procedure"><a href="#HDFS-Read-Write-Procedure" class="headerlink" title="HDFS Read Write Procedure"></a>HDFS Read Write Procedure</h2><h3 id="文件寫入流程"><a href="#文件寫入流程" class="headerlink" title="文件寫入流程"></a>文件寫入流程</h3><img src="/2017/08/28/hdfs-read-write-procedure/HDFS_file_write_procedure.svg" width="800">
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/hdfs-read-write-procedure/#more" rel="contents">
+            <a class="btn" href="/hdfs-read-write-procedure/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -649,7 +800,7 @@
 <li>提供應用程式對數據的高吞吐量(high throughput)訪問，適用於具有大數據集的應用程式
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/hdfs-basics/#more" rel="contents">
+            <a class="btn" href="/hdfs-basics/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -805,7 +956,7 @@
 <li><a href="http://hadoop.apache.org/releases.html" title="Hadoop releases" target="_blank" rel="external">Hadoop官網下載</a>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/hadoop-compile/#more" rel="contents">
+            <a class="btn" href="/hadoop-compile/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -960,7 +1111,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/hadoop-install-pseudo-distributed/#more" rel="contents">
+            <a class="btn" href="/hadoop-install-pseudo-distributed/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1107,7 +1258,7 @@
 <p>而N-gram又稱為N元模型，N-gram是指一段語句中包含N個Token，譬如abcde，則2-gram依次為:<br>ab, bc, cd, de<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/nlp-gram/#more" rel="contents">
+            <a class="btn" href="/nlp-gram/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1263,7 +1414,7 @@
 <p>與其他決策樹算法不同的是，這裡不進行剪枝，因為前兩個隨機採樣的過程保證了隨機性，就算不進行剪枝，也不會出現over-fitting<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/rf-basic/#more" rel="contents">
+            <a class="btn" href="/rf-basic/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1410,7 +1561,7 @@
 <h3 id="如何挑選分隔超平面"><a href="#如何挑選分隔超平面" class="headerlink" title="如何挑選分隔超平面"></a>如何挑選分隔超平面</h3><p>找到離超平面最近的點，並且讓它們離分隔面越遠越好。支援向量(support vector)及為離超平面最近的那些點；而支援向量到超平面的距離稱為間隔(margin)。在挑選超平面時，追求一個擁有最大間隔的超平面，保證在處理未知資料時的分類或回歸效果最佳。<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/svm_basic/#more" rel="contents">
+            <a class="btn" href="/svm_basic/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1563,7 +1714,7 @@
 </ol>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/verify_a_signature_with_certificate/#more" rel="contents">
+            <a class="btn" href="/verify_a_signature_with_certificate/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1655,7 +1806,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

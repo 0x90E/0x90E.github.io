@@ -91,7 +91,7 @@
     root: '/',
     scheme: 'Pisces',
     version: '5.1.3',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -254,6 +254,160 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-rdd-dependence/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/spark-rdd-dependence/" itemprop="url">Spark RDD Dependence</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-24T23:35:37+08:00">
+                2018-02-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="Spark-RDD-Dependence"><a href="#Spark-RDD-Dependence" class="headerlink" title="Spark RDD Dependence"></a>Spark RDD Dependence</h2><h3 id="Dependencies"><a href="#Dependencies" class="headerlink" title="Dependencies"></a>Dependencies</h3><h4 id="Narrow-Dependencies"><a href="#Narrow-Dependencies" class="headerlink" title="Narrow Dependencies"></a>Narrow Dependencies</h4><ul>
+<li>任何一個Parent RDD的Partition至多被Child RDD的某個Partition使用一次<ul>
+<li>有些可能沒用被使用</li>
+</ul>
+</li>
+<li>透過流水線(pipelining possible)的方式進行傳遞</li>
+<li>不存在shuffle</li>
+<li>如果某個Partition遺失了，可以快速使用Parent RDD對應的Patition計算出來，容錯與計算速度都很快</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/spark-rdd-dependence/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-shuffle/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -361,7 +515,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/spark-shuffle/#more" rel="contents">
+            <a class="btn" href="/spark-shuffle/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -515,7 +669,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/spark-core-rdd-lineage-checkpoint/#more" rel="contents">
+            <a class="btn" href="/spark-core-rdd-lineage-checkpoint/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -664,7 +818,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/spark-core-persist/#more" rel="contents">
+            <a class="btn" href="/spark-core-persist/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -810,7 +964,7 @@
           <h2 id="Spark-Core-Basic"><a href="#Spark-Core-Basic" class="headerlink" title="Spark Core Basic"></a>Spark Core Basic</h2><h3 id="Cluster-Overview"><a href="#Cluster-Overview" class="headerlink" title="Cluster Overview"></a>Cluster Overview</h3><img src="/2018/01/28/spark_core_basic/spark_workflow.svg" width="700">
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/spark-core-basic/#more" rel="contents">
+            <a class="btn" href="/spark-core-basic/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -959,7 +1113,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/redis-installation/#more" rel="contents">
+            <a class="btn" href="/redis-installation/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1115,7 +1269,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/setup-elk-nvironment/#more" rel="contents">
+            <a class="btn" href="/setup-elk-nvironment/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1267,7 +1421,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/nginx-installation/#more" rel="contents">
+            <a class="btn" href="/nginx-installation/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1413,7 +1567,7 @@
           <h2 id="ElasticSearch-Installation"><a href="#ElasticSearch-Installation" class="headerlink" title="ElasticSearch Installation"></a>ElasticSearch Installation</h2><h3 id="Basic-Info"><a href="#Basic-Info" class="headerlink" title="Basic Info"></a>Basic Info</h3><p>OS Version: CentOS 7.3<br>Java Version: 1.8.0_151<br>ElasticSearch Version: 5.5.0</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/elasticsearch-installation/#more" rel="contents">
+            <a class="btn" href="/elasticsearch-installation/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1567,156 +1721,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/spark-sql-configuration-and-performance-tuning/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-sql-external-data-source/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="0x90e">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="0x90e's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/spark-sql-external-data-source/" itemprop="url">Spark SQL External Data Source</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-28T01:21:46+08:00">
-                2017-12-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Big-data/" itemprop="url" rel="index">
-                    <span itemprop="name">Big data</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="Spark-SQL-External-Data-Source"><a href="#Spark-SQL-External-Data-Source" class="headerlink" title="Spark SQL External Data Source"></a>Spark SQL External Data Source</h2><p><a href="http://spark.apache.org/docs/latest/sql-programming-guide.html#data-sources" title="Spark SQL Data Sources" target="_blank" rel="external">Spark SQL Data Sources</a></p>
-<h3 id="External-Data-Source-API"><a href="#External-Data-Source-API" class="headerlink" title="External Data Source API"></a>External Data Source API</h3><h4 id="Why"><a href="#Why" class="headerlink" title="Why"></a>Why</h4><ul>
-<li>多個不同數據源使用不同的方式進行讀寫操作，非常不方便</li>
-<li>不同讀入與寫出的格式之間的轉換
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/spark-sql-external-data-source/#more" rel="contents">
+            <a class="btn" href="/spark-sql-configuration-and-performance-tuning/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1808,7 +1813,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

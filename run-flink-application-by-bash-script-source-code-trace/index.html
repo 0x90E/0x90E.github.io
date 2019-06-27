@@ -83,7 +83,7 @@
 <meta property="og:site_name" content="0x90e&#39;s Blog">
 <meta property="og:description" content="Run Flink Application by Bash Script Source Code TraceBasic information Flink version: 1.8  Run Flink Application by Bash Script在使用Bash Script時，可以使用下面方式Submit一個SocketWindowWordCount的Flink applicati">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-06-09T14:19:16.619Z">
+<meta property="og:updated_time" content="2019-06-16T08:41:35.860Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Run Flink Application by Bash Script Source Code Trace">
 <meta name="twitter:description" content="Run Flink Application by Bash Script Source Code TraceBasic information Flink version: 1.8  Run Flink Application by Bash Script在使用Bash Script時，可以使用下面方式Submit一個SocketWindowWordCount的Flink applicati">
@@ -96,7 +96,7 @@
     root: '/',
     scheme: 'Pisces',
     version: '5.1.3',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -405,7 +405,7 @@
 </li>
 <li>ContextEnvironment.setAsContext(factory)<ul>
 <li>將ContextEnvironmentFactory object透過ContextEnvironment @org/apache/flink/client/program/ContextEnvironment.java賦值給ExecutionEnvironment @org/apache/flink/api/java/ExecutionEnvironment.java 的contextEnvironmentFactory，</li>
-<li>讓使用者的Flink application在實作邏輯時，使用ExecutionEnvironment.getExecutionEnvironment()獲得的ExecutionEnvironment即是ContextEnvironmentFactory object</li>
+<li>讓使用者的Flink application在實作邏輯時，使用StreamExecutionEnvironment.getExecutionEnvironment()獲得的ExecutionEnvironment即是ContextEnvironmentFactory object</li>
 </ul>
 </li>
 <li>prog.invokeInteractiveModeForExecution()<ul>
@@ -480,6 +480,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/flink-stream-graph/" rel="prev" title="Flink Stream Graph">
+                Flink Stream Graph <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -560,7 +564,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

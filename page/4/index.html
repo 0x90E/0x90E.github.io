@@ -91,7 +91,7 @@
     root: '/',
     scheme: 'Pisces',
     version: '5.1.3',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -254,6 +254,155 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-sql-external-data-source/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/spark-sql-external-data-source/" itemprop="url">Spark SQL External Data Source</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-28T01:21:46+08:00">
+                2017-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="Spark-SQL-External-Data-Source"><a href="#Spark-SQL-External-Data-Source" class="headerlink" title="Spark SQL External Data Source"></a>Spark SQL External Data Source</h2><p><a href="http://spark.apache.org/docs/latest/sql-programming-guide.html#data-sources" title="Spark SQL Data Sources" target="_blank" rel="external">Spark SQL Data Sources</a></p>
+<h3 id="External-Data-Source-API"><a href="#External-Data-Source-API" class="headerlink" title="External Data Source API"></a>External Data Source API</h3><h4 id="Why"><a href="#Why" class="headerlink" title="Why"></a>Why</h4><ul>
+<li>多個不同數據源使用不同的方式進行讀寫操作，非常不方便</li>
+<li>不同讀入與寫出的格式之間的轉換
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/spark-sql-external-data-source/" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-sql-thrift-server/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -356,7 +505,7 @@
 <li>Thrift Server無論連入多少個客戶端都是一個Spark Application，且只要申請一次資源，而且客戶端之間的數據可以共享。
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/spark-sql-thrift-server/#more" rel="contents">
+            <a class="btn" href="/spark-sql-thrift-server/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -502,7 +651,7 @@
           <h2 id="Spark-Sql-Built-in-and-UDF-Functions"><a href="#Spark-Sql-Built-in-and-UDF-Functions" class="headerlink" title="Spark Sql Built-in and UDF Functions"></a>Spark Sql Built-in and UDF Functions</h2><p>Spark Sql中常用的函數分兩類，分別為Built-in函數與UDF函數，以下分別提出案例說明該如何使用<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/spark-sql-builtin-udf-functions/#more" rel="contents">
+            <a class="btn" href="/spark-sql-builtin-udf-functions/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -650,7 +799,7 @@
 <li>DataFrame常用API皆在org.apache.spark.sql的Dataset.scala和functions.scala內，可以透過觀看相關程式源碼來熟悉DataFrame
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/spark-sql-dataFrame-api-programming/#more" rel="contents">
+            <a class="btn" href="/spark-sql-dataFrame-api-programming/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -801,7 +950,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/cuckoo-network-analysis-failure/#more" rel="contents">
+            <a class="btn" href="/cuckoo-network-analysis-failure/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -955,7 +1104,7 @@
 <li>不使用虛擬環境(Conda/Virtualenv)，不影響Cuckoo的安裝與使用
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/cuckoo-installation/#more" rel="contents">
+            <a class="btn" href="/cuckoo-installation/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1106,7 +1255,7 @@
 <li>Python Virtual Environment: Conda
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/cuckoo-install-failure-pillow/#more" rel="contents">
+            <a class="btn" href="/cuckoo-install-failure-pillow/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1259,7 +1408,7 @@
 <li>使用interface創建schema，並應用在既有的RDD上得到DataFrame
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/spark-sql-dataframe-rdd/#more" rel="contents">
+            <a class="btn" href="/spark-sql-dataframe-rdd/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1405,7 +1554,7 @@
           <h2 id="Spark-SQL-DataFrame-Operations"><a href="#Spark-SQL-DataFrame-Operations" class="headerlink" title="Spark SQL DataFrame Operations"></a>Spark SQL DataFrame Operations</h2><h3 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> org.apache.spark.sql.<span class="type">SparkSession</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">DataFrameDemo</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</div><div class="line"></div><div class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span></div><div class="line">      .builder().master(<span class="string">"local[2]"</span>)</div><div class="line">      .appName(<span class="string">"DataFrameDemo"</span>)</div><div class="line">      .getOrCreate()</div><div class="line"></div><div class="line">    <span class="keyword">val</span> df = spark.read.format(<span class="string">"json"</span>).load(<span class="string">"file/people.json"</span>)</div><div class="line">    println(<span class="string">"Displays the content of the DataFrame to stdout"</span>)</div><div class="line">    df.show()</div><div class="line"></div><div class="line">    println(<span class="string">"Print the schema in a tree format"</span>)</div><div class="line">    df.printSchema()</div><div class="line"></div><div class="line">    println(<span class="string">"Select only the name column"</span>)</div><div class="line">    df.select(<span class="string">"name"</span>).show()</div><div class="line"></div><div class="line">    <span class="comment">// This import is needed to use the $-notation</span></div><div class="line">    <span class="keyword">import</span> spark.implicits._</div><div class="line"></div><div class="line">    println(<span class="string">"Select everybody, but increment the age by 1"</span>)</div><div class="line">    df.select($<span class="string">"name"</span>, $<span class="string">"age"</span> + <span class="number">1</span>).show()</div><div class="line"></div><div class="line">    println(<span class="string">"Select people older than 21"</span>)</div><div class="line">    df.filter($<span class="string">"age"</span> &gt; <span class="number">21</span>).show()</div><div class="line"></div><div class="line">    spark.stop()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/spark-sql-dataFrame-operations/#more" rel="contents">
+            <a class="btn" href="/spark-sql-dataFrame-operations/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1564,153 +1713,7 @@
 <li>可以使用Java或Scala來進行操作，Python暫時不支持DataSet API
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/spark-sql-dataset-dataframe/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/spark-sql-architecture/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="0x90e">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="0x90e's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/spark-sql-architecture/" itemprop="url">Spark SQL Architecture</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-02T01:16:28+08:00">
-                2017-12-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Big-data/" itemprop="url" rel="index">
-                    <span itemprop="name">Big data</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="Spark-SQL-architecture"><a href="#Spark-SQL-architecture" class="headerlink" title="Spark SQL architecture"></a>Spark SQL architecture</h2><img src="/2017/12/02/spark-sql-architecture/spark_sql_architecture.svg" width="900">
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/spark-sql-architecture/#more" rel="contents">
+            <a class="btn" href="/spark-sql-dataset-dataframe/" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1802,7 +1805,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
