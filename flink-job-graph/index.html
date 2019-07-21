@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Flink," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="延續上篇Stream Graph產生，此篇說明Job Graph生成的過程與目的透過下方的連續調用會到Job Graph的生成主要邏輯代碼StreamingJobGraphGenerator的createJobGraph()@org/apache/flink/streaming/api/graph/StreamingJobGraphGenerator.java">
+<meta name="keywords" content="Flink">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flink Job Graph">
+<meta property="og:url" content="https://0x90e.github.io/flink-job-graph/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="延續上篇Stream Graph產生，此篇說明Job Graph生成的過程與目的透過下方的連續調用會到Job Graph的生成主要邏輯代碼StreamingJobGraphGenerator的createJobGraph()@org/apache/flink/streaming/api/graph/StreamingJobGraphGenerator.java">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-07-21T13:14:58.961Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flink Job Graph">
+<meta name="twitter:description" content="延續上篇Stream Graph產生，此篇說明Job Graph生成的過程與目的透過下方的連續調用會到Job Graph的生成主要邏輯代碼StreamingJobGraphGenerator的createJobGraph()@org/apache/flink/streaming/api/graph/StreamingJobGraphGenerator.java">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/flink-job-graph/"/>
+
+
+
+
+
+  <title>Flink Job Graph | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/flink-job-graph/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Flink Job Graph</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-21T21:13:44+08:00">
+                2019-07-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">Big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>延續上篇Stream Graph產生，此篇說明Job Graph生成的過程與目的<br>透過下方的連續調用會到Job Graph的生成主要邏輯代碼StreamingJobGraphGenerator的createJobGraph()@org/apache/flink/streaming/api/graph/StreamingJobGraphGenerator.java<br><a id="more"></a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@PublicEvolving</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamContextEnvironment</span> <span class="keyword">extends</span> <span class="title">StreamExecutionEnvironment</span> </span>&#123;</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> JobExecutionResult <span class="title">execute</span><span class="params">(String jobName)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		Preconditions.checkNotNull(jobName, <span class="string">"Streaming Job name should not be null."</span>);</div><div class="line"></div><div class="line">		StreamGraph streamGraph = <span class="keyword">this</span>.getStreamGraph();</div><div class="line">		streamGraph.setJobName(jobName);</div><div class="line"></div><div class="line">		transformations.clear();</div><div class="line"></div><div class="line">		<span class="comment">// execute the programs</span></div><div class="line">		<span class="keyword">if</span> (ctx <span class="keyword">instanceof</span> DetachedEnvironment) &#123;</div><div class="line">			<span class="comment">// ...</span></div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="keyword">return</span> ctx</div><div class="line">				.getClient()</div><div class="line">				.run(streamGraph, ctx.getJars(), ctx.getClasspaths(), ctx.getUserCodeClassLoader(), ctx.getSavepointRestoreSettings())</div><div class="line">				.getJobExecutionResult();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ClusterClient</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> JobSubmissionResult <span class="title">run</span><span class="params">(FlinkPlan compiledPlan,</span></span></div><div class="line"><span class="function"><span class="params">			List&lt;URL&gt; libraries, List&lt;URL&gt; classpaths, ClassLoader classLoader, SavepointRestoreSettings savepointSettings)</span></span></div><div class="line"><span class="function">			<span class="keyword">throws</span> ProgramInvocationException </span>&#123;</div><div class="line">		JobGraph job = getJobGraph(flinkConfig, compiledPlan, libraries, classpaths, savepointSettings);</div><div class="line">		<span class="keyword">return</span> submitJob(job, classLoader);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> JobGraph <span class="title">getJobGraph</span><span class="params">(Configuration flinkConfig, FlinkPlan optPlan, List&lt;URL&gt; jarFiles, List&lt;URL&gt; classpaths, SavepointRestoreSettings savepointSettings)</span> </span>&#123;</div><div class="line">		JobGraph job;</div><div class="line">		<span class="keyword">if</span> (optPlan <span class="keyword">instanceof</span> StreamingPlan) &#123;</div><div class="line">			<span class="comment">// StreamingPlan</span></div><div class="line">			job = ((StreamingPlan) optPlan).getJobGraph();</div><div class="line">			job.setSavepointRestoreSettings(savepointSettings);</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="comment">// ...</span></div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">// ...</span></div><div class="line"></div><div class="line">		<span class="keyword">return</span> job;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>@org/apache/flink/streaming/api/graph/StreamGraph.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Internal</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamGraph</span> <span class="keyword">extends</span> <span class="title">StreamingPlan</span> </span>&#123;</div><div class="line">	<span class="meta">@SuppressWarnings</span>(<span class="string">"deprecation"</span>)</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> JobGraph <span class="title">getJobGraph</span><span class="params">(@Nullable JobID jobID)</span> </span>&#123;</div><div class="line">		<span class="comment">// ...</span></div><div class="line"></div><div class="line">		<span class="keyword">return</span> StreamingJobGraphGenerator.createJobGraph(<span class="keyword">this</span>, jobID);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>@org/apache/flink/streaming/api/graph/StreamingJobGraphGenerator.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Internal</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamingJobGraphGenerator</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> JobGraph <span class="title">createJobGraph</span><span class="params">(StreamGraph streamGraph, @Nullable JobID jobID)</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">new</span> StreamingJobGraphGenerator(streamGraph, jobID).createJobGraph();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="title">StreamingJobGraphGenerator</span><span class="params">(StreamGraph streamGraph, @Nullable JobID jobID)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.streamGraph = streamGraph;</div><div class="line">		<span class="keyword">this</span>.defaultStreamGraphHasher = <span class="keyword">new</span> StreamGraphHasherV2();</div><div class="line">		<span class="keyword">this</span>.legacyStreamGraphHashers = Arrays.asList(<span class="keyword">new</span> StreamGraphUserHashHasher());</div><div class="line"></div><div class="line">		<span class="comment">// ...</span></div><div class="line"></div><div class="line">		jobGraph = <span class="keyword">new</span> JobGraph(jobID, streamGraph.getJobName());</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> JobGraph <span class="title">createJobGraph</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">		<span class="comment">// make sure that all vertices start immediately</span></div><div class="line">		jobGraph.setScheduleMode(ScheduleMode.EAGER);</div><div class="line"></div><div class="line">		<span class="comment">// Generate deterministic hashes for the nodes in order to identify them across</span></div><div class="line">		<span class="comment">// submission iff they didn't change.</span></div><div class="line">		Map&lt;Integer, <span class="keyword">byte</span>[]&gt; hashes = defaultStreamGraphHasher.traverseStreamGraphAndGenerateHashes(streamGraph);</div><div class="line"></div><div class="line">		<span class="comment">// Generate legacy version hashes for backwards compatibility</span></div><div class="line">		List&lt;Map&lt;Integer, <span class="keyword">byte</span>[]&gt;&gt; legacyHashes = <span class="keyword">new</span> ArrayList&lt;&gt;(legacyStreamGraphHashers.size());</div><div class="line">		<span class="keyword">for</span> (StreamGraphHasher hasher : legacyStreamGraphHashers) &#123;</div><div class="line">			legacyHashes.add(hasher.traverseStreamGraphAndGenerateHashes(streamGraph));</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		Map&lt;Integer, List&lt;Tuple2&lt;<span class="keyword">byte</span>[], <span class="keyword">byte</span>[]&gt;&gt;&gt; chainedOperatorHashes = <span class="keyword">new</span> HashMap&lt;&gt;();</div><div class="line"></div><div class="line">		setChaining(hashes, legacyHashes, chainedOperatorHashes);</div><div class="line"></div><div class="line">		setPhysicalEdges();</div><div class="line"></div><div class="line">		setSlotSharingAndCoLocation();</div><div class="line"></div><div class="line">		configureCheckpointing();</div><div class="line"></div><div class="line">		JobGraphGenerator.addUserArtifactEntries(streamGraph.getEnvironment().getCachedFiles(), jobGraph);</div><div class="line"></div><div class="line">		<span class="comment">// set the ExecutionConfig last when it has been finalized</span></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			jobGraph.setExecutionConfig(streamGraph.getExecutionConfig());</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalConfigurationException(<span class="string">"Could not serialize the ExecutionConfig."</span> +</div><div class="line">					<span class="string">"This indicates that non-serializable types (like custom serializers) were registered"</span>);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">return</span> jobGraph;</div><div class="line">	&#125;    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>@org/apache/flink/runtime/jobgraph/JobGraph.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JobGraph</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</div><div class="line">	<span class="comment">/**</span></div><div class="line"><span class="comment">	 * Constructs a new job graph with the given job ID (or a random ID, if &#123;<span class="doctag">@code</span> null&#125; is passed),</span></div><div class="line"><span class="comment">	 * the given name and the given execution configuration (see &#123;<span class="doctag">@link</span> ExecutionConfig&#125;).</span></div><div class="line"><span class="comment">	 * The ExecutionConfig will be serialized and can't be modified afterwards.</span></div><div class="line"><span class="comment">	 *</span></div><div class="line"><span class="comment">	 * <span class="doctag">@param</span> jobId The id of the job. A random ID is generated, if &#123;<span class="doctag">@code</span> null&#125; is passed.</span></div><div class="line"><span class="comment">	 * <span class="doctag">@param</span> jobName The name of the job.</span></div><div class="line"><span class="comment">	 */</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">JobGraph</span><span class="params">(JobID jobId, String jobName)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.jobID = jobId == <span class="keyword">null</span> ? <span class="keyword">new</span> JobID() : jobId;</div><div class="line">		<span class="keyword">this</span>.jobName = jobName == <span class="keyword">null</span> ? <span class="string">"(unnamed job)"</span> : jobName;</div><div class="line"></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			setExecutionConfig(<span class="keyword">new</span> ExecutionConfig());</div><div class="line">		&#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">			<span class="comment">// this should never happen, since an empty execution config is always serializable</span></div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"bug, empty execution config is not serializable"</span>);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="createJobGraph"><a href="#createJobGraph" class="headerlink" title="createJobGraph"></a>createJobGraph</h3><ul>
+<li><p>defaultStreamGraphHasher.traverseStreamGraphAndGenerateHashes(…)</p>
+<ul>
+<li>defaultStreamGraphHasher為StreamGraphHasherV2@org/apache/flink/streaming/api/graph/StreamGraphHasherV2.java</li>
+<li>目的<ul>
+<li>是產生每個StreamNode擁有唯一Hash Id</li>
+<li>擁有相同邏輯的Stream Graph，會得到相同的Hashed Stream Graph</li>
+</ul>
+</li>
+<li>方法<ul>
+<li>使用Source作為起點，廣度優先遍歷傳入的streamGraph，逐一產生每個StreamNode的Hash Id</li>
+<li>若使用者有指定UID，則使用UID作為產生Hash Id的入參，否則使用StreamNode相關訊息作為產生Hash Id的入參<ul>
+<li>無法直接使用StreamNode id來作為Hash Id的入參是因為其是一個靜態遞增變量，同樣的Stream Graph可能會得到不同的Hash Id輸出</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>setChaining</p>
+<ul>
+<li>目的<ul>
+<li>生成JobVertex，JobEdge，並盡量將多個StreamNode Chain在一起</li>
+<li>將能Chain的兩個或多個節點合成一個節點，減少傳輸量，與序列化/反序列化的過程</li>
+</ul>
+</li>
+<li>方法<ul>
+<li>使用Source作為起點，廣度優先遍歷傳入的streamGraph，將盡量多的StreamNode chain在一起，並產生JobVertex</li>
+<li>根據isChaninable判斷是否能Chain</li>
+<li>將StreamNode中的config配置到StreamConfig中，其中包括序列化器、StreamOperator、Checkpoint等相關配置，準備發送給JobManager和 TaskManager</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>setPhysicalEdges<ul>
+<li>目的<ul>
+<li>將每個JobVertex的入邊集合序列化到對應JobVertex的StreamConfig中</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>setSlotSharing<ul>
+<li>目的<ul>
+<li>根據group name，為每個JobVertex指定所屬的SlotSharingGroup</li>
+<li>針對Iteration的頭尾設置CoLocationGroup</li>
+<li>以及针对 Iteration的头尾设置  CoLocationGroup</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>configureCheckpointing(<ul>
+<li>目的<ul>
+<li>配置checkpoint</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>configureRestartStrategy()<ul>
+<li>目的<ul>
+<li>配置重啟策略</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamGraphHasherV2</span> <span class="keyword">implements</span> <span class="title">StreamGraphHasher</span> </span>&#123;</div><div class="line">	</div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">	 * Returns a map with a hash for each &#123;<span class="doctag">@link</span> StreamNode&#125; of the &#123;<span class="doctag">@link</span></span></div><div class="line"><span class="comment">	 * StreamGraph&#125;. The hash is used as the &#123;<span class="doctag">@link</span> JobVertexID&#125; in order to</span></div><div class="line"><span class="comment">	 * identify nodes across job submissions if they didn't change.</span></div><div class="line"><span class="comment">	 *</span></div><div class="line"><span class="comment">	 * &lt;p&gt;The complete &#123;<span class="doctag">@link</span> StreamGraph&#125; is traversed. The hash is either</span></div><div class="line"><span class="comment">	 * computed from the transformation's user-specified id (see</span></div><div class="line"><span class="comment">	 * &#123;<span class="doctag">@link</span> StreamTransformation#getUid()&#125;) or generated in a deterministic way.</span></div><div class="line"><span class="comment">	 *</span></div><div class="line"><span class="comment">	 * &lt;p&gt;The generated hash is deterministic with respect to:</span></div><div class="line"><span class="comment">	 * &lt;ul&gt;</span></div><div class="line"><span class="comment">	 *   &lt;li&gt;node-local properties (node ID),</span></div><div class="line"><span class="comment">	 *   &lt;li&gt;chained output nodes, and</span></div><div class="line"><span class="comment">	 *   &lt;li&gt;input nodes hashes</span></div><div class="line"><span class="comment">	 * &lt;/ul&gt;</span></div><div class="line"><span class="comment">	 *</span></div><div class="line"><span class="comment">	 * <span class="doctag">@return</span> A map from &#123;<span class="doctag">@link</span> StreamNode#id&#125; to hash as 16-byte array.</span></div><div class="line"><span class="comment">	 */</span>    </div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="keyword">public</span> Map&lt;Integer, <span class="keyword">byte</span>[]&gt; traverseStreamGraphAndGenerateHashes(StreamGraph streamGraph) &#123;</div><div class="line">		<span class="comment">// The hash function used to generate the hash</span></div><div class="line">		<span class="keyword">final</span> HashFunction hashFunction = Hashing.murmur3_128(<span class="number">0</span>);</div><div class="line">		<span class="keyword">final</span> Map&lt;Integer, <span class="keyword">byte</span>[]&gt; hashes = <span class="keyword">new</span> HashMap&lt;&gt;();</div><div class="line"></div><div class="line">		Set&lt;Integer&gt; visited = <span class="keyword">new</span> HashSet&lt;&gt;();</div><div class="line">		Queue&lt;StreamNode&gt; remaining = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</div><div class="line"></div><div class="line">		<span class="comment">// We need to make the source order deterministic. The source IDs are</span></div><div class="line">		<span class="comment">// not returned in the same order, which means that submitting the same</span></div><div class="line">		<span class="comment">// program twice might result in different traversal, which breaks the</span></div><div class="line">		<span class="comment">// deterministic hash assignment.</span></div><div class="line">		List&lt;Integer&gt; sources = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">		<span class="keyword">for</span> (Integer sourceNodeId : streamGraph.getSourceIDs()) &#123;</div><div class="line">			sources.add(sourceNodeId);</div><div class="line">		&#125;</div><div class="line">		Collections.sort(sources);</div><div class="line"></div><div class="line">		<span class="comment">//</span></div><div class="line">		<span class="comment">// Traverse the graph in a breadth-first manner. Keep in mind that</span></div><div class="line">		<span class="comment">// the graph is not a tree and multiple paths to nodes can exist.</span></div><div class="line">		<span class="comment">//</span></div><div class="line"></div><div class="line">		<span class="comment">// Start with source nodes</span></div><div class="line">		<span class="keyword">for</span> (Integer sourceNodeId : sources) &#123;</div><div class="line">			remaining.add(streamGraph.getStreamNode(sourceNodeId));</div><div class="line">			visited.add(sourceNodeId);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		StreamNode currentNode;</div><div class="line">		<span class="keyword">while</span> ((currentNode = remaining.poll()) != <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="comment">// Generate the hash code. Because multiple path exist to each</span></div><div class="line">			<span class="comment">// node, we might not have all required inputs available to</span></div><div class="line">			<span class="comment">// generate the hash code.</span></div><div class="line">			<span class="keyword">if</span> (generateNodeHash(currentNode, hashFunction, hashes, streamGraph.isChainingEnabled(), streamGraph)) &#123;</div><div class="line">				<span class="comment">// Add the child nodes</span></div><div class="line">				<span class="keyword">for</span> (StreamEdge outEdge : currentNode.getOutEdges()) &#123;</div><div class="line">					StreamNode child = streamGraph.getTargetVertex(outEdge);</div><div class="line"></div><div class="line">					<span class="keyword">if</span> (!visited.contains(child.getId())) &#123;</div><div class="line">						remaining.add(child);</div><div class="line">						visited.add(child.getId());</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="comment">// We will revisit this later.</span></div><div class="line">				visited.remove(currentNode.getId());</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">return</span> hashes;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Internal</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamingJobGraphGenerator</span> </span>&#123;</div><div class="line">	<span class="comment">/**</span></div><div class="line"><span class="comment">	 * Sets up task chains from the source &#123;<span class="doctag">@link</span> StreamNode&#125; instances.</span></div><div class="line"><span class="comment">	 *</span></div><div class="line"><span class="comment">	 * &lt;p&gt;This will recursively create all &#123;<span class="doctag">@link</span> JobVertex&#125; instances.</span></div><div class="line"><span class="comment">	 */</span></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">setChaining</span><span class="params">(Map&lt;Integer, <span class="keyword">byte</span>[]&gt; hashes, List&lt;Map&lt;Integer, <span class="keyword">byte</span>[]&gt;&gt; legacyHashes, Map&lt;Integer, List&lt;Tuple2&lt;<span class="keyword">byte</span>[], <span class="keyword">byte</span>[]&gt;&gt;&gt; chainedOperatorHashes)</span> </span>&#123;</div><div class="line">		<span class="keyword">for</span> (Integer sourceNodeId : streamGraph.getSourceIDs()) &#123;</div><div class="line">			createChain(sourceNodeId, sourceNodeId, hashes, legacyHashes, <span class="number">0</span>, chainedOperatorHashes);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> List&lt;StreamEdge&gt; <span class="title">createChain</span><span class="params">(</span></span></div><div class="line"><span class="function"><span class="params">			Integer startNodeId,</span></span></div><div class="line"><span class="function"><span class="params">			Integer currentNodeId,</span></span></div><div class="line"><span class="function"><span class="params">			Map&lt;Integer, <span class="keyword">byte</span>[]&gt; hashes,</span></span></div><div class="line"><span class="function"><span class="params">			List&lt;Map&lt;Integer, <span class="keyword">byte</span>[]&gt;&gt; legacyHashes,</span></span></div><div class="line"><span class="function"><span class="params">			<span class="keyword">int</span> chainIndex,</span></span></div><div class="line"><span class="function"><span class="params">			Map&lt;Integer, List&lt;Tuple2&lt;<span class="keyword">byte</span>[], <span class="keyword">byte</span>[]&gt;&gt;&gt; chainedOperatorHashes)</span> </span>&#123;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (!builtVertices.contains(startNodeId)) &#123;</div><div class="line"></div><div class="line">			List&lt;StreamEdge&gt; transitiveOutEdges = <span class="keyword">new</span> ArrayList&lt;StreamEdge&gt;();</div><div class="line"></div><div class="line">			List&lt;StreamEdge&gt; chainableOutputs = <span class="keyword">new</span> ArrayList&lt;StreamEdge&gt;();</div><div class="line">			List&lt;StreamEdge&gt; nonChainableOutputs = <span class="keyword">new</span> ArrayList&lt;StreamEdge&gt;();</div><div class="line"></div><div class="line">			<span class="keyword">for</span> (StreamEdge outEdge : streamGraph.getStreamNode(currentNodeId).getOutEdges()) &#123;</div><div class="line">				<span class="keyword">if</span> (isChainable(outEdge, streamGraph)) &#123;</div><div class="line">					chainableOutputs.add(outEdge);</div><div class="line">				&#125; <span class="keyword">else</span> &#123;</div><div class="line">					nonChainableOutputs.add(outEdge);</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="keyword">for</span> (StreamEdge chainable : chainableOutputs) &#123;</div><div class="line">				transitiveOutEdges.addAll(</div><div class="line">						createChain(startNodeId, chainable.getTargetId(), hashes, legacyHashes, chainIndex + <span class="number">1</span>, chainedOperatorHashes));</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="keyword">for</span> (StreamEdge nonChainable : nonChainableOutputs) &#123;</div><div class="line">				transitiveOutEdges.add(nonChainable);</div><div class="line">				createChain(nonChainable.getTargetId(), nonChainable.getTargetId(), hashes, legacyHashes, <span class="number">0</span>, chainedOperatorHashes);</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			List&lt;Tuple2&lt;<span class="keyword">byte</span>[], <span class="keyword">byte</span>[]&gt;&gt; operatorHashes =</div><div class="line">				chainedOperatorHashes.computeIfAbsent(startNodeId, k -&gt; <span class="keyword">new</span> ArrayList&lt;&gt;());</div><div class="line"></div><div class="line">			<span class="keyword">byte</span>[] primaryHashBytes = hashes.get(currentNodeId);</div><div class="line"></div><div class="line">			<span class="keyword">for</span> (Map&lt;Integer, <span class="keyword">byte</span>[]&gt; legacyHash : legacyHashes) &#123;</div><div class="line">				operatorHashes.add(<span class="keyword">new</span> Tuple2&lt;&gt;(primaryHashBytes, legacyHash.get(currentNodeId)));</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			chainedNames.put(currentNodeId, createChainedName(currentNodeId, chainableOutputs));</div><div class="line">			chainedMinResources.put(currentNodeId, createChainedMinResources(currentNodeId, chainableOutputs));</div><div class="line">			chainedPreferredResources.put(currentNodeId, createChainedPreferredResources(currentNodeId, chainableOutputs));</div><div class="line"></div><div class="line">			StreamConfig config = currentNodeId.equals(startNodeId)</div><div class="line">					? createJobVertex(startNodeId, hashes, legacyHashes, chainedOperatorHashes)</div><div class="line">					: <span class="keyword">new</span> StreamConfig(<span class="keyword">new</span> Configuration());</div><div class="line"></div><div class="line">			setVertexConfig(currentNodeId, config, chainableOutputs, nonChainableOutputs);</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (currentNodeId.equals(startNodeId)) &#123;</div><div class="line"></div><div class="line">				config.setChainStart();</div><div class="line">				config.setChainIndex(<span class="number">0</span>);</div><div class="line">				config.setOperatorName(streamGraph.getStreamNode(currentNodeId).getOperatorName());</div><div class="line">				config.setOutEdgesInOrder(transitiveOutEdges);</div><div class="line">				config.setOutEdges(streamGraph.getStreamNode(currentNodeId).getOutEdges());</div><div class="line"></div><div class="line">				<span class="keyword">for</span> (StreamEdge edge : transitiveOutEdges) &#123;</div><div class="line">					connect(startNodeId, edge);</div><div class="line">				&#125;</div><div class="line"></div><div class="line">				config.setTransitiveChainedTaskConfigs(chainedConfigs.get(startNodeId));</div><div class="line"></div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line"></div><div class="line">				Map&lt;Integer, StreamConfig&gt; chainedConfs = chainedConfigs.get(startNodeId);</div><div class="line"></div><div class="line">				<span class="keyword">if</span> (chainedConfs == <span class="keyword">null</span>) &#123;</div><div class="line">					chainedConfigs.put(startNodeId, <span class="keyword">new</span> HashMap&lt;Integer, StreamConfig&gt;());</div><div class="line">				&#125;</div><div class="line">				config.setChainIndex(chainIndex);</div><div class="line">				StreamNode node = streamGraph.getStreamNode(currentNodeId);</div><div class="line">				config.setOperatorName(node.getOperatorName());</div><div class="line">				chainedConfigs.get(startNodeId).put(currentNodeId, config);</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			config.setOperatorID(<span class="keyword">new</span> OperatorID(primaryHashBytes));</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (chainableOutputs.isEmpty()) &#123;</div><div class="line">				config.setChainEnd();</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> transitiveOutEdges;</div><div class="line"></div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><ul>
+<li>Stream Graph是邏輯是的DAG圖，不需要關心JobManager如何調度每個Operator，Job Graph是對Stream Graph進行切分與合併，因為有些Stream Node是可以被Chain在一起，並且一起被JobManager安排調度的，換句話說，Job Graph的DAG內的每一個頂點就是JobManger的一個調度單位</li>
+<li>一個JobVertex包含一個或多個Operator，JobVertex的輸入是JobEdge，輸出是IntermediateDataSet</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Flink/" rel="tag"># Flink</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/flink-stream-graph/" rel="next" title="Flink Stream Graph">
+                <i class="fa fa-chevron-left"></i> Flink Stream Graph
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#createJobGraph"><span class="nav-number">1.</span> <span class="nav-text">createJobGraph</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary"><span class="nav-number">2.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
