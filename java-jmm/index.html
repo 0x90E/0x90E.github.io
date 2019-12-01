@@ -75,18 +75,18 @@
 
 
 
-<meta name="description" content="Java memory model(JMM)本篇文章說明Java memory model(JMM)為什麼會存在，其是為了解決什麼問題而產生的，以及其如何克服問題。">
+<meta name="description" content="Java Memory Model(JMM)本篇文章說明Java memory model(JMM)為什麼會存在，其是為了解決什麼問題而產生的，以及其如何克服問題。">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java_jmm">
+<meta property="og:title" content="Java Memory Model">
 <meta property="og:url" content="https://0x90e.github.io/java-jmm/index.html">
 <meta property="og:site_name" content="0x90e&#39;s Blog">
-<meta property="og:description" content="Java memory model(JMM)本篇文章說明Java memory model(JMM)為什麼會存在，其是為了解決什麼問題而產生的，以及其如何克服問題。">
+<meta property="og:description" content="Java Memory Model(JMM)本篇文章說明Java memory model(JMM)為什麼會存在，其是為了解決什麼問題而產生的，以及其如何克服問題。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-01T10:20:41.719Z">
+<meta property="og:updated_time" content="2019-12-01T10:27:26.195Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java_jmm">
-<meta name="twitter:description" content="Java memory model(JMM)本篇文章說明Java memory model(JMM)為什麼會存在，其是為了解決什麼問題而產生的，以及其如何克服問題。">
+<meta name="twitter:title" content="Java Memory Model">
+<meta name="twitter:description" content="Java Memory Model(JMM)本篇文章說明Java memory model(JMM)為什麼會存在，其是為了解決什麼問題而產生的，以及其如何克服問題。">
 
 
 
@@ -122,7 +122,7 @@
 
 
 
-  <title>java_jmm | 0x90e's Blog</title>
+  <title>Java Memory Model | 0x90e's Blog</title>
   
 
 
@@ -275,7 +275,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">java_jmm</h2>
+          <h2 class="post-title" itemprop="name headline">Java Memory Model</h2>
         
 
         <div class="post-meta">
@@ -352,7 +352,7 @@
       
 
       
-        <h2 id="Java-memory-model-JMM"><a href="#Java-memory-model-JMM" class="headerlink" title="Java memory model(JMM)"></a>Java memory model(JMM)</h2><p>本篇文章說明Java memory model(JMM)為什麼會存在，其是為了解決什麼問題而產生的，以及其如何克服問題。<br><a id="more"></a></p>
+        <h2 id="Java-Memory-Model-JMM"><a href="#Java-Memory-Model-JMM" class="headerlink" title="Java Memory Model(JMM)"></a>Java Memory Model(JMM)</h2><p>本篇文章說明Java memory model(JMM)為什麼會存在，其是為了解決什麼問題而產生的，以及其如何克服問題。<br><a id="more"></a></p>
 <h3 id="Why"><a href="#Why" class="headerlink" title="Why"></a>Why</h3><p>在多核CPU的普遍現在，相同一段代碼在實作語言層面使用多執行緒時，可能會執行在不同的CPU核心中，這會帶來以下兩個問題</p>
 <ol>
 <li>快取一致性(Cache coherence)問題</li>
@@ -382,7 +382,7 @@
 </ol>
 <h4 id="保證數據的可見性"><a href="#保證數據的可見性" class="headerlink" title="保證數據的可見性"></a>保證數據的可見性</h4><p>保證某些資料或者某條指令的執行結果的記憶體可見性，在插入Memory Barrier後，將會在將在Barrier之前寫入cache的資料，刷回主記憶體中，從而保證任何CPU上的執行緒都可以讀到最新版本得資料。解決快取一致性問題</p>
 <h4 id="防止指令之間的重排序"><a href="#防止指令之間的重排序" class="headerlink" title="防止指令之間的重排序"></a>防止指令之間的重排序</h4><p>保證CPU或編譯器在記憶體進行特定操作時，嚴格按照一定的順序執行，在插入Memory Barrier時，CPU與編譯器會得知，不能將Memory Barrier前後的指令進行重排。解決在多執行緒場景下，CPU或編譯器重排序帶來的潛在問題。</p>
-<h3 id="Java-memory-model-JMM-1"><a href="#Java-memory-model-JMM-1" class="headerlink" title="Java memory model(JMM)"></a>Java memory model(JMM)</h3><p>JMM的作用是提供語句，封裝管理CPU與編譯器的優化，讓開發者可以在併發環境下，讓程式的表現跟預期的一樣。<br>JMM透過Happens-before關係向開發者提供跨執行緒的記憶體可見性</p>
+<h3 id="Java-memory-model-JMM"><a href="#Java-memory-model-JMM" class="headerlink" title="Java memory model(JMM)"></a>Java memory model(JMM)</h3><p>JMM的作用是提供語句，封裝管理CPU與編譯器的優化，讓開發者可以在併發環境下，讓程式的表現跟預期的一樣。<br>JMM透過Happens-before關係向開發者提供跨執行緒的記憶體可見性</p>
 <ul>
 <li><a href="http://www.cs.umd.edu/~pugh/java/memoryModel/jsr133.pdf" title="JSR-133: JavaTM Memory Model and Thread Specification" target="_blank" rel="external">JR133</a>保證併發性一致性<ul>
 <li>可見性<ul>
@@ -632,7 +632,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-memory-model-JMM"><span class="nav-number">1.</span> <span class="nav-text">Java memory model(JMM)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Why"><span class="nav-number">1.1.</span> <span class="nav-text">Why</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#快取一致性-Cache-coherence-問題"><span class="nav-number">1.1.1.</span> <span class="nav-text">快取一致性(Cache coherence)問題</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU優化和指令重排"><span class="nav-number">1.1.2.</span> <span class="nav-text">CPU優化和指令重排</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原子性-Atomicity-、可見性-Visibility-、有序性-Ordering"><span class="nav-number">1.1.3.</span> <span class="nav-text">原子性(Atomicity)、可見性(Visibility)、有序性(Ordering)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How"><span class="nav-number">1.2.</span> <span class="nav-text">How</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#保證數據的可見性"><span class="nav-number">1.2.1.</span> <span class="nav-text">保證數據的可見性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#防止指令之間的重排序"><span class="nav-number">1.2.2.</span> <span class="nav-text">防止指令之間的重排序</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-memory-model-JMM-1"><span class="nav-number">1.3.</span> <span class="nav-text">Java memory model(JMM)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Happen-before"><span class="nav-number">1.3.1.</span> <span class="nav-text">Happen-before</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Volatile-Final的語法改進"><span class="nav-number">1.3.2.</span> <span class="nav-text">Volatile, Final的語法改進</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summury"><span class="nav-number">1.4.</span> <span class="nav-text">Summury</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">1.5.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-Memory-Model-JMM"><span class="nav-number">1.</span> <span class="nav-text">Java Memory Model(JMM)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Why"><span class="nav-number">1.1.</span> <span class="nav-text">Why</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#快取一致性-Cache-coherence-問題"><span class="nav-number">1.1.1.</span> <span class="nav-text">快取一致性(Cache coherence)問題</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU優化和指令重排"><span class="nav-number">1.1.2.</span> <span class="nav-text">CPU優化和指令重排</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原子性-Atomicity-、可見性-Visibility-、有序性-Ordering"><span class="nav-number">1.1.3.</span> <span class="nav-text">原子性(Atomicity)、可見性(Visibility)、有序性(Ordering)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How"><span class="nav-number">1.2.</span> <span class="nav-text">How</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#保證數據的可見性"><span class="nav-number">1.2.1.</span> <span class="nav-text">保證數據的可見性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#防止指令之間的重排序"><span class="nav-number">1.2.2.</span> <span class="nav-text">防止指令之間的重排序</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-memory-model-JMM"><span class="nav-number">1.3.</span> <span class="nav-text">Java memory model(JMM)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Happen-before"><span class="nav-number">1.3.1.</span> <span class="nav-text">Happen-before</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Volatile-Final的語法改進"><span class="nav-number">1.3.2.</span> <span class="nav-text">Volatile, Final的語法改進</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summury"><span class="nav-number">1.4.</span> <span class="nav-text">Summury</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">1.5.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></div>
             
 
           </div>
