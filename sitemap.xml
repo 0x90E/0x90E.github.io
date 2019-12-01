@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://0x90e.github.io/java-jmm/</loc>
+    
+    <lastmod>2019-12-01T10:20:41.719Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0x90e.github.io/flink-execution-graph/</loc>
     
     <lastmod>2019-10-20T11:54:00.920Z</lastmod>

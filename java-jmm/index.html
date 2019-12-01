@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Java," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Java memory model(JMM)本篇文章說明Java memory model(JMM)為什麼會存在，其是為了解決什麼問題而產生的，以及其如何克服問題。">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java_jmm">
+<meta property="og:url" content="https://0x90e.github.io/java-jmm/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Java memory model(JMM)本篇文章說明Java memory model(JMM)為什麼會存在，其是為了解決什麼問題而產生的，以及其如何克服問題。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-12-01T10:20:41.719Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java_jmm">
+<meta name="twitter:description" content="Java memory model(JMM)本篇文章說明Java memory model(JMM)為什麼會存在，其是為了解決什麼問題而產生的，以及其如何克服問題。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/java-jmm/"/>
+
+
+
+
+
+  <title>java_jmm | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/java-jmm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">java_jmm</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-01T18:15:14+08:00">
+                2019-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Java-memory-model-JMM"><a href="#Java-memory-model-JMM" class="headerlink" title="Java memory model(JMM)"></a>Java memory model(JMM)</h2><p>本篇文章說明Java memory model(JMM)為什麼會存在，其是為了解決什麼問題而產生的，以及其如何克服問題。<br><a id="more"></a></p>
+<h3 id="Why"><a href="#Why" class="headerlink" title="Why"></a>Why</h3><p>在多核CPU的普遍現在，相同一段代碼在實作語言層面使用多執行緒時，可能會執行在不同的CPU核心中，這會帶來以下兩個問題</p>
+<ol>
+<li>快取一致性(Cache coherence)問題</li>
+<li>CPU優化和指令重排</li>
+</ol>
+<h4 id="快取一致性-Cache-coherence-問題"><a href="#快取一致性-Cache-coherence-問題" class="headerlink" title="快取一致性(Cache coherence)問題"></a>快取一致性(Cache coherence)問題</h4><p>每個CPU核心都含有L1 cache，在多執行緒場景下，每個CPU核心對共享數據就可能存在不一致的情況，例如運算完的數據沒有即時同步回主記憶體中，導致在另一個CPU核心進行的操作，是基於上一次操作結果的數據內容。</p>
+<h4 id="CPU優化和指令重排"><a href="#CPU優化和指令重排" class="headerlink" title="CPU優化和指令重排"></a>CPU優化和指令重排</h4><p>為了提高效率與並行度，現代CPU會在執行之前，對傳入的程式進行優化，就是會將傳入的指令進行亂序執行處理。另外Java虛擬機的JIT也會執行指令重排。<br>對程式進行重排序時，會遵循as-if-serial語意，其保證重排序的結果不能改變單執行緒下的執行結果，和CPU、編譯器和Runtime都必須遵循as-if-serial語意。<br>在什麼情況下，重排序會對程式的執行結果會有影響呢？就是在上下文語句中包含數據依賴關係的操作。換句話說，若在單執行緒的環境下，若上下文代碼不存在數據依賴關係，則可以進行重排序。</p>
+<h4 id="原子性-Atomicity-、可見性-Visibility-、有序性-Ordering"><a href="#原子性-Atomicity-、可見性-Visibility-、有序性-Ordering" class="headerlink" title="原子性(Atomicity)、可見性(Visibility)、有序性(Ordering)"></a>原子性(Atomicity)、可見性(Visibility)、有序性(Ordering)</h4><ul>
+<li>原子性<ul>
+<li>一個操作在CPU不能被中斷，只能整個操作完成，或整個操作失敗並回滾。</li>
+</ul>
+</li>
+<li>可見性<ul>
+<li>多執行緒同時訪問一個相同變量時，當一個執行緒修改了變量，其他執行緒可以立即看到變更後的值。</li>
+</ul>
+</li>
+<li>有序性<ul>
+<li>程式執行的順序按照代碼的先後順序執行</li>
+</ul>
+</li>
+</ul>
+<p>綜合以上談到的，快取一致性問題即是可見性問題；而CPU優化會導致原子性問題，CPU優化與指令重排會導致有序性問題。</p>
+<h3 id="How"><a href="#How" class="headerlink" title="How"></a>How</h3><p>針對上述在多執行緒可能導致非預期結果的潛在問題，CPU廠商提出了對應的優化限制方法-記憶體屏障(Memory Barrier)。<br>記憶體屏障提供2個功能:</p>
+<ol>
+<li>保證數據的可見性</li>
+<li>防止指令之間的重排序</li>
+</ol>
+<h4 id="保證數據的可見性"><a href="#保證數據的可見性" class="headerlink" title="保證數據的可見性"></a>保證數據的可見性</h4><p>保證某些資料或者某條指令的執行結果的記憶體可見性，在插入Memory Barrier後，將會在將在Barrier之前寫入cache的資料，刷回主記憶體中，從而保證任何CPU上的執行緒都可以讀到最新版本得資料。解決快取一致性問題</p>
+<h4 id="防止指令之間的重排序"><a href="#防止指令之間的重排序" class="headerlink" title="防止指令之間的重排序"></a>防止指令之間的重排序</h4><p>保證CPU或編譯器在記憶體進行特定操作時，嚴格按照一定的順序執行，在插入Memory Barrier時，CPU與編譯器會得知，不能將Memory Barrier前後的指令進行重排。解決在多執行緒場景下，CPU或編譯器重排序帶來的潛在問題。</p>
+<h3 id="Java-memory-model-JMM-1"><a href="#Java-memory-model-JMM-1" class="headerlink" title="Java memory model(JMM)"></a>Java memory model(JMM)</h3><p>JMM的作用是提供語句，封裝管理CPU與編譯器的優化，讓開發者可以在併發環境下，讓程式的表現跟預期的一樣。<br>JMM透過Happens-before關係向開發者提供跨執行緒的記憶體可見性</p>
+<ul>
+<li><a href="http://www.cs.umd.edu/~pugh/java/memoryModel/jsr133.pdf" title="JSR-133: JavaTM Memory Model and Thread Specification" target="_blank" rel="external">JR133</a>保證併發性一致性<ul>
+<li>可見性<ul>
+<li>保證共享變量的可見性</li>
+</ul>
+</li>
+<li>原子性<ul>
+<li>保證讀/寫原子性</li>
+</ul>
+</li>
+<li>有序性<ul>
+<li>使用鎖保證 一些行為一定在之前</li>
+<li>禁止重排序</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>JR133提出新的JAVA的記憶體模型，其在設計時，考慮到程式開發者、編譯器、CPU之間的關係；開發者希望在一個強約束且易於理解的強記憶體模型基礎上進行開發；在CPU與編譯器的角度，希望記憶體模型不要有過多的干預，讓它們可以盡可能的優化來提高性能。<br>故JR133提出了Happens-Before，在兩者間取得適當的平衡，另外提出volatile, final的語法改進，讓開發者能在多執行緒場景下，保證程式的執行結果。</p>
+<h4 id="Happen-before"><a href="#Happen-before" class="headerlink" title="Happen-before"></a>Happen-before</h4><p>JMM規定了JVM必須遵循一組最小保證，這組保證規定了對變量的寫入操作在何時將對其他執行緒可見。<br>JMM為程式中所有的操作定義了一個偏序關係，稱之為Happens-Before。<br>Happens-Before的處理對象有兩者:</p>
+<ol>
+<li>重排序後與Happens-Before關係指定順序的執行結果不同</li>
+<li>重排序後與Happens-Before關係指定順序的執行結果相同<br>(不影響執行結果是指單執行緒以及正確同步的多執行緒程式)</li>
+</ol>
+<p>JMM面對上述兩者不同性質的重排序，有著不同的策略</p>
+<ol>
+<li>會改變執行結果的重排序，JMM要求CPU/編譯器/JVM禁止對程式進行重排序</li>
+<li>不會改變執行結果的重排序，JMM對CPU/編譯器/JVM的重排序不做干預</li>
+</ol>
+<p>若想保證執行操作B的執行緒看到操作A的結果(無論是否在相同執行緒當中)，那麼在A與B之間必須滿足Happens-Before的關係，如果兩個操作之間缺乏Happens-Before的關係，那麼CPU/編譯器/JVM可以對它們任意的重排序；例如未正確同步的多執行緒操作。<br>如果在讀操作和寫操作之間沒有依照Happens-Before來排序，那麼就會產生數據競爭問題，在正確同步的程式中不存在數據競爭，並且會表現出串型一致性，這意味程式中的所有操作都會按照一種固定的和全局的順序執行。<br>隨然Happens-Before只滿足偏序關係，但同步操作，如鎖的獲得與釋放等操作、volatile變量的讀取與寫入操作，都滿足全序關係，因此，在描述Happens-Before關係時，就可以使用”後續的鎖獲取操作”，和”後續的volatile變量讀取操作”等表達術語來達成全序關係。<br>由上述的策略中，JMM可以在開發者與CPU、編譯器的兩者間做出較好的權衡，一方面保證的易懂與記憶體可見性，一方面保證足夠的優化空間。</p>
+<h4 id="Volatile-Final的語法改進"><a href="#Volatile-Final的語法改進" class="headerlink" title="Volatile, Final的語法改進"></a>Volatile, Final的語法改進</h4><ul>
+<li>Volatile<ul>
+<li>JR133嚴格限制volatile變量與普通變量的重排序，使得volatile的寫-讀和鎖的釋放具有相同的記憶體語意</li>
+</ul>
+</li>
+<li>Final<ul>
+<li>JR133為final增加兩個重排序功能，讓final具有初始化安全性</li>
+</ul>
+</li>
+</ul>
+<h3 id="Summury"><a href="#Summury" class="headerlink" title="Summury"></a>Summury</h3><p>近年來，CPU透過不斷優化來提升效能，包含重排序、時鐘頻率、提升的併發度度和多層快取，編譯器也在不斷改進，通過對指令重新排序來實現優化，以及使用成熟的全局寄存器分配算法。<br>在共享記憶體的多處理器體系架構中，每個處理器都擁有自己的快取，並且定期與主記憶體進行協調，在不同的處理器架構中提供了不同級別的快取一致性，其中一部分只提供最小的保證，作業系統、編譯器以及運行時(有時甚至包含應用程式)需要彌合在硬件能力與執行緒安全需求之間的差異。想要確保每個處理器都能在任意時刻知道其他處理器正在進行的工作，將需要非常大的開銷，在大多時候，這些信息是不需要的，因此處理器會適當放寬存儲一致性，以換取效能的提升。<br>在處理器架構定義的記憶體模型中將告訴應用程式可以獲得怎樣的保證，此外還定義了一些特殊的指令(稱為記憶體屏障)，當需要共享數據時，這些指令就能實現額外的存儲協調保證。<br>Java提供了JMM，讓Java開發人員無需關心不同架構上記憶體模型之間的差異，並且JVM通過在適當的位置上插入記憶體屏障來屏蔽在JMM與底層平台記憶體模型之間的差異。<br>為了保證原子性、可見性和有序性，JMM定義了共享記憶體系統中多執行緒程式讀寫操作行為的規範，透過這些規範對記憶體的讀寫操作，進而保證指令執行的正確性，其規範包含CPU優化、多層快取、優化、指令重排序等。<br>Java關鍵字對應在併發場景下提供的保證:</p>
+<ul>
+<li>原子性<ul>
+<li>Java提供兩個高級字節碼指令monitorenter和monitorexit，因此在Java中可以使用synchronized保證方法和代碼塊內的操作是原子性的</li>
+</ul>
+</li>
+<li>可見性<ul>
+<li>volatile提供在多執行緒環境下的可見性保證，被其修飾的變量在被修改後，可以立即同步到主記憶體中，被其修飾的變量在每次使用之前都從主記憶體中取得</li>
+</ul>
+</li>
+<li>有序性<ul>
+<li>synchronized和volatile提供在多執行緒之間操作的有序性，其可以透過Happen-before關係提供保證</li>
+</ul>
+</li>
+</ul>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li>Java并发编程实战(中文版)</li>
+<li>深入理解Java内存模型</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/flink-execution-graph/" rel="next" title="Flink Execution Graph">
+                <i class="fa fa-chevron-left"></i> Flink Execution Graph
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-memory-model-JMM"><span class="nav-number">1.</span> <span class="nav-text">Java memory model(JMM)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Why"><span class="nav-number">1.1.</span> <span class="nav-text">Why</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#快取一致性-Cache-coherence-問題"><span class="nav-number">1.1.1.</span> <span class="nav-text">快取一致性(Cache coherence)問題</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU優化和指令重排"><span class="nav-number">1.1.2.</span> <span class="nav-text">CPU優化和指令重排</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原子性-Atomicity-、可見性-Visibility-、有序性-Ordering"><span class="nav-number">1.1.3.</span> <span class="nav-text">原子性(Atomicity)、可見性(Visibility)、有序性(Ordering)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How"><span class="nav-number">1.2.</span> <span class="nav-text">How</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#保證數據的可見性"><span class="nav-number">1.2.1.</span> <span class="nav-text">保證數據的可見性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#防止指令之間的重排序"><span class="nav-number">1.2.2.</span> <span class="nav-text">防止指令之間的重排序</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-memory-model-JMM-1"><span class="nav-number">1.3.</span> <span class="nav-text">Java memory model(JMM)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Happen-before"><span class="nav-number">1.3.1.</span> <span class="nav-text">Happen-before</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Volatile-Final的語法改進"><span class="nav-number">1.3.2.</span> <span class="nav-text">Volatile, Final的語法改進</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summury"><span class="nav-number">1.4.</span> <span class="nav-text">Summury</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">1.5.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
