@@ -83,7 +83,7 @@
 <meta property="og:site_name" content="0x90e&#39;s Blog">
 <meta property="og:description" content="Java Memory Model(JMM)本篇文章說明Java memory model(JMM)為什麼會存在，其是為了解決什麼問題而產生的，以及其如何克服問題。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-01T10:27:26.195Z">
+<meta property="og:updated_time" content="2020-02-01T12:20:19.191Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Memory Model">
 <meta name="twitter:description" content="Java Memory Model(JMM)本篇文章說明Java memory model(JMM)為什麼會存在，其是為了解決什麼問題而產生的，以及其如何克服問題。">
@@ -412,7 +412,7 @@
 <li>會改變執行結果的重排序，JMM要求CPU/編譯器/JVM禁止對程式進行重排序</li>
 <li>不會改變執行結果的重排序，JMM對CPU/編譯器/JVM的重排序不做干預</li>
 </ol>
-<p>若想保證執行操作B的執行緒看到操作A的結果(無論是否在相同執行緒當中)，那麼在A與B之間必須滿足Happens-Before的關係，如果兩個操作之間缺乏Happens-Before的關係，那麼CPU/編譯器/JVM可以對它們任意的重排序；例如未正確同步的多執行緒操作。<br>如果在讀操作和寫操作之間沒有依照Happens-Before來排序，那麼就會產生數據競爭問題，在正確同步的程式中不存在數據競爭，並且會表現出串型一致性，這意味程式中的所有操作都會按照一種固定的和全局的順序執行。<br>隨然Happens-Before只滿足偏序關係，但同步操作，如鎖的獲得與釋放等操作、volatile變量的讀取與寫入操作，都滿足全序關係，因此，在描述Happens-Before關係時，就可以使用”後續的鎖獲取操作”，和”後續的volatile變量讀取操作”等表達術語來達成全序關係。<br>由上述的策略中，JMM可以在開發者與CPU、編譯器的兩者間做出較好的權衡，一方面保證的易懂與記憶體可見性，一方面保證足夠的優化空間。</p>
+<p>若想保證執行操作B的執行緒看到操作A的結果(無論是否在相同執行緒當中)，那麼在A與B之間必須滿足Happens-Before的關係，如果兩個操作之間缺乏Happens-Before的關係，那麼CPU/編譯器/JVM可以對它們任意的重排序；例如未正確同步的多執行緒操作。<br>如果在讀操作和寫操作之間沒有依照Happens-Before來排序，那麼就會產生數據競爭問題，在正確同步的程式中不存在數據競爭，並且會表現出串型一致性，這意味程式中的所有操作都會按照一種固定的和全局的順序執行。<br>雖然Happens-Before只滿足偏序關係，但同步操作，如鎖的獲得與釋放等操作、volatile變量的讀取與寫入操作，都滿足全序關係，因此，在描述Happens-Before關係時，就可以使用”後續的鎖獲取操作”，和”後續的volatile變量讀取操作”等表達術語來達成全序關係。<br>由上述的策略中，JMM可以在開發者與CPU、編譯器的兩者間做出較好的權衡，一方面保證的易懂與記憶體可見性，一方面保證足夠的優化空間。</p>
 <h4 id="Volatile-Final的語法改進"><a href="#Volatile-Final的語法改進" class="headerlink" title="Volatile, Final的語法改進"></a>Volatile, Final的語法改進</h4><ul>
 <li>Volatile<ul>
 <li>JR133嚴格限制volatile變量與普通變量的重排序，使得volatile的寫-讀和鎖的釋放具有相同的記憶體語意</li>
@@ -652,7 +652,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
