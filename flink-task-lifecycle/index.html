@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/custom-favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/custom-favicon-16x16-next.png?v=5.1.3">
+
+
+
+
+
+
+  <meta name="keywords" content="Hadoop,Hive,HDFS,Spark,Map Reduce,Big Data,Security" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Basic information Flink version: 1.9  Task Lifecycle此篇依序說明Flink從JobMaster創建ExecutionGraph到提交至TaskExector的流程，以及Task與StreamTask的生命週期">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flink_task_lifecycle">
+<meta property="og:url" content="https://0x90e.github.io/flink-task-lifecycle/index.html">
+<meta property="og:site_name" content="0x90e&#39;s Blog">
+<meta property="og:description" content="Basic information Flink version: 1.9  Task Lifecycle此篇依序說明Flink從JobMaster創建ExecutionGraph到提交至TaskExector的流程，以及Task與StreamTask的生命週期">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-02-05T15:16:46.223Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="flink_task_lifecycle">
+<meta name="twitter:description" content="Basic information Flink version: 1.9  Task Lifecycle此篇依序說明Flink從JobMaster創建ExecutionGraph到提交至TaskExector的流程，以及Task與StreamTask的生命週期">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://0x90e.github.io/flink-task-lifecycle/"/>
+
+
+
+
+
+  <title>flink_task_lifecycle | 0x90e's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-107755816-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0x90e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Chase Excellence,<br/>Sucess will follow.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://0x90e.github.io/flink-task-lifecycle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0x90e">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0x90e's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">flink_task_lifecycle</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-05T22:52:07+08:00">
+                2020-02-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>Page View
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Basic-information"><a href="#Basic-information" class="headerlink" title="Basic information"></a>Basic information</h3><ul>
+<li>Flink version: 1.9</li>
+</ul>
+<h3 id="Task-Lifecycle"><a href="#Task-Lifecycle" class="headerlink" title="Task Lifecycle"></a>Task Lifecycle</h3><p>此篇依序說明Flink從<code>JobMaster</code>創建<code>ExecutionGraph</code>到提交至<code>TaskExector</code>的流程，以及<code>Task</code>與<code>StreamTask</code>的生命週期<br><a id="more"></a></p>
+<h3 id="About-Objects-and-Concepts"><a href="#About-Objects-and-Concepts" class="headerlink" title="About Objects and Concepts"></a>About Objects and Concepts</h3><ul>
+<li>Task為Flink中分布式執行的基礎單元</li>
+<li>Operator的包含一個或多個<code>ExecutionVertex</code>，而<code>ExecutionVertex</code>的數量與Operator的parallel相同</li>
+<li>Task中包含一個或多個Chained operator的<code>ExecutionVertex</code>所組成的pipeline<ul>
+<li>在生成<code>JobGraph</code>時會根據條件判斷能否將兩個Operator串聯在一起，並將一連串的Chained operator生成一個<code>JobVertex</code></li>
+<li>生成<code>ExecutionGraph</code>時，將<code>JobVertex</code>展開為並行化版本的<code>ExecutionVertex</code></li>
+<li>每一個<code>ExecutionVertex</code>對應<code>JobVertex</code>的一個並行子任務</li>
+</ul>
+</li>
+<li>Task負責Element在Operator chain中傳遞，Element包含Input element，Watermark和Checkpoint barriers</li>
+<li>Task為獨立執行緒，多個Task可以包含在一個Task shot內，參考<a href="https://ci.apache.org/projects/flink/flink-docs-release-1.9/concepts/runtime.html#task-slots-and-resources," title="Task Slots and Resources" target="_blank" rel="external">官方文檔</a></li>
+<li><code>StreamTask</code>為Flink流式引擎中所有不同Task子類型的基礎</li>
+<li><code>StreamTask</code>在其<a href="https://ci.apache.org/projects/flink/flink-docs-release-1.9/internals/task_lifecycle.html#task-lifecycle," title="Task Lifecycle" target="_blank" rel="external">生命週期</a>中，透過<code>OperatorChain</code>操作Operator</li>
+<li>Operator透過不同的方法處理不同類型的Element<ul>
+<li>Input element: processElement()</li>
+<li>Watermark: processWatermark()</li>
+<li>Checkpoint barriers: 異步調用snapshotState()</li>
+</ul>
+</li>
+<li>Operator中會在其<a href="https://ci.apache.org/projects/flink/flink-docs-release-1.9/internals/task_lifecycle.html#operator-lifecycle-in-a-nutshell," title="Operator Lifecycle in a nutshell" target="_blank" rel="external">生命週期</a>中，調用開發者的實作代碼(UDF)</li>
+</ul>
+<h3 id="Build-Executeion-Graph"><a href="#Build-Executeion-Graph" class="headerlink" title="Build Executeion Graph"></a>Build Executeion Graph</h3><p><code>Dispatcher</code>(<code>StandaloneDispatcher</code>的父類)透過<code>JobManagerRunner</code>封裝的RPC接口操作<code>JobMaster</code>，在<code>JobMaster</code>在初始化時調用<code>createAndRestoreExecutionGraph(...)</code>，其再調用<code>createExecutionGraph(...)</code>，此時<code>JobMaster</code>就擁有創建好的<code>ExecutionGraph</code>，存放在executionGraph變量中。</p>
+<p>接著<code>JobManagerRunner</code>調用<code>JobMaster</code>的<code>start()</code>，在<code>JobMaster</code>內部會一路調用至<code>scheduleExecutionGraph()</code>，其內部調用<code>ExecutionGraph</code>的<code>scheduleForExecution()</code>方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JobMaster</span> <span class="keyword">extends</span> <span class="title">FencedRpcEndpoint</span>&lt;<span class="title">JobMasterId</span>&gt; <span class="keyword">implements</span> <span class="title">JobMasterGateway</span>, <span class="title">JobMasterService</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">JobMaster</span><span class="params">(</span></span></div><div class="line"><span class="function"><span class="params">			RpcService rpcService,</span></span></div><div class="line"><span class="function"><span class="params">			JobMasterConfiguration jobMasterConfiguration,</span></span></div><div class="line"><span class="function"><span class="params">			ResourceID resourceId,</span></span></div><div class="line"><span class="function"><span class="params">			JobGraph jobGraph,</span></span></div><div class="line"><span class="function"><span class="params">			HighAvailabilityServices highAvailabilityService,</span></span></div><div class="line"><span class="function"><span class="params">			SlotPoolFactory slotPoolFactory,</span></span></div><div class="line"><span class="function"><span class="params">			SchedulerFactory schedulerFactory,</span></span></div><div class="line"><span class="function"><span class="params">			JobManagerSharedServices jobManagerSharedServices,</span></span></div><div class="line"><span class="function"><span class="params">			HeartbeatServices heartbeatServices,</span></span></div><div class="line"><span class="function"><span class="params">			JobManagerJobMetricGroupFactory jobMetricGroupFactory,</span></span></div><div class="line"><span class="function"><span class="params">			OnCompletionActions jobCompletionActions,</span></span></div><div class="line"><span class="function"><span class="params">			FatalErrorHandler fatalErrorHandler,</span></span></div><div class="line"><span class="function"><span class="params">			ClassLoader userCodeLoader)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">                </div><div class="line">                <span class="comment">// ...</span></div><div class="line">                <span class="keyword">this</span>.executionGraph = createAndRestoreExecutionGraph(jobManagerJobMetricGroup);</div><div class="line">                <span class="comment">// ...</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line"><span class="comment">	 * Start the rpc service and begin to run the job.</span></div><div class="line"><span class="comment">	 *</span></div><div class="line"><span class="comment">	 * <span class="doctag">@param</span> newJobMasterId The necessary fencing token to run the job</span></div><div class="line"><span class="comment">	 * <span class="doctag">@return</span> Future acknowledge if the job could be started. Otherwise the future contains an exception</span></div><div class="line"><span class="comment">	 */</span></div><div class="line">	<span class="function"><span class="keyword">public</span> CompletableFuture&lt;Acknowledge&gt; <span class="title">start</span><span class="params">(<span class="keyword">final</span> JobMasterId newJobMasterId)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		<span class="comment">// make sure we receive RPC and async calls</span></div><div class="line">		start();</div><div class="line"></div><div class="line">		<span class="keyword">return</span> callAsyncWithoutFencing(() -&gt; startJobExecution(newJobMasterId), RpcUtils.INF_TIMEOUT);</div><div class="line">	&#125;    </div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">scheduleExecutionGraph</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="comment">// ...</span></div><div class="line"></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			executionGraph.scheduleForExecution();</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (Throwable t) &#123;</div><div class="line">			executionGraph.failGlobal(t);</div><div class="line">		&#125;</div><div class="line">	&#125;    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>ExecutionGraph</code>的<code>scheduleForExecution()</code>方法中會根據scheduleMode變量判斷，使用不同的策略申請Slot資源，具體代碼參考<code>scheduleLazy(...)</code>或<code>scheduleEager(...)</code>，這裡代碼追縱<code>scheduleEager(...)</code>；在其代碼流程中，會先為每個<code>ExecutionJobVertex</code>申請Slot資源；申請成功之後，會在<code>Execution</code>的粒度上進行部署，透過<code>Execution</code>的<code>deploy()</code>方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExecutionGraph</span> <span class="keyword">implements</span> <span class="title">AccessExecutionGraph</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">scheduleForExecution</span><span class="params">()</span> <span class="keyword">throws</span> JobException </span>&#123;</div><div class="line">		<span class="comment">// ...</span></div><div class="line"></div><div class="line">		<span class="keyword">if</span> (transitionState(JobStatus.CREATED, JobStatus.RUNNING)) &#123;</div><div class="line"></div><div class="line">			<span class="keyword">final</span> CompletableFuture&lt;Void&gt; newSchedulingFuture;</div><div class="line"></div><div class="line">			<span class="keyword">switch</span> (scheduleMode) &#123;</div><div class="line"></div><div class="line">				<span class="keyword">case</span> LAZY_FROM_SOURCES:</div><div class="line">					newSchedulingFuture = scheduleLazy(slotProvider);</div><div class="line">					<span class="keyword">break</span>;</div><div class="line"></div><div class="line">				<span class="keyword">case</span> EAGER:</div><div class="line">					newSchedulingFuture = scheduleEager(slotProvider, allocationTimeout);</div><div class="line">					<span class="keyword">break</span>;</div><div class="line"></div><div class="line">				<span class="keyword">default</span>:</div><div class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> JobException(<span class="string">"Schedule mode is invalid."</span>);</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (state == JobStatus.RUNNING &amp;&amp; currentGlobalModVersion == globalModVersion) &#123;</div><div class="line">				schedulingFuture = newSchedulingFuture;</div><div class="line">				newSchedulingFuture.whenComplete(</div><div class="line">					(Void ignored, Throwable throwable) -&gt; &#123;</div><div class="line">						<span class="keyword">if</span> (throwable != <span class="keyword">null</span> &amp;&amp; !(throwable <span class="keyword">instanceof</span> CancellationException)) &#123;</div><div class="line">							<span class="comment">// only fail if the scheduling future was not canceled</span></div><div class="line">							failGlobal(ExceptionUtils.stripCompletionException(throwable));</div><div class="line">						&#125;</div><div class="line">					&#125;);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				newSchedulingFuture.cancel(<span class="keyword">false</span>);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Job may only be scheduled from state "</span> + JobStatus.CREATED);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">    </div><div class="line">	<span class="comment">/**</span></div><div class="line"><span class="comment">	 *</span></div><div class="line"><span class="comment">	 *</span></div><div class="line"><span class="comment">	 * <span class="doctag">@param</span> slotProvider  The resource provider from which the slots are allocated</span></div><div class="line"><span class="comment">	 * <span class="doctag">@param</span> timeout       The maximum time that the deployment may take, before a</span></div><div class="line"><span class="comment">	 *                      TimeoutException is thrown.</span></div><div class="line"><span class="comment">	 * <span class="doctag">@return</span> Future which is completed once the &#123;<span class="doctag">@link</span> ExecutionGraph&#125; has been scheduled.</span></div><div class="line"><span class="comment">	 * The future can also be completed exceptionally if an error happened.</span></div><div class="line"><span class="comment">	 */</span></div><div class="line">	<span class="function"><span class="keyword">private</span> CompletableFuture&lt;Void&gt; <span class="title">scheduleEager</span><span class="params">(SlotProvider slotProvider, <span class="keyword">final</span> Time timeout)</span> </span>&#123;</div><div class="line">		<span class="comment">// ...</span></div><div class="line"></div><div class="line">		<span class="comment">// allocate the slots (obtain all their futures</span></div><div class="line">		<span class="keyword">for</span> (ExecutionJobVertex ejv : getVerticesTopologically()) &#123;</div><div class="line">			<span class="comment">// these calls are not blocking, they only return futures</span></div><div class="line">			Collection&lt;CompletableFuture&lt;Execution&gt;&gt; allocationFutures = ejv.allocateResourcesForAll(</div><div class="line">				slotProvider,</div><div class="line">				queued,</div><div class="line">				LocationPreferenceConstraint.ALL,</div><div class="line">				allPreviousAllocationIds,</div><div class="line">				timeout);</div><div class="line"></div><div class="line">			allAllocationFutures.addAll(allocationFutures);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">// this future is complete once all slot futures are complete.</span></div><div class="line">		<span class="comment">// the future fails once one slot future fails.</span></div><div class="line">		<span class="keyword">final</span> ConjunctFuture&lt;Collection&lt;Execution&gt;&gt; allAllocationsFuture = FutureUtils.combineAll(allAllocationFutures);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> allAllocationsFuture.thenAccept(</div><div class="line">			(Collection&lt;Execution&gt; executionsToDeploy) -&gt; &#123;</div><div class="line">				<span class="keyword">for</span> (Execution execution : executionsToDeploy) &#123;</div><div class="line">					<span class="keyword">try</span> &#123;</div><div class="line">						execution.deploy();</div><div class="line">					&#125; <span class="keyword">catch</span> (Throwable t) &#123;</div><div class="line">						<span class="keyword">throw</span> <span class="keyword">new</span> CompletionException(</div><div class="line">							<span class="keyword">new</span> FlinkException(</div><div class="line">								String.format(<span class="string">"Could not deploy execution %s."</span>, execution),</div><div class="line">								t));</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			&#125;)</div><div class="line">			<span class="comment">// Generate a more specific failure message for the eager scheduling</span></div><div class="line">			.exceptionally(</div><div class="line">                <span class="comment">// ...</span></div><div class="line">				&#125;);</div><div class="line">	&#125;    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Execution</code>的<code>deploy()</code>中，使用<code>TaskManagerGateway</code>的<code>submitTask(...)</code>進行Task提交，<code>TaskManagerGateway</code>的instance為<code>RpcTaskManagerGateway</code>，此時對應的<code>TaskManagerRunner</code> process 就會透過Akka RPC接收到Task。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Execution</span> <span class="keyword">implements</span> <span class="title">AccessExecution</span>, <span class="title">Archiveable</span>&lt;<span class="title">ArchivedExecution</span>&gt;, <span class="title">LogicalSlot</span>.<span class="title">Payload</span> </span>&#123;</div><div class="line">	<span class="comment">/**</span></div><div class="line"><span class="comment">	 * Deploys the execution to the previously assigned resource.</span></div><div class="line"><span class="comment">	 *</span></div><div class="line"><span class="comment">	 * <span class="doctag">@throws</span> JobException if the execution cannot be deployed to the assigned resource</span></div><div class="line"><span class="comment">	 */</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deploy</span><span class="params">()</span> <span class="keyword">throws</span> JobException </span>&#123;</div><div class="line">		assertRunningInJobMasterMainThread();</div><div class="line"></div><div class="line">		<span class="keyword">final</span> LogicalSlot slot  = assignedResource;</div><div class="line">        <span class="comment">// ...</span></div><div class="line"></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line"></div><div class="line">			<span class="comment">// ...</span></div><div class="line"></div><div class="line">			<span class="keyword">final</span> TaskDeploymentDescriptor deployment = vertex.createDeploymentDescriptor(</div><div class="line">				attemptId,</div><div class="line">				slot,</div><div class="line">				taskRestore,</div><div class="line">				attemptNumber);</div><div class="line"></div><div class="line">			<span class="comment">// null taskRestore to let it be GC'ed</span></div><div class="line">			taskRestore = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">			<span class="keyword">final</span> TaskManagerGateway taskManagerGateway = slot.getTaskManagerGateway();</div><div class="line"></div><div class="line">			<span class="keyword">final</span> ComponentMainThreadExecutor jobMasterMainThreadExecutor =</div><div class="line">				vertex.getExecutionGraph().getJobMasterMainThreadExecutor();</div><div class="line"></div><div class="line"></div><div class="line">			<span class="comment">// We run the submission in the future executor so that the serialization of large TDDs does not block</span></div><div class="line">			<span class="comment">// the main thread and sync back to the main thread once submission is completed.</span></div><div class="line">			CompletableFuture.supplyAsync(() -&gt; taskManagerGateway.submitTask(deployment, rpcTimeout), executor)</div><div class="line">				.thenCompose(Function.identity())</div><div class="line">				.whenCompleteAsync(</div><div class="line">					(ack, failure) -&gt; &#123;</div><div class="line">						<span class="comment">// only respond to the failure case</span></div><div class="line">						<span class="keyword">if</span> (failure != <span class="keyword">null</span>) &#123;</div><div class="line">							<span class="keyword">if</span> (failure <span class="keyword">instanceof</span> TimeoutException) &#123;</div><div class="line">								String taskname = vertex.getTaskNameWithSubtaskIndex() + <span class="string">" ("</span> + attemptId + <span class="string">')'</span>;</div><div class="line"></div><div class="line">								markFailed(<span class="keyword">new</span> Exception(</div><div class="line">									<span class="string">"Cannot deploy task "</span> + taskname + <span class="string">" - TaskManager ("</span> + getAssignedResourceLocation()</div><div class="line">										+ <span class="string">") not responding after a rpcTimeout of "</span> + rpcTimeout, failure));</div><div class="line">							&#125; <span class="keyword">else</span> &#123;</div><div class="line">								markFailed(failure);</div><div class="line">							&#125;</div><div class="line">						&#125;</div><div class="line">					&#125;,</div><div class="line">					jobMasterMainThreadExecutor);</div><div class="line"></div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (Throwable t) &#123;</div><div class="line">			markFailed(t);</div><div class="line">			ExceptionUtils.rethrow(t);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>TaskExector</code>的<code>submitTask(...)</code>會接收來自RPC Task的提交，在準備初始化<code>Task</code>一切所需的數據完備後，創建<code>Task</code> object；每一個提交的Task，皆會創建一個<code>Task</code> object。<br>創建完畢後，透過調用<code>Task</code>的<code>startTaskThread()</code>執行Thread。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TaskExecutor</span> <span class="keyword">extends</span> <span class="title">RpcEndpoint</span> <span class="keyword">implements</span> <span class="title">TaskExecutorGateway</span> </span>&#123;</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> CompletableFuture&lt;Acknowledge&gt; <span class="title">submitTask</span><span class="params">(</span></span></div><div class="line"><span class="function"><span class="params">			TaskDeploymentDescriptor tdd,</span></span></div><div class="line"><span class="function"><span class="params">			JobMasterId jobMasterId,</span></span></div><div class="line"><span class="function"><span class="params">			Time timeout)</span> </span>&#123;</div><div class="line"></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			<span class="keyword">final</span> JobID jobId = tdd.getJobId();</div><div class="line">			<span class="keyword">final</span> JobManagerConnection jobManagerConnection = jobManagerTable.get(jobId);</div><div class="line"></div><div class="line">			<span class="comment">// ...</span></div><div class="line"></div><div class="line">			<span class="comment">// deserialize the pre-serialized information</span></div><div class="line">			<span class="keyword">final</span> JobInformation jobInformation;</div><div class="line">			<span class="keyword">final</span> TaskInformation taskInformation;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				jobInformation = tdd.getSerializedJobInformation().deserializeValue(getClass().getClassLoader());</div><div class="line">				taskInformation = tdd.getSerializedTaskInformation().deserializeValue(getClass().getClassLoader());</div><div class="line">			&#125; <span class="keyword">catch</span> (IOException | ClassNotFoundException e) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> TaskSubmissionException(<span class="string">"Could not deserialize the job or task information."</span>, e);</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (!jobId.equals(jobInformation.getJobId())) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> TaskSubmissionException(</div><div class="line">					<span class="string">"Inconsistent job ID information inside TaskDeploymentDescriptor ("</span> +</div><div class="line">						tdd.getJobId() + <span class="string">" vs. "</span> + jobInformation.getJobId() + <span class="string">")"</span>);</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			TaskMetricGroup taskMetricGroup = taskManagerMetricGroup.addTaskForJob(</div><div class="line">				jobInformation.getJobId(),</div><div class="line">				jobInformation.getJobName(),</div><div class="line">				taskInformation.getJobVertexId(),</div><div class="line">				tdd.getExecutionAttemptId(),</div><div class="line">				taskInformation.getTaskName(),</div><div class="line">				tdd.getSubtaskIndex(),</div><div class="line">				tdd.getAttemptNumber());</div><div class="line"></div><div class="line">			InputSplitProvider inputSplitProvider = <span class="keyword">new</span> RpcInputSplitProvider(</div><div class="line">				jobManagerConnection.getJobManagerGateway(),</div><div class="line">				taskInformation.getJobVertexId(),</div><div class="line">				tdd.getExecutionAttemptId(),</div><div class="line">				taskManagerConfiguration.getTimeout());</div><div class="line"></div><div class="line">			TaskManagerActions taskManagerActions = jobManagerConnection.getTaskManagerActions();</div><div class="line">			CheckpointResponder checkpointResponder = jobManagerConnection.getCheckpointResponder();</div><div class="line">			GlobalAggregateManager aggregateManager = jobManagerConnection.getGlobalAggregateManager();</div><div class="line"></div><div class="line">			LibraryCacheManager libraryCache = jobManagerConnection.getLibraryCacheManager();</div><div class="line">			ResultPartitionConsumableNotifier resultPartitionConsumableNotifier = jobManagerConnection.getResultPartitionConsumableNotifier();</div><div class="line">			PartitionProducerStateChecker partitionStateChecker = jobManagerConnection.getPartitionStateChecker();</div><div class="line"></div><div class="line">			<span class="keyword">final</span> TaskLocalStateStore localStateStore = localStateStoresManager.localStateStoreForSubtask(</div><div class="line">				jobId,</div><div class="line">				tdd.getAllocationId(),</div><div class="line">				taskInformation.getJobVertexId(),</div><div class="line">				tdd.getSubtaskIndex());</div><div class="line"></div><div class="line">			<span class="keyword">final</span> JobManagerTaskRestore taskRestore = tdd.getTaskRestore();</div><div class="line"></div><div class="line">			<span class="keyword">final</span> TaskStateManager taskStateManager = <span class="keyword">new</span> TaskStateManagerImpl(</div><div class="line">				jobId,</div><div class="line">				tdd.getExecutionAttemptId(),</div><div class="line">				localStateStore,</div><div class="line">				taskRestore,</div><div class="line">				checkpointResponder);</div><div class="line"></div><div class="line">			Task task = <span class="keyword">new</span> Task(</div><div class="line">				jobInformation,</div><div class="line">				taskInformation,</div><div class="line">				tdd.getExecutionAttemptId(),</div><div class="line">				tdd.getAllocationId(),</div><div class="line">				tdd.getSubtaskIndex(),</div><div class="line">				tdd.getAttemptNumber(),</div><div class="line">				tdd.getProducedPartitions(),</div><div class="line">				tdd.getInputGates(),</div><div class="line">				tdd.getTargetSlotNumber(),</div><div class="line">				taskExecutorServices.getMemoryManager(),</div><div class="line">				taskExecutorServices.getIOManager(),</div><div class="line">				taskExecutorServices.getNetworkEnvironment(),</div><div class="line">				taskExecutorServices.getBroadcastVariableManager(),</div><div class="line">				taskStateManager,</div><div class="line">				taskManagerActions,</div><div class="line">				inputSplitProvider,</div><div class="line">				checkpointResponder,</div><div class="line">				aggregateManager,</div><div class="line">				blobCacheService,</div><div class="line">				libraryCache,</div><div class="line">				fileCache,</div><div class="line">				taskManagerConfiguration,</div><div class="line">				taskMetricGroup,</div><div class="line">				resultPartitionConsumableNotifier,</div><div class="line">				partitionStateChecker,</div><div class="line">				getRpcService().getExecutor());</div><div class="line"></div><div class="line">			log.info(<span class="string">"Received task &#123;&#125;."</span>, task.getTaskInfo().getTaskNameWithSubtasks());</div><div class="line"></div><div class="line">			<span class="keyword">boolean</span> taskAdded;</div><div class="line"></div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				taskAdded = taskSlotTable.addTask(task);</div><div class="line">			&#125; <span class="keyword">catch</span> (SlotNotFoundException | SlotNotActiveException e) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> TaskSubmissionException(<span class="string">"Could not submit task."</span>, e);</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (taskAdded) &#123;</div><div class="line">				task.startTaskThread();</div><div class="line"></div><div class="line">				<span class="keyword">return</span> CompletableFuture.completedFuture(Acknowledge.get());</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="comment">// ...</span></div><div class="line">			&#125;</div><div class="line">		&#125; <span class="keyword">catch</span> (TaskSubmissionException e) &#123;</div><div class="line">			<span class="keyword">return</span> FutureUtils.completedExceptionally(e);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Task</code>繼承Thread．實作Runnable，故每一個<code>Task</code> object都是一個獨立的Thread。<br><code>Task</code>的<code>run()</code>方法中，透過<code>loadAndInstantiateInvokable()</code>方法反射獲得<code>AbstractInvokable</code>的instance，其子類<code>StreamTask</code>是所有不同Task子類型的基礎，例如SourceStreamTask、OneInputStreamTask、TwoInputStreamTask。<br><code>run()</code>中調用<code>AbstractInvokable</code>的<code>invoke()</code>方法，對應<code>StreamTask</code>的<code>invoke()</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Task</span> <span class="keyword">implements</span> <span class="title">Runnable</span>, <span class="title">TaskActions</span>, <span class="title">CheckpointListener</span> </span>&#123;</div><div class="line">	<span class="comment">/**</span></div><div class="line"><span class="comment">	 * Starts the task's thread.</span></div><div class="line"><span class="comment">	 */</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startTaskThread</span><span class="params">()</span> </span>&#123;</div><div class="line">		executingThread.start();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line"><span class="comment">	 * The core work method that bootstraps the task and executes its code.</span></div><div class="line"><span class="comment">	 */</span></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="comment">// ----------------------------</span></div><div class="line">		<span class="comment">//  Initial State transition</span></div><div class="line">		<span class="comment">// ----------------------------</span></div><div class="line">		<span class="comment">// ...</span></div><div class="line"></div><div class="line">		<span class="comment">// all resource acquisitions and registrations from here on</span></div><div class="line">		<span class="comment">// need to be undone in the end</span></div><div class="line">		Map&lt;String, Future&lt;Path&gt;&gt; distributedCacheEntries = <span class="keyword">new</span> HashMap&lt;&gt;();</div><div class="line">		AbstractInvokable invokable = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			<span class="comment">// ----------------------------</span></div><div class="line">			<span class="comment">//  Task Bootstrap - We periodically</span></div><div class="line">			<span class="comment">//  check for canceling as a shortcut</span></div><div class="line">			<span class="comment">// ----------------------------</span></div><div class="line"></div><div class="line">			<span class="comment">// ...</span></div><div class="line"></div><div class="line">			<span class="comment">// ----------------------------------------------------------------</span></div><div class="line">			<span class="comment">// register the task with the network stack</span></div><div class="line">			<span class="comment">// this operation may fail if the system does not have enough</span></div><div class="line">			<span class="comment">// memory to run the necessary data exchanges</span></div><div class="line">			<span class="comment">// the registration must also strictly be undone</span></div><div class="line">			<span class="comment">// ----------------------------------------------------------------</span></div><div class="line"></div><div class="line">			<span class="comment">// ...</span></div><div class="line"></div><div class="line">			<span class="comment">// ----------------------------------------------------------------</span></div><div class="line">			<span class="comment">//  call the user code initialization methods</span></div><div class="line">			<span class="comment">// ----------------------------------------------------------------</span></div><div class="line"></div><div class="line">			TaskKvStateRegistry kvStateRegistry = network.createKvStateTaskRegistry(jobId, getJobVertexId());</div><div class="line"></div><div class="line">			Environment env = <span class="keyword">new</span> RuntimeEnvironment(</div><div class="line">				jobId,</div><div class="line">				vertexId,</div><div class="line">				executionId,</div><div class="line">				executionConfig,</div><div class="line">				taskInfo,</div><div class="line">				jobConfiguration,</div><div class="line">				taskConfiguration,</div><div class="line">				userCodeClassLoader,</div><div class="line">				memoryManager,</div><div class="line">				ioManager,</div><div class="line">				broadcastVariableManager,</div><div class="line">				taskStateManager,</div><div class="line">				aggregateManager,</div><div class="line">				accumulatorRegistry,</div><div class="line">				kvStateRegistry,</div><div class="line">				inputSplitProvider,</div><div class="line">				distributedCacheEntries,</div><div class="line">				producedPartitions,</div><div class="line">				inputGates,</div><div class="line">				network.getTaskEventDispatcher(),</div><div class="line">				checkpointResponder,</div><div class="line">				taskManagerConfig,</div><div class="line">				metrics,</div><div class="line">				<span class="keyword">this</span>);</div><div class="line"></div><div class="line">			<span class="comment">// now load and instantiate the task's invokable code</span></div><div class="line">			invokable = loadAndInstantiateInvokable(userCodeClassLoader, nameOfInvokableClass, env);</div><div class="line"></div><div class="line">			<span class="comment">// ----------------------------------------------------------------</span></div><div class="line">			<span class="comment">//  actual task core work</span></div><div class="line">			<span class="comment">// ----------------------------------------------------------------</span></div><div class="line"></div><div class="line">			<span class="comment">// we must make strictly sure that the invokable is accessible to the cancel() call</span></div><div class="line">			<span class="comment">// by the time we switched to running.</span></div><div class="line">			<span class="keyword">this</span>.invokable = invokable;</div><div class="line"></div><div class="line">			<span class="comment">// switch to the RUNNING state, if that fails, we have been canceled/failed in the meantime</span></div><div class="line">			<span class="keyword">if</span> (!transitionState(ExecutionState.DEPLOYING, ExecutionState.RUNNING)) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> CancelTaskException();</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="comment">// notify everyone that we switched to running</span></div><div class="line">			taskManagerActions.updateTaskExecutionState(<span class="keyword">new</span> TaskExecutionState(jobId, executionId, ExecutionState.RUNNING));</div><div class="line"></div><div class="line">			<span class="comment">// make sure the user code classloader is accessible thread-locally</span></div><div class="line">			executingThread.setContextClassLoader(userCodeClassLoader);</div><div class="line"></div><div class="line">			<span class="comment">// run the invokable</span></div><div class="line">			invokable.invoke();</div><div class="line"></div><div class="line">			<span class="comment">// make sure, we enter the catch block if the task leaves the invoke() method due</span></div><div class="line">			<span class="comment">// to the fact that it has been canceled</span></div><div class="line">			<span class="keyword">if</span> (isCanceledOrFailed()) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> CancelTaskException();</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="comment">// ----------------------------------------------------------------</span></div><div class="line">			<span class="comment">//  finalization of a successful execution</span></div><div class="line">			<span class="comment">// ----------------------------------------------------------------</span></div><div class="line"></div><div class="line">			<span class="comment">// ...</span></div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (Throwable t) &#123;</div><div class="line">			<span class="comment">// ...</span></div><div class="line">		&#125;</div><div class="line">		<span class="keyword">finally</span> &#123;</div><div class="line">            <span class="comment">// ...</span></div><div class="line">		&#125;</div><div class="line">	&#125;    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在<code>StreamTask</code>的<code>invoke()</code>中，會創建<code>OperatorChain</code>，其表示此Task中包含的所有Operator(並行化版本)。<br><code>OperatorChain</code>的初始化中，會創建所有其負責的Operator的上下游關係，包含Element的傳遞，透過其內部類<code>ChainingOutput</code>或<code>CopyingChainingOutput</code>進行實作。<br>其二者都擁有一個<code>OneInputStreamOperator</code>變量，其代表著<code>OperatorChain</code>中當前Operator的下游Operator；當<code>ChainingOutput</code>接收到當前Operator提交的數據時，直接調用下游Operator的<code>processElement()</code>方法。<br><code>ChainingOutput</code>的父類<code>Output</code>，在每個StreamOperator都擁有<code>Output</code>成員，用於收集當前Operator處理完的數據。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Internal</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamTask</span>&lt;<span class="title">OUT</span>, <span class="title">OP</span> <span class="keyword">extends</span> <span class="title">StreamOperator</span>&lt;<span class="title">OUT</span>&gt;&gt;</span></div><div class="line"><span class="class">		<span class="keyword">extends</span> <span class="title">AbstractInvokable</span></span></div><div class="line"><span class="class">		<span class="keyword">implements</span> <span class="title">AsyncExceptionHandler</span> </span>&#123;</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">invoke</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		<span class="keyword">boolean</span> disposed = <span class="keyword">false</span>;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			<span class="comment">// -------- Initialize ---------</span></div><div class="line">			<span class="comment">// ...</span></div><div class="line"></div><div class="line">			operatorChain = <span class="keyword">new</span> OperatorChain&lt;&gt;(<span class="keyword">this</span>, recordWriters);</div><div class="line">			headOperator = operatorChain.getHeadOperator();</div><div class="line"></div><div class="line">			<span class="comment">// task specific initialization</span></div><div class="line">			init();</div><div class="line"></div><div class="line">			<span class="comment">// save the work of reloading state, etc, if the task is already canceled</span></div><div class="line">			<span class="keyword">if</span> (canceled) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> CancelTaskException();</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="comment">// -------- Invoke --------</span></div><div class="line">			LOG.debug(<span class="string">"Invoking &#123;&#125;"</span>, getName());</div><div class="line"></div><div class="line">			<span class="comment">// we need to make sure that any triggers scheduled in open() cannot be</span></div><div class="line">			<span class="comment">// executed before all operators are opened</span></div><div class="line">			<span class="keyword">synchronized</span> (lock) &#123;</div><div class="line"></div><div class="line">				<span class="comment">// both the following operations are protected by the lock</span></div><div class="line">				<span class="comment">// so that we avoid race conditions in the case that initializeState()</span></div><div class="line">				<span class="comment">// registers a timer, that fires before the open() is called.</span></div><div class="line"></div><div class="line">				initializeState();</div><div class="line">				openAllOperators();</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="comment">// final check to exit early before starting to run</span></div><div class="line">			<span class="keyword">if</span> (canceled) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> CancelTaskException();</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="comment">// let the task do its work</span></div><div class="line">			isRunning = <span class="keyword">true</span>;</div><div class="line">			run();</div><div class="line"></div><div class="line">			<span class="comment">// if this left the run() method cleanly despite the fact that this was canceled,</span></div><div class="line">			<span class="comment">// make sure the "clean shutdown" is not attempted</span></div><div class="line">			<span class="keyword">if</span> (canceled) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> CancelTaskException();</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			LOG.debug(<span class="string">"Finished task &#123;&#125;"</span>, getName());</div><div class="line"></div><div class="line">			<span class="comment">// make sure no further checkpoint and notification actions happen.</span></div><div class="line">			<span class="comment">// we make sure that no other thread is currently in the locked scope before</span></div><div class="line">			<span class="comment">// we close the operators by trying to acquire the checkpoint scope lock</span></div><div class="line">			<span class="comment">// we also need to make sure that no triggers fire concurrently with the close logic</span></div><div class="line">			<span class="comment">// at the same time, this makes sure that during any "regular" exit where still</span></div><div class="line">			<span class="keyword">synchronized</span> (lock) &#123;</div><div class="line">				<span class="comment">// this is part of the main logic, so if this fails, the task is considered failed</span></div><div class="line">				closeAllOperators();</div><div class="line"></div><div class="line">				<span class="comment">// make sure no new timers can come</span></div><div class="line">				timerService.quiesce();</div><div class="line"></div><div class="line">				<span class="comment">// only set the StreamTask to not running after all operators have been closed!</span></div><div class="line">				<span class="comment">// See FLINK-7430</span></div><div class="line">				isRunning = <span class="keyword">false</span>;</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="comment">// make sure all timers finish</span></div><div class="line">			timerService.awaitPendingAfterQuiesce();</div><div class="line"></div><div class="line">			LOG.debug(<span class="string">"Closed operators for task &#123;&#125;"</span>, getName());</div><div class="line"></div><div class="line">			<span class="comment">// make sure all buffered data is flushed</span></div><div class="line">			operatorChain.flushOutputs();</div><div class="line"></div><div class="line">			<span class="comment">// make an attempt to dispose the operators such that failures in the dispose call</span></div><div class="line">			<span class="comment">// still let the computation fail</span></div><div class="line">			tryDisposeAllOperators();</div><div class="line">			disposed = <span class="keyword">true</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">finally</span> &#123;</div><div class="line">            <span class="comment">// ...</span></div><div class="line">		&#125;</div><div class="line">	&#125;            </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Internal</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OperatorChain</span>&lt;<span class="title">OUT</span>, <span class="title">OP</span> <span class="keyword">extends</span> <span class="title">StreamOperator</span>&lt;<span class="title">OUT</span>&gt;&gt; <span class="keyword">implements</span> <span class="title">StreamStatusMaintainer</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">OperatorChain</span><span class="params">(</span></span></div><div class="line"><span class="function"><span class="params">			StreamTask&lt;OUT, OP&gt; containingTask,</span></span></div><div class="line"><span class="function"><span class="params">			List&lt;RecordWriter&lt;SerializationDelegate&lt;StreamRecord&lt;OUT&gt;&gt;&gt;&gt; recordWriters)</span> </span>&#123;</div><div class="line"></div><div class="line">		<span class="keyword">final</span> ClassLoader userCodeClassloader = containingTask.getUserCodeClassLoader();</div><div class="line">		<span class="keyword">final</span> StreamConfig configuration = containingTask.getConfiguration();</div><div class="line"></div><div class="line">		headOperator = configuration.getStreamOperator(userCodeClassloader);</div><div class="line"></div><div class="line">		<span class="comment">// we read the chained configs, and the order of record writer registrations by output name</span></div><div class="line">		Map&lt;Integer, StreamConfig&gt; chainedConfigs = configuration.getTransitiveChainedTaskConfigsWithSelf(userCodeClassloader);</div><div class="line"></div><div class="line">		<span class="comment">// create the final output stream writers</span></div><div class="line">		<span class="comment">// we iterate through all the out edges from this job vertex and create a stream output</span></div><div class="line">		List&lt;StreamEdge&gt; outEdgesInOrder = configuration.getOutEdgesInOrder(userCodeClassloader);</div><div class="line">		Map&lt;StreamEdge, RecordWriterOutput&lt;?&gt;&gt; streamOutputMap = <span class="keyword">new</span> HashMap&lt;&gt;(outEdgesInOrder.size());</div><div class="line">		<span class="keyword">this</span>.streamOutputs = <span class="keyword">new</span> RecordWriterOutput&lt;?&gt;[outEdgesInOrder.size()];</div><div class="line"></div><div class="line">		<span class="comment">// from here on, we need to make sure that the output writers are shut down again on failure</span></div><div class="line">		<span class="keyword">boolean</span> success = <span class="keyword">false</span>;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; outEdgesInOrder.size(); i++) &#123;</div><div class="line">				StreamEdge outEdge = outEdgesInOrder.get(i);</div><div class="line"></div><div class="line">				RecordWriterOutput&lt;?&gt; streamOutput = createStreamOutput(</div><div class="line">					recordWriters.get(i),</div><div class="line">					outEdge,</div><div class="line">					chainedConfigs.get(outEdge.getSourceId()),</div><div class="line">					containingTask.getEnvironment());</div><div class="line"></div><div class="line">				<span class="keyword">this</span>.streamOutputs[i] = streamOutput;</div><div class="line">				streamOutputMap.put(outEdge, streamOutput);</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="comment">// we create the chain of operators and grab the collector that leads into the chain</span></div><div class="line"></div><div class="line">			List&lt;StreamOperator&lt;?&gt;&gt; allOps = <span class="keyword">new</span> ArrayList&lt;&gt;(chainedConfigs.size());</div><div class="line">			<span class="keyword">this</span>.chainEntryPoint = createOutputCollector(</div><div class="line">				containingTask,</div><div class="line">				configuration,</div><div class="line">				chainedConfigs,</div><div class="line">				userCodeClassloader,</div><div class="line">				streamOutputMap,</div><div class="line">				allOps);</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (headOperator != <span class="keyword">null</span>) &#123;</div><div class="line">				WatermarkGaugeExposingOutput&lt;StreamRecord&lt;OUT&gt;&gt; output = getChainEntryPoint();</div><div class="line">				headOperator.setup(containingTask, configuration, output);</div><div class="line"></div><div class="line">				headOperator.getMetricGroup().gauge(MetricNames.IO_CURRENT_OUTPUT_WATERMARK, output.getWatermarkGauge());</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="comment">// add head operator to end of chain</span></div><div class="line">			allOps.add(headOperator);</div><div class="line"></div><div class="line">			<span class="keyword">this</span>.allOperators = allOps.toArray(<span class="keyword">new</span> StreamOperator&lt;?&gt;[allOps.size()]);</div><div class="line"></div><div class="line">			success = <span class="keyword">true</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">finally</span> &#123;</div><div class="line">			<span class="comment">// make sure we clean up after ourselves in case of a failure after acquiring</span></div><div class="line">			<span class="comment">// the first resources</span></div><div class="line">			<span class="keyword">if</span> (!success) &#123;</div><div class="line">				<span class="keyword">for</span> (RecordWriterOutput&lt;?&gt; output : <span class="keyword">this</span>.streamOutputs) &#123;</div><div class="line">					<span class="keyword">if</span> (output != <span class="keyword">null</span>) &#123;</div><div class="line">						output.close();</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;&#125;</div></pre></td></tr></table></figure>
+<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><ul>
+<li>JobMaster創建完Execution graph後，透過Akka RPC提交至<code>TaskManagerRunner</code> process。</li>
+<li><code>TaskManagerRunner</code> process將每個提交的Task創建對應<code>Task</code> thread。</li>
+<li><code>Task</code> thread可以根據Flink slot策略(SlotSharingGroup與CoLocationGroup)，與其他Task共享一個Task slot。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/java-jmm/" rel="next" title="Java Memory Model">
+                <i class="fa fa-chevron-left"></i> Java Memory Model
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="0x90e" />
+            
+              <p class="site-author-name" itemprop="name">0x90e</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">64</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:albertchungx90@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/0x90e" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-information"><span class="nav-number">1.</span> <span class="nav-text">Basic information</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Task-Lifecycle"><span class="nav-number">2.</span> <span class="nav-text">Task Lifecycle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#About-Objects-and-Concepts"><span class="nav-number">3.</span> <span class="nav-text">About Objects and Concepts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Build-Executeion-Graph"><span class="nav-number">4.</span> <span class="nav-text">Build Executeion Graph</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary"><span class="nav-number">5.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0x90e</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>Unique Visitor
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>Page View
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
